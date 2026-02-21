@@ -71,4 +71,9 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 *   **Fluxo em 2 Passos com API Customizada:** Refatoração da lógica de registo. A API de supabase foi configurada para lidar com uma inserção manual no momento da finalização do registo, separando logicamente as credenciais do site das do motor de jogo.
 *   **Deep Linking (A Ponte para o Unity):** Introdução do conceito de **Scheme dinâmico** (`puzzleofblessings://`). Foi programado o frontend para que, após a validação da API no site, o navegador envie o `session_token` de volta para o Unity, permitindo o login sem fricção dentro do jogo através do protocolo de deep links.
 *   **Reengenharia da Tabela `jogador`:** Modificação estrutural (SQL) para campos de password encriptada para o jogo (`jo_password_jogo`), preparando a API para validações externas vindas de fora do navegador.
+---
 
+## 21/02/2026 - Devlog #12: Deployment e Gestão de Versões
+*   **Página de Perfil (V1):** Lançamento da primeira versão funcional da página de perfil e edição. Foi implementada a lógica para separar dados editáveis (nome de utilizador, bio, estado do jogador) de dados fixos do sistema.
+*   **Versionamento com Git:** Criação do repositório oficial no GitHub (**WebsitePuzzleofBlessings**). Todo o projeto foi organizado e transferido via comandos de terminal (CLI), estabelecendo uma base sólida para colaboração e histórico de alterações.
+*   **Integração Contínua (Vercel):** Implementação da plataforma de hosting **Vercel**. O projeto foi importado diretamente do GitHub, configurando uma pipeline de CI/CD onde cada "push" para o repositório resulta numa atualização automática e imediata do site em produção.
