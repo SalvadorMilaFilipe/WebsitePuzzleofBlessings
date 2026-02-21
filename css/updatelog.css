@@ -1,0 +1,282 @@
+/* ===========================================
+   UPDATE LOG PAGE STYLES
+   =========================================== */
+
+.updatelog-main {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.update-intro {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.8;
+}
+
+.version-filter {
+    background: linear-gradient(
+        135deg,
+        rgba(62, 65, 67, 0.92) 0%,
+        rgba(74, 77, 79, 0.88) 50%,
+        rgba(62, 65, 67, 0.92) 100%
+    );
+    padding: 1.5rem 2rem;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--border-vintage);
+    border-radius: 12px;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.version-filter label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.version-filter select {
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-card-light);
+    border: 2px solid var(--border-vintage);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    clip-path: polygon(3% 0%, 97% 0%, 100% 10%, 100% 90%, 97% 100%, 3% 100%, 0% 90%, 0% 10%);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.version-filter select:focus {
+    outline: none;
+    border-color: var(--blue-accent);
+    box-shadow: 0 0 0 3px rgba(123, 163, 196, 0.18);
+}
+
+.updates-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    position: relative;
+    padding-left: 2rem;
+}
+
+.updates-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--blue-accent), var(--green-accent));
+    opacity: 0.25;
+}
+
+.update-entry {
+    background: linear-gradient(
+        135deg,
+        rgba(62, 65, 67, 0.92) 0%,
+        rgba(74, 77, 79, 0.88) 50%,
+        rgba(62, 65, 67, 0.92) 100%
+    );
+    padding: 2.5rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--border-vintage);
+    border-radius: 12px;
+    position: relative;
+    margin-left: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.update-entry::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(139, 181, 214, 0.08) 0%,
+        rgba(157, 192, 171, 0.08) 50%,
+        rgba(154, 138, 200, 0.08) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 12px;
+}
+
+.update-entry:hover::after {
+    opacity: 1;
+}
+
+.update-entry > * {
+    position: relative;
+    z-index: 1;
+}
+
+.update-entry::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 2.5rem;
+    width: 1rem;
+    height: 1rem;
+    background: var(--blue-accent);
+    border-radius: 50%;
+    border: 3px solid var(--bg-primary);
+    box-shadow: 0 0 0 3px var(--blue-accent);
+}
+
+.update-entry:hover {
+    transform: translateX(5px);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border-color: var(--blue-accent);
+}
+
+.update-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-vintage);
+}
+
+.version-number {
+    background: linear-gradient(135deg, #9fc7e8 0%, #8bb5d6 40%, #aed0bc 60%, #9dc0ab 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 25px rgba(159, 199, 232, 0.6)) drop-shadow(0 0 40px rgba(174, 208, 188, 0.4));
+    letter-spacing: -0.01em;
+}
+
+.update-date {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.update-content {
+    color: var(--text-secondary);
+}
+
+.update-description {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    font-weight: 400;
+}
+
+.update-section {
+    margin-bottom: 2rem;
+}
+
+.update-section:last-child {
+    margin-bottom: 0;
+}
+
+.update-section h3 {
+    color: var(--blue-accent);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.update-section h4 {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.update-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.update-section ul li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.7;
+}
+
+.update-section ul li::before {
+    content: '▶';
+    position: absolute;
+    left: 0;
+    color: var(--blue-accent);
+    font-size: 0.8rem;
+}
+
+.update-section ul li strong {
+    color: var(--blue-accent);
+}
+
+.update-section p {
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .updates-timeline {
+        padding-left: 1rem;
+    }
+    
+    .update-entry {
+        margin-left: 1.5rem;
+        padding: 2rem;
+    }
+    
+    .update-entry::before {
+        left: -2rem;
+        width: 0.75rem;
+        height: 0.75rem;
+    }
+    
+    .version-number {
+        font-size: 1.5rem;
+    }
+    
+    .update-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .version-filter {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .version-filter select {
+        width: 100%;
+    }
+}

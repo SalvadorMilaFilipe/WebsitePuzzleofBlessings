@@ -1,0 +1,167 @@
+/* ===========================================
+   O CENTRO PAGE STYLES
+   =========================================== */
+
+.centro-main {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.centro-content {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.centro-title {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    /* Cor similar ao emoji puzzle 🧩 - usando a paleta de lavanda com muito mais brilho */
+    background: linear-gradient(135deg, #baaae8 0%, #aa9ad8 33%, #9a8ac8 66%, #baaae8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 35px rgba(186, 170, 232, 0.7)) drop-shadow(0 0 60px rgba(154, 138, 200, 0.5));
+    letter-spacing: -0.02em;
+}
+
+.centro-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+}
+
+.moedas-counter-box {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: rgba(186, 170, 232, 0.1);
+    border: 2px solid rgba(186, 170, 232, 0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(186, 170, 232, 0.2);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 280px;
+    /* Previne pulos de layout durante atualizações */
+}
+
+.moedas-counter-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.moedas-counter-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    height: 180px;
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.moedas-counter-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 20px rgba(186, 170, 232, 0.3));
+    animation: diceFloat 3s ease-in-out infinite;
+    transition: transform 0.3s ease;
+    mix-blend-mode: multiply;
+}
+
+.moedas-counter-icon:hover {
+    transform: scale(1.05) rotate(5deg);
+}
+
+@keyframes diceFloat {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(2deg);
+    }
+}
+
+.moedas-counter-label {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.moedas-counter-value {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #baaae8;
+    text-shadow: 0 0 20px rgba(186, 170, 232, 0.6),
+        0 0 40px rgba(186, 170, 232, 0.4),
+        2px 2px 4px rgba(0, 0, 0, 0.8);
+    line-height: 1;
+}
+
+.moedas-counter-loading,
+.moedas-counter-error {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    padding: 1rem;
+}
+
+.moedas-counter-error {
+    color: #ff6b6b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .centro-title {
+        font-size: 3rem;
+    }
+
+    .centro-subtitle {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .centro-title {
+        font-size: 2.5rem;
+    }
+
+    .centro-subtitle {
+        font-size: 1rem;
+    }
+
+    .moedas-counter-box {
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .moedas-counter-label {
+        font-size: 1rem;
+    }
+
+    .moedas-counter-value {
+        font-size: 2.5rem;
+    }
+
+    .moedas-counter-icon-wrapper {
+        width: 90px;
+        height: 90px;
+    }
+}

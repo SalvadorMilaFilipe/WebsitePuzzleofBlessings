@@ -1,0 +1,10 @@
+/* Import all CSS files */
+@import '../css/shared.css';
+@import '../css/landingpage.css';
+@import '../css/mainmenu.css';
+@import '../css/centro.css';
+@import '../css/forum.css';
+@import '../css/wiki.css';
+@import '../css/credits.css';
+@import '../css/updatelog.css';
+

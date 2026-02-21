@@ -1,0 +1,293 @@
+/* ===========================================
+   WIKI PAGE STYLES
+   =========================================== */
+
+.wiki-main {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.search-section {
+    margin-bottom: 3rem;
+}
+
+.search-container {
+    background: linear-gradient(
+        135deg,
+        rgba(62, 65, 67, 0.92) 0%,
+        rgba(74, 77, 79, 0.88) 50%,
+        rgba(62, 65, 67, 0.92) 100%
+    );
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--border-vintage);
+    border-radius: 12px;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.search-box {
+    margin-bottom: 1.5rem;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card-light);
+    border: 2px solid var(--border-vintage);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    clip-path: polygon(2% 0%, 98% 0%, 100% 10%, 100% 90%, 98% 100%, 2% 100%, 0% 90%, 0% 10%);
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--blue-accent);
+    box-shadow: 0 0 0 3px rgba(123, 163, 196, 0.18);
+}
+
+.search-box input::placeholder {
+    color: var(--text-muted);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 0.6rem 1.5rem;
+    background: var(--bg-card-light);
+    border: 2px solid var(--border-vintage);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    clip-path: polygon(5% 0%, 95% 0%, 100% 25%, 100% 75%, 95% 100%, 5% 100%, 0% 75%, 0% 25%);
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.filter-tab:hover {
+    border-color: var(--blue-accent);
+    color: var(--blue-accent);
+}
+
+.filter-tab.active {
+    background: linear-gradient(135deg, var(--blue-primary) 0%, var(--green-primary) 100%);
+    border-color: var(--blue-accent);
+    color: white;
+    box-shadow: 0 4px 12px rgba(90, 125, 154, 0.28);
+}
+
+.wiki-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.wiki-item {
+    background: linear-gradient(
+        135deg,
+        rgba(62, 65, 67, 0.92) 0%,
+        rgba(74, 77, 79, 0.88) 50%,
+        rgba(62, 65, 67, 0.92) 100%
+    );
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--border-vintage);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.wiki-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(139, 181, 214, 0.08) 0%,
+        rgba(157, 192, 171, 0.08) 50%,
+        rgba(154, 138, 200, 0.08) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.wiki-item:hover::before {
+    opacity: 1;
+}
+
+.wiki-item > * {
+    position: relative;
+    z-index: 1;
+}
+
+.wiki-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border-color: var(--blue-accent);
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.item-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0; /* Allow flex item to shrink */
+}
+
+.item-image {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    clip-path: polygon(10% 0%, 90% 0%, 100% 20%, 100% 80%, 90% 100%, 10% 100%, 0% 80%, 0% 20%);
+    border: 2px solid var(--border-vintage);
+    background: var(--bg-card-light);
+    padding: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.wiki-item:hover .item-image {
+    transform: scale(1.05);
+    border-color: var(--blue-accent);
+    box-shadow: 0 6px 18px rgba(123, 163, 196, 0.28);
+}
+
+.item-rarity {
+    padding: 0.4rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 5% 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.item-rarity.common {
+    background: var(--gray-medium);
+    color: var(--text-primary);
+}
+
+.item-rarity.rare {
+    background: var(--teal-medium);
+    color: white;
+}
+
+.item-rarity.epic {
+    background: var(--green-primary);
+    color: white;
+}
+
+.item-rarity.legendary {
+    background: linear-gradient(135deg, var(--blue-accent), var(--green-accent));
+    color: white;
+}
+
+.item-name {
+    color: var(--blue-accent);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.item-content {
+    color: var(--text-secondary);
+}
+
+.item-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.info-row {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-vintage-light);
+    font-size: 0.95rem;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-row strong {
+    color: var(--blue-accent);
+    margin-right: 0.5rem;
+}
+
+.event-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    background: var(--teal-medium);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 5% 100%);
+}
+
+.no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .wiki-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-tabs {
+        justify-content: center;
+    }
+    
+    .item-image {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .item-name {
+        font-size: 1.3rem;
+    }
+    
+    .item-header-left {
+        gap: 0.75rem;
+    }
+}

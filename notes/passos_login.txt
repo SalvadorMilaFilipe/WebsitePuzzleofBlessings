@@ -1,0 +1,50 @@
+PASSOS PARA CRIAÇÃO DO SISTEMA DE LOGIN (PUZZLE OF BLESSINGS)
+
+1. ANÁLISE: LOGIN GOOGLE VS. E-MAIL CONSTITUCIONAL
+
+Situacao: Jogo Pedagogico
+
+Opção A: Login via Google (OAuth)
+- Vantagens: Login num clique, não requer que o aluno decore mais uma senha, maior segurança (2FA do Google), facilidade de integração se a escola já usa Google Workspace (Classroom).
+- Desvantagem: Pode misturar contas pessoais com escolares se o aluno não estiver atento.
+
+Opção B: E-mail Institucional (E-mail + Senha ou Link Mágico)
+- Vantagens: Separação total entre vida pessoal e escolar, maior controle administrativo (pode-se restringir o registro apenas para dominios @escola.pt), evita dependência de contas externas de redes sociais.
+- Desvantagem: Alunos esquecem senhas com frequência.
+
+RECOMENDAÇÃO:
+Para a sua situação (pedagógica), o ideal é usar "Login com Google" restringindo apenas para o domínio da sua instituição. O Supabase permite configurar isso. Assim, une-se a facilidade do "um clique" com o controle do e-mail institucional.
+
+---
+
+2. PASSOS PARA A IMPLEMENTAÇÃO (Usando Supabase Auth)
+
+Passo 1: Configuração no Painel do Supabase
+- Aceda a Authentication > Providers.
+- Ative o "Email" (para e-mail/senha) ou o "Google" (necessita criar credenciais no Google Cloud Console).
+- Nas definições de "URL Configuration", defina o Site URL (ex: seu-site.vercel.app).
+
+Passo 2: Criar Página de Login (React)
+- Crie um novo componente `src/pages/Login.jsx`.
+- Implemente um formulário simples ou um botão de "Entrar com Google".
+- Use as funções: 
+  * Para E-mail: `await supabase.auth.signInWithPassword({ email, password })`
+  * Para Google: `await supabase.auth.signInWithOAuth({ provider: 'google' })`
+
+Passo 3: Gestão de Estado Global (User Context)
+- Crie um contexto (ex: `src/context/AuthContext.jsx`) para guardar o utilizador logado.
+- Use o hook `supabase.auth.onAuthStateChange` para detetar quando o utilizador entra ou saí e atualizar o site em tempo real.
+
+Passo 4: Integração na Navbar
+- O botão "Log In" que modificamos deve ser atualizado para:
+  a) Se não logado: Levar para a página `/login`.
+  b) Se logado: Mostrar o nome do utilizador/avatar e ter opção "Sair" (`supabase.auth.signOut()`).
+
+Passo 5: Proteção de Dados (RLS - Row Level Security)
+- No Supabase, ative o RLS nas tabelas (como a `label` ou `forum`).
+- Crie Políticas (Policies) para que, por exemplo, um utilizador só possa ver as suas próprias moedas ou só possa postar no fórum se estiver autenticado (`auth.uid() = user_id`).
+
+Passo 6: Persistência
+- O Supabase guarda a sessão automaticamente no LocalStorage, por isso o utilizador não precisa de fazer login sempre que atualizar a página.
+
+Este sistema é moderno, seguro e escala bem para um ambiente escolar.

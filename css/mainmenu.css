@@ -1,0 +1,2149 @@
+/* ===========================================
+   MAIN MENU PAGE STYLES - Optimized for Engagement
+   =========================================== */
+
+.main-menu {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+/* Hero Section: Download + Rewards Vertical Layout */
+.main-hero-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+/* Download Promo Box - Flattened Horizontal */
+.download-promo-box {
+    background: rgba(62, 65, 67, 0.5);
+    padding: 1.25rem 2rem;
+    backdrop-filter: blur(8px);
+    text-align: center;
+    border: 2px solid var(--border-vintage);
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.download-promo-box:hover {
+    transform: translateY(-3px);
+    border-color: var(--blue-accent);
+    box-shadow: 0 8px 25px rgba(139, 181, 214, 0.3);
+}
+
+.download-promo-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(139, 181, 214, 0.08) 50%,
+        transparent 70%
+    );
+    animation: shimmer 6s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.download-promo-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: 100%;
+    flex: 1;
+}
+
+.download-icon {
+    font-size: 2.5rem;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+    flex-shrink: 0;
+}
+
+.download-promo-title {
+    background: linear-gradient(135deg, #9fc7e8 0%, #8bb5d6 50%, #aed0bc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 20px rgba(159, 199, 232, 0.5));
+    letter-spacing: -0.01em;
+    flex: 1;
+    text-align: left;
+}
+
+.btn-download-promo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Login Rewards - Full Width Below Download */
+.login-rewards-box {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    backdrop-filter: blur(8px);
+    border: 2px solid var(--border-vintage);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    width: 100%;
+}
+
+.login-rewards-box:hover {
+    transform: translateY(-3px);
+    border-color: var(--green-accent);
+    box-shadow: 0 8px 25px rgba(157, 192, 171, 0.3);
+}
+
+.login-rewards-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.login-rewards-title-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.rewards-icon {
+    font-size: 1.8rem;
+}
+
+.rewards-title {
+    background: linear-gradient(135deg, #aed0bc 0%, #9dc0ab 50%, #8cb09a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 25px rgba(174, 208, 188, 0.6));
+    letter-spacing: -0.01em;
+}
+
+.calendar-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.calendar-btn:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(2px 2px 6px rgba(139, 181, 214, 0.5));
+}
+
+/* 7 Days Rewards Display */
+.login-rewards-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+    width: 100%;
+}
+
+.login-reward-day {
+    background: linear-gradient(
+        135deg,
+        rgba(62, 65, 67, 0.85) 0%,
+        rgba(74, 77, 79, 0.80) 50%,
+        rgba(62, 65, 67, 0.85) 100%
+    );
+    padding: 1rem 0.5rem;
+    border-radius: 10px;
+    border: 2px solid var(--border-vintage);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    text-align: center;
+    box-shadow: 
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+/* Past days - smaller and lighter */
+.login-reward-day.past-day {
+    opacity: 0.5;
+    transform: scale(0.85);
+    filter: grayscale(0.3);
+}
+
+.login-reward-day.past-day .reward-day-header,
+.login-reward-day.past-day .reward-content {
+    color: var(--text-muted);
+}
+
+.login-reward-day.past-day .reward-name {
+    font-size: 0.75rem;
+}
+
+.login-reward-day.past-day .reward-quantity {
+    font-size: 0.7rem;
+}
+
+/* Current day - larger and highlighted */
+.login-reward-day.current-day {
+    transform: scale(1.1);
+    z-index: 10;
+    border: 3px solid var(--blue-accent);
+    box-shadow: 
+        0 6px 25px rgba(139, 181, 214, 0.6),
+        0 0 35px rgba(139, 181, 214, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    background: linear-gradient(
+        135deg,
+        rgba(62, 65, 67, 0.95) 0%,
+        rgba(74, 77, 79, 0.92) 50%,
+        rgba(62, 65, 67, 0.95) 100%
+    );
+    animation: glow-pulse-rewards 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse-rewards {
+    0%, 100% {
+        box-shadow: 
+            0 6px 25px rgba(139, 181, 214, 0.6),
+            0 0 35px rgba(139, 181, 214, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    50% {
+        box-shadow: 
+            0 8px 30px rgba(139, 181, 214, 0.8),
+            0 0 45px rgba(139, 181, 214, 0.6),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+}
+
+.login-reward-day.current-day::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(
+        45deg,
+        var(--blue-accent),
+        var(--green-accent),
+        var(--lavender-medium),
+        var(--blue-accent),
+        var(--green-accent)
+    );
+    background-size: 300% 300%;
+    border-radius: 12px;
+    z-index: -1;
+    opacity: 0.7;
+    animation: border-glow-rewards 3s ease infinite;
+    filter: blur(2px);
+}
+
+@keyframes border-glow-rewards {
+    0% {
+        background-position: 0% 50%;
+        opacity: 0.7;
+    }
+    50% {
+        background-position: 100% 50%;
+        opacity: 0.9;
+    }
+    100% {
+        background-position: 0% 50%;
+        opacity: 0.7;
+    }
+}
+
+/* Future days - medium colors */
+.login-reward-day.future-day {
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+
+.login-reward-day.future-day .reward-day-header,
+.login-reward-day.future-day .reward-content {
+    color: var(--text-secondary);
+}
+
+/* Reward day header */
+.reward-day-header {
+    margin-bottom: 0.75rem;
+}
+
+.reward-day-week {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--blue-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+}
+
+.login-reward-day.current-day .reward-day-week {
+    font-size: 0.85rem;
+    color: var(--blue-accent);
+    text-shadow: 0 0 8px rgba(139, 181, 214, 0.5);
+}
+
+.login-reward-day.past-day .reward-day-week {
+    font-size: 0.65rem;
+    opacity: 0.6;
+}
+
+.reward-day-date {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.login-reward-day.current-day .reward-day-date {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.login-reward-day.past-day .reward-day-date {
+    font-size: 0.85rem;
+}
+
+.login-reward-day.future-day .reward-day-date {
+    font-size: 0.95rem;
+}
+
+/* Reward content */
+.reward-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+}
+
+.reward-image {
+    width: 50px;
+    height: 50px;
+    background: rgba(139, 181, 214, 0.1);
+    border: 2px dashed var(--border-vintage);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+    flex-shrink: 0;
+}
+
+.login-reward-day.current-day .reward-image {
+    width: 60px;
+    height: 60px;
+    border-color: var(--blue-accent);
+    background: rgba(139, 181, 214, 0.15);
+}
+
+.login-reward-day.past-day .reward-image {
+    width: 40px;
+    height: 40px;
+    opacity: 0.5;
+}
+
+.reward-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+.login-reward-day.current-day .reward-name {
+    font-size: 1rem;
+    color: var(--blue-accent);
+}
+
+.login-reward-day.past-day .reward-name {
+    font-size: 0.75rem;
+}
+
+.reward-quantity {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+.login-reward-day.current-day .reward-quantity {
+    font-size: 0.9rem;
+    color: var(--green-accent);
+}
+
+.login-reward-day.past-day .reward-quantity {
+    font-size: 0.7rem;
+}
+
+/* Collect button */
+.btn-collect-reward {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--blue-accent) 0%, var(--green-accent) 100%);
+    color: white;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(3% 0%, 97% 0%, 100% 10%, 100% 90%, 97% 100%, 3% 100%, 0% 90%, 0% 10%);
+    box-shadow: 
+        0 3px 10px rgba(139, 181, 214, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.2;
+    min-height: 2.5rem;
+}
+
+.btn-collect-reward:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 5px 15px rgba(139, 181, 214, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-collect-reward:active {
+    transform: translateY(0);
+}
+
+/* Reward status */
+.reward-status {
+    padding: 0.4rem 0.3rem;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-top: 0.25rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.collected-status {
+    background: rgba(157, 192, 171, 0.2);
+    color: var(--green-accent);
+    border: 1px solid var(--green-accent);
+}
+
+.not-collected-status {
+    background: rgba(158, 158, 158, 0.15);
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    opacity: 0.7;
+}
+
+.to-collect-status {
+    background: rgba(139, 181, 214, 0.15);
+    color: var(--blue-accent);
+    border: 1px solid var(--blue-accent);
+    opacity: 0.8;
+}
+
+/* Calendar Modal */
+.calendar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.calendar-modal {
+    position: relative;
+    background: linear-gradient(
+        135deg,
+        rgba(42, 45, 47, 0.98) 0%,
+        rgba(62, 65, 67, 0.95) 100%
+    );
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--border-vintage);
+    border-radius: 15px;
+    padding: 2rem;
+    z-index: 10000;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    animation: modalSlideIn 0.3s ease forwards;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+/* Desktop: Stretch modal to show all days without scroll */
+@media (min-width: 769px) {
+    .calendar-modal {
+        max-width: 95vw;
+        max-height: 95vh;
+        width: auto;
+        min-width: 950px;
+        padding: 2.5rem 3rem;
+        overflow: visible;
+    }
+    
+    .calendar-content {
+        overflow: visible;
+        max-height: none;
+    }
+    
+    .calendar-grid {
+        gap: 0.7rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .calendar-day {
+        min-height: 95px;
+    }
+    
+    /* If last day is isolated (alone in first column of last row), move it to last column */
+    .calendar-day.last-day-isolated {
+        grid-column: 7;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+        scale: 0.95;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        scale: 1;
+    }
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-vintage);
+}
+
+.calendar-header h3 {
+    color: var(--blue-accent);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.calendar-close {
+    background: transparent;
+    border: 2px solid var(--border-vintage-light);
+    color: var(--text-secondary);
+    font-size: 1.8rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    line-height: 1;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.calendar-close:hover {
+    background: rgba(139, 181, 214, 0.2);
+    color: var(--blue-accent);
+    border-color: var(--blue-accent);
+    transform: rotate(90deg) scale(1.1);
+}
+
+.calendar-close:active {
+    transform: rotate(90deg) scale(0.95);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.calendar-weekday {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--blue-accent);
+    padding: 0.5rem 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.calendar-day {
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    border-radius: 8px;
+    border: 2px solid var(--border-vintage-light);
+    background: rgba(62, 65, 67, 0.5);
+    position: relative;
+    transition: all 0.3s ease;
+    padding: 0.4rem 0.3rem;
+    gap: 0.3rem;
+    overflow: hidden;
+}
+
+/* Desktop: Adjust calendar day sizing */
+@media (min-width: 769px) {
+    .calendar-day {
+        min-height: 95px;
+        padding: 0.45rem 0.35rem;
+    }
+    
+    .calendar-reward-name {
+        font-size: 0.65rem;
+    }
+    
+    .calendar-reward-quantity {
+        font-size: 0.75rem;
+    }
+    
+    .calendar-day.today .calendar-reward-name {
+        font-size: 0.7rem;
+    }
+    
+    .calendar-day.today .calendar-reward-quantity {
+        font-size: 0.8rem;
+    }
+    
+    .calendar-day.last-day-of-month .calendar-reward-name {
+        font-size: 0.7rem;
+    }
+    
+    .calendar-day.last-day-of-month .calendar-reward-quantity {
+        font-size: 0.85rem;
+    }
+    
+    .status-badge {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.45rem;
+    }
+}
+
+.calendar-day:hover:not(.empty) {
+    border-color: var(--blue-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 181, 214, 0.3);
+}
+
+.calendar-day.empty {
+    border: none;
+    background: transparent;
+    min-height: 0;
+    padding: 0;
+}
+
+.calendar-day.today {
+    border-color: var(--blue-accent);
+    background: rgba(139, 181, 214, 0.2);
+    box-shadow: 0 0 15px rgba(139, 181, 214, 0.4);
+}
+
+.calendar-day.collected {
+    border-color: var(--green-accent);
+    background: rgba(157, 192, 171, 0.2);
+}
+
+.calendar-day.missed {
+    border-color: var(--text-muted);
+    background: rgba(158, 158, 158, 0.1);
+    opacity: 0.7;
+}
+
+.calendar-day.future {
+    border-color: var(--border-vintage-light);
+    background: rgba(62, 65, 67, 0.4);
+    opacity: 0.8;
+}
+
+/* Last day of month - Golden border */
+.calendar-day.last-day-of-month {
+    border: 3px solid #d4af37;
+    background: linear-gradient(
+        135deg,
+        rgba(212, 175, 55, 0.15) 0%,
+        rgba(62, 65, 67, 0.5) 50%,
+        rgba(212, 175, 55, 0.15) 100%
+    );
+    box-shadow: 
+        0 0 20px rgba(212, 175, 55, 0.4),
+        inset 0 0 10px rgba(212, 175, 55, 0.1);
+    animation: golden-glow 3s ease-in-out infinite;
+}
+
+@keyframes golden-glow {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(212, 175, 55, 0.4),
+            inset 0 0 10px rgba(212, 175, 55, 0.1);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(212, 175, 55, 0.6),
+            inset 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+}
+
+.calendar-day.last-day-of-month:hover {
+    border-color: #f4d03f;
+    box-shadow: 
+        0 0 35px rgba(212, 175, 55, 0.7),
+        inset 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+/* Calendar day header */
+.calendar-content {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.calendar-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.25rem;
+    gap: 0.25rem;
+}
+
+.calendar-golden-badge {
+    font-size: 0.7rem;
+    color: #d4af37;
+    filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.6));
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.2);
+    }
+}
+
+.calendar-day-number {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.calendar-day.today .calendar-day-number {
+    color: var(--blue-accent);
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(139, 181, 214, 0.5);
+}
+
+.calendar-day.collected .calendar-day-number {
+    color: var(--green-accent);
+}
+
+.calendar-day.last-day-of-month .calendar-day-number {
+    color: #d4af37;
+    font-weight: 800;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+}
+
+.calendar-check {
+    font-size: 0.75rem;
+    color: var(--green-accent);
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* Calendar reward preview */
+.calendar-reward-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    width: 100%;
+    flex: 1;
+    justify-content: center;
+    padding-top: 0.2rem;
+}
+
+.calendar-reward-icon {
+    font-size: 1rem;
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+    line-height: 1;
+}
+
+.calendar-day.last-day-of-month .calendar-reward-icon {
+    font-size: 1.2rem;
+    filter: drop-shadow(2px 2px 4px rgba(212, 175, 55, 0.5));
+}
+
+.calendar-reward-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    width: 100%;
+}
+
+.calendar-reward-name {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-height: 2.4em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.calendar-day.today .calendar-reward-name {
+    color: var(--text-primary);
+    font-size: 0.65rem;
+}
+
+.calendar-day.collected .calendar-reward-name {
+    color: var(--green-accent);
+}
+
+.calendar-day.last-day-of-month .calendar-reward-name {
+    color: #d4af37;
+    font-weight: 700;
+    font-size: 0.65rem;
+}
+
+.calendar-reward-quantity {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+.calendar-day.today .calendar-reward-quantity {
+    color: var(--blue-accent);
+    font-size: 0.75rem;
+}
+
+.calendar-day.collected .calendar-reward-quantity {
+    color: var(--green-accent);
+}
+
+.calendar-day.last-day-of-month .calendar-reward-quantity {
+    color: #f4d03f;
+    font-size: 0.8rem;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+}
+
+/* Calendar reward status badges */
+.calendar-reward-status {
+    margin-top: 0.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.status-badge {
+    font-size: 0.55rem;
+    font-weight: 600;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    text-align: center;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.collected-badge {
+    background: rgba(157, 192, 171, 0.3);
+    color: var(--green-accent);
+    border: 1px solid var(--green-accent);
+}
+
+.today-badge {
+    background: rgba(139, 181, 214, 0.3);
+    color: var(--blue-accent);
+    border: 1px solid var(--blue-accent);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.missed-badge {
+    background: rgba(158, 158, 158, 0.2);
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    opacity: 0.7;
+}
+
+.future-badge {
+    background: rgba(62, 65, 67, 0.4);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-vintage-light);
+    opacity: 0.8;
+}
+
+.calendar-legend {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--border-vintage);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid;
+}
+
+.today-legend {
+    background: rgba(139, 181, 214, 0.2);
+    border-color: var(--blue-accent);
+}
+
+.collected-legend {
+    background: rgba(157, 192, 171, 0.2);
+    border-color: var(--green-accent);
+}
+
+.missed-legend {
+    background: rgba(158, 158, 158, 0.1);
+    border-color: var(--text-muted);
+}
+
+.future-legend {
+    background: rgba(62, 65, 67, 0.5);
+    border-color: var(--border-vintage-light);
+}
+
+.golden-legend {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: #d4af37;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+/* Quick Access Section - 1 Click Access */
+.quick-access-section {
+    margin-bottom: 3rem;
+}
+
+.section-subtitle {
+    background: linear-gradient(135deg, #9fc7e8 0%, #8bb5d6 40%, #aed0bc 60%, #9dc0ab 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 25px rgba(159, 199, 232, 0.5)) drop-shadow(0 0 40px rgba(174, 208, 188, 0.3));
+    letter-spacing: -0.01em;
+}
+
+.quick-access-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.quick-access-card {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    backdrop-filter: blur(8px);
+    border: 2px solid var(--border-vintage);
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 180px;
+    justify-content: center;
+}
+
+.quick-access-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--blue-accent);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.quick-access-card.featured-accent {
+    border-color: var(--green-accent);
+    background: rgba(157, 192, 171, 0.1);
+}
+
+.quick-access-card.featured-accent:hover {
+    border-color: var(--green-accent);
+    box-shadow: 
+        0 8px 25px rgba(157, 192, 171, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.quick-icon {
+    font-size: 3rem;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.quick-access-card h3 {
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.quick-access-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Content Section: Events & News */
+.content-section {
+    margin-bottom: 3rem;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.content-card {
+    background: linear-gradient(
+        135deg,
+        rgba(62, 65, 67, 0.92) 0%,
+        rgba(74, 77, 79, 0.88) 50%,
+        rgba(62, 65, 67, 0.92) 100%
+    );
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--border-vintage);
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    height: 100%;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    z-index: 1;
+}
+
+.content-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.content-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(139, 181, 214, 0.08) 0%,
+        rgba(157, 192, 171, 0.08) 50%,
+        rgba(154, 138, 200, 0.08) 100%
+    );
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.content-card:hover::before {
+    opacity: 1;
+}
+
+.content-card.large-card {
+    grid-column: span 2;
+    min-height: 280px;
+}
+
+/* Smart grid expansion for last items */
+.content-grid {
+    grid-auto-flow: dense;
+}
+
+/* Default: last card expands to fill remaining space */
+.content-card:last-child {
+    grid-column: span 3;
+}
+
+/* If there are two items in last row (second-to-last and last), make last one span 2 */
+.content-grid .content-card:nth-last-child(2):not(.large-card) + .content-card:last-child {
+    grid-column: span 2;
+}
+
+/* Special handling: if we have a pattern where last item should span 2 instead of 3 */
+.content-card:nth-last-child(2) ~ .content-card:last-child {
+    grid-column: span 2;
+}
+
+.content-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border-color: var(--blue-accent);
+}
+
+.content-card.featured {
+    border: 2px solid var(--blue-accent);
+    background: rgba(139, 181, 214, 0.1);
+}
+
+/* Enhanced styles for expanded last card */
+.content-card:last-child {
+    background: linear-gradient(
+        135deg,
+        rgba(62, 65, 67, 0.95) 0%,
+        rgba(74, 77, 79, 0.90) 25%,
+        rgba(139, 181, 214, 0.10) 50%,
+        rgba(157, 192, 171, 0.10) 75%,
+        rgba(74, 77, 79, 0.90) 100%
+    );
+    border-color: var(--border-vintage);
+}
+
+/* When last card spans 2 columns, use different gradient */
+.content-card:nth-last-child(2) ~ .content-card:last-child {
+    background: linear-gradient(
+        135deg,
+        rgba(62, 65, 67, 0.95) 0%,
+        rgba(74, 77, 79, 0.90) 40%,
+        rgba(157, 192, 171, 0.12) 60%,
+        rgba(74, 77, 79, 0.90) 100%
+    );
+}
+
+.content-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.content-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 5% 100%);
+    z-index: 1;
+}
+
+.event-badge {
+    background: var(--blue-accent);
+    color: var(--bg-primary);
+}
+
+.news-badge {
+    background: var(--green-accent);
+    color: var(--bg-primary);
+}
+
+.content-title {
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-right: 5rem;
+    flex-grow: 0;
+    line-height: 1.3;
+}
+
+.content-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.content-date {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-vintage-light);
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--blue-accent);
+    color: white;
+    clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 5% 100%);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn:hover {
+    background: var(--blue-light);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(139, 181, 214, 0.4);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--blue-accent) 0%, var(--blue-light) 100%);
+    box-shadow: 0 4px 15px rgba(139, 181, 214, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--green-accent) 0%, var(--green-light) 100%);
+    box-shadow: 0 4px 15px rgba(157, 192, 171, 0.4);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, var(--green-light) 0%, var(--green-accent) 100%);
+    box-shadow: 0 5px 15px rgba(157, 192, 171, 0.4);
+}
+
+.btn-icon {
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .content-card.large-card {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 1024px) {
+    .main-hero-section {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .download-promo-box {
+        margin: 0 auto;
+    }
+    
+    .download-promo-content {
+        flex-direction: row;
+        gap: 1.25rem;
+    }
+    
+    .download-icon {
+        font-size: 2.25rem;
+    }
+    
+    .download-promo-title {
+        font-size: 1.3rem;
+    }
+    
+    .content-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .quick-access-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .section-subtitle {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-menu {
+        padding: 1.5rem 0;
+    }
+    
+    .container {
+        padding: 0 1rem;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    
+    .main-hero-section {
+        flex-direction: column;
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .download-promo-box {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem 1.25rem;
+    }
+    
+    .download-promo-content {
+        flex-direction: row;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .download-icon {
+        font-size: 2rem;
+    }
+    
+    .download-promo-title {
+        font-size: 1.2rem;
+        text-align: center;
+        flex: 1;
+        min-width: 100%;
+    }
+    
+    .btn-download-promo {
+        padding: 0.65rem 1.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .login-rewards-box {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem 0.75rem;
+        gap: 1rem;
+    }
+    
+    .login-rewards-header {
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-rewards-week {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .login-reward-day {
+        padding: 0.75rem 0.5rem;
+        min-height: auto;
+    }
+    
+    .login-reward-day.current-day {
+        transform: scale(1.05);
+    }
+    
+    .reward-day-week {
+        font-size: 0.65rem;
+    }
+    
+    .login-reward-day.current-day .reward-day-week {
+        font-size: 0.75rem;
+    }
+    
+    .reward-day-date {
+        font-size: 0.9rem;
+    }
+    
+    .login-reward-day.current-day .reward-day-date {
+        font-size: 1.1rem;
+    }
+    
+    .reward-image {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .login-reward-day.current-day .reward-image {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .login-reward-day.past-day .reward-image {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .reward-name {
+        font-size: 0.75rem;
+    }
+    
+    .login-reward-day.current-day .reward-name {
+        font-size: 0.9rem;
+    }
+    
+    .reward-quantity {
+        font-size: 0.7rem;
+    }
+    
+    .login-reward-day.current-day .reward-quantity {
+        font-size: 0.85rem;
+    }
+    
+    .btn-collect-reward {
+        padding: 0.45rem 0.6rem;
+        font-size: 0.65rem;
+        width: 100%;
+        max-width: 100%;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.2;
+        min-height: 2.25rem;
+    }
+    
+    .reward-status {
+        padding: 0.3rem 0.25rem;
+        font-size: 0.6rem;
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.2;
+    }
+    
+    .calendar-overlay {
+        padding: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .calendar-modal {
+        padding: 1.25rem;
+        max-width: 95vw;
+        max-height: 90vh;
+        border-radius: 12px;
+        margin: auto;
+    }
+    
+    .calendar-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+    }
+    
+    .calendar-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .calendar-close {
+        width: 38px;
+        height: 38px;
+        font-size: 1.7rem;
+    }
+    
+    .calendar-grid {
+        gap: 0.5rem;
+    }
+    
+    .calendar-weekday {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.2rem;
+    }
+    
+    .calendar-day {
+        min-height: 80px;
+        padding: 0.35rem 0.25rem;
+        gap: 0.25rem;
+    }
+    
+    .calendar-day-header {
+        margin-bottom: 0.2rem;
+    }
+    
+    .calendar-day-number {
+        font-size: 0.75rem;
+    }
+    
+    .calendar-check {
+        font-size: 0.65rem;
+    }
+    
+    .calendar-reward-icon {
+        font-size: 0.85rem;
+    }
+    
+    .calendar-day.last-day-of-month .calendar-reward-icon {
+        font-size: 1rem;
+    }
+    
+    .calendar-reward-name {
+        font-size: 0.55rem;
+        max-height: 2.4em;
+        -webkit-line-clamp: 2;
+    }
+    
+    .calendar-day.today .calendar-reward-name {
+        font-size: 0.6rem;
+    }
+    
+    .calendar-day.last-day-of-month .calendar-reward-name {
+        font-size: 0.6rem;
+    }
+    
+    .calendar-reward-quantity {
+        font-size: 0.65rem;
+    }
+    
+    .calendar-day.today .calendar-reward-quantity {
+        font-size: 0.7rem;
+    }
+    
+    .calendar-day.last-day-of-month .calendar-reward-quantity {
+        font-size: 0.75rem;
+    }
+    
+    .calendar-golden-badge {
+        font-size: 0.65rem;
+    }
+    
+    .status-badge {
+        font-size: 0.5rem;
+        padding: 0.12rem 0.3rem;
+    }
+    
+    .calendar-legend {
+        gap: 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    .legend-color {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .calendar-close {
+        width: 36px;
+        height: 36px;
+        font-size: 1.6rem;
+    }
+    
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .quick-access-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .quick-access-card {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .content-card {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 100%;
+        min-height: 250px;
+        padding: 1.75rem 1.5rem;
+    }
+    
+    .content-card.large-card {
+        grid-column: span 1;
+    }
+    
+    .content-card:last-child {
+        grid-column: span 1;
+    }
+    
+    .download-promo-title {
+        font-size: 1.2rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .quick-access-section,
+    .content-section {
+        width: 100%;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .content-title {
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .download-promo-content {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .download-promo-title {
+        min-width: auto;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+    
+    .download-icon {
+        font-size: 1.75rem;
+    }
+    
+    .login-rewards-box {
+        padding: 1rem 0.75rem;
+        gap: 1rem;
+    }
+    
+    .login-rewards-week {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+    
+    .login-reward-day {
+        padding: 1.25rem 0.75rem;
+        min-height: 220px;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .login-reward-day.current-day {
+        transform: scale(1.05);
+        min-height: 240px;
+    }
+    
+    .reward-day-week {
+        font-size: 0.85rem;
+    }
+    
+    .login-reward-day.current-day .reward-day-week {
+        font-size: 0.95rem;
+    }
+    
+    .reward-day-date {
+        font-size: 1.15rem;
+    }
+    
+    .login-reward-day.current-day .reward-day-date {
+        font-size: 1.4rem;
+    }
+    
+    .reward-image {
+        width: 65px;
+        height: 65px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-reward-day.current-day .reward-image {
+        width: 75px;
+        height: 75px;
+    }
+    
+    .login-reward-day.past-day .reward-image {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .reward-name {
+        font-size: 0.95rem;
+        line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+    
+    .login-reward-day.current-day .reward-name {
+        font-size: 1.1rem;
+    }
+    
+    .reward-quantity {
+        font-size: 0.9rem;
+        line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .login-reward-day.current-day .reward-quantity {
+        font-size: 1.05rem;
+    }
+    
+    .btn-collect-reward {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.7rem;
+        width: 100%;
+        max-width: 100%;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.2;
+        min-height: 2.4rem;
+    }
+    
+    .reward-status {
+        padding: 0.4rem 0.3rem;
+        font-size: 0.65rem;
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.2;
+    }
+}
+
+@media (max-width: 480px) {
+    .download-promo-box {
+        padding: 0.875rem 1rem;
+    }
+    
+    .download-promo-content {
+        gap: 0.625rem;
+    }
+    
+    .download-promo-title {
+        font-size: 1rem;
+    }
+    
+    .download-icon {
+        font-size: 1.5rem;
+    }
+    
+    .btn-download-promo {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.9rem;
+    }
+    
+    .login-rewards-box {
+        padding: 0.875rem 0.625rem;
+        gap: 0.875rem;
+    }
+    
+    .login-rewards-week {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.875rem;
+    }
+    
+    .login-reward-day {
+        padding: 1.125rem 0.625rem;
+        min-height: 210px;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .login-reward-day.current-day {
+        transform: scale(1.04);
+        min-height: 230px;
+    }
+    
+    .reward-day-week {
+        font-size: 0.8rem;
+    }
+    
+    .login-reward-day.current-day .reward-day-week {
+        font-size: 0.9rem;
+    }
+    
+    .reward-day-date {
+        font-size: 1.1rem;
+    }
+    
+    .login-reward-day.current-day .reward-day-date {
+        font-size: 1.3rem;
+    }
+    
+    .reward-image {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-reward-day.current-day .reward-image {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .login-reward-day.past-day .reward-image {
+        width: 52px;
+        height: 52px;
+    }
+    
+    .reward-name {
+        font-size: 0.9rem;
+        line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+    
+    .login-reward-day.current-day .reward-name {
+        font-size: 1.05rem;
+    }
+    
+    .reward-quantity {
+        font-size: 0.85rem;
+        line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .login-reward-day.current-day .reward-quantity {
+        font-size: 1rem;
+    }
+    
+    .btn-collect-reward {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.65rem;
+        width: 100%;
+        max-width: 100%;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.2;
+        min-height: 2.3rem;
+    }
+    
+    .reward-status {
+        padding: 0.35rem 0.25rem;
+        font-size: 0.6rem;
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.2;
+    }
+    
+    .calendar-modal {
+        padding: 1rem;
+    }
+    
+    .calendar-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .calendar-modal {
+        padding: 1rem 0.75rem;
+        max-width: 98vw;
+        max-height: 95vh;
+    }
+    
+    .calendar-header {
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    .calendar-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .calendar-grid {
+        gap: 0.35rem;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        display: grid;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .calendar-weekday {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.1rem;
+        text-align: center;
+        word-break: keep-all;
+    }
+    
+    .calendar-day {
+        min-height: 70px;
+        padding: 0.25rem 0.15rem;
+        gap: 0.15rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+    
+    .calendar-day.empty {
+        min-height: 0;
+        padding: 0;
+    }
+    
+    .calendar-day-header {
+        margin-bottom: 0.1rem;
+        gap: 0.15rem;
+    }
+    
+    .calendar-day-number {
+        font-size: 0.65rem;
+        font-weight: 700;
+    }
+    
+    .calendar-check {
+        font-size: 0.55rem;
+    }
+    
+    .calendar-reward-icon {
+        font-size: 0.75rem;
+        line-height: 1;
+    }
+    
+    .calendar-day.last-day-of-month .calendar-reward-icon {
+        font-size: 0.85rem;
+    }
+    
+    .calendar-reward-info {
+        gap: 0.1rem;
+        width: 100%;
+    }
+    
+    .calendar-reward-name {
+        font-size: 0.48rem;
+        max-height: 2em;
+        -webkit-line-clamp: 2;
+        line-height: 1.1;
+        word-break: break-word;
+    }
+    
+    .calendar-day.today .calendar-reward-name {
+        font-size: 0.52rem;
+    }
+    
+    .calendar-day.last-day-of-month .calendar-reward-name {
+        font-size: 0.52rem;
+    }
+    
+    .calendar-reward-quantity {
+        font-size: 0.55rem;
+        line-height: 1.1;
+    }
+    
+    .calendar-day.today .calendar-reward-quantity {
+        font-size: 0.6rem;
+    }
+    
+    .calendar-day.last-day-of-month .calendar-reward-quantity {
+        font-size: 0.65rem;
+    }
+    
+    .calendar-golden-badge {
+        font-size: 0.55rem;
+    }
+    
+    .calendar-reward-status {
+        margin-top: 0.15rem;
+    }
+    
+    .status-badge {
+        font-size: 0.42rem;
+        padding: 0.08rem 0.2rem;
+        line-height: 1.1;
+    }
+    
+    .calendar-legend {
+        gap: 0.5rem;
+        font-size: 0.7rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .legend-item {
+        gap: 0.4rem;
+    }
+    
+    .legend-color {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .legend-item span {
+        font-size: 0.7rem;
+    }
+    
+    .calendar-close {
+        width: 34px;
+        height: 34px;
+        font-size: 1.5rem;
+    }
+    
+    .calendar-header h3 {
+        font-size: 1rem;
+    }
+}
+
+/* Next month hidden - locked/mystery style */
+.calendar-day.next-month-hidden {
+    border-color: var(--border-vintage);
+    background: rgba(43, 44, 46, 0.7);
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.calendar-day.next-month-hidden .calendar-day-header {
+    opacity: 0.5;
+}
+
+.calendar-day.next-month-hidden .calendar-reward-icon {
+    filter: grayscale(1);
+    opacity: 0.3;
+}
+
+/* Locked badge */
+.status-badge.locked-badge {
+    background: rgba(100, 100, 100, 0.2);
+    color: var(--text-muted);
+    border: 1px solid var(--border-vintage);
+    opacity: 0.8;
+}
+
