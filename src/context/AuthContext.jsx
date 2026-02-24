@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const { data, error } = await supabase
                 .from('jogador')
-                .select('*')
+                .select('*, status:jo_status(*)')
                 .eq('jo_email', email)
                 .maybeSingle() // maybeSingle avoids error if row not found
 

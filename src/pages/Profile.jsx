@@ -63,17 +63,25 @@ function Profile() {
                                     <span style={{
                                         fontSize: '0.8rem',
                                         background: 'rgba(255,255,255,0.05)',
-                                        padding: '2px 8px',
+                                        padding: '5px 12px',
                                         borderRadius: '12px',
-                                        color: userProfile.jo_status === 'online' ? '#4CAF50' : '#888',
+                                        color: '#fff',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '4px'
+                                        gap: '8px',
+                                        border: '1px solid rgba(255,255,255,0.1)'
                                     }}>
-                                        {userProfile.jo_status === 'online' ? '🟢' :
-                                            userProfile.jo_status === 'away' ? '🟡' :
-                                                userProfile.jo_status === 'idle' ? '🌙' : '⚪'}
-                                        {userProfile.jo_status || 'offline'}
+                                        <div style={{
+                                            width: '8px',
+                                            height: '8px',
+                                            borderRadius: '50%',
+                                            backgroundColor: userProfile.status?.st_cor || '#6B7280',
+                                            boxShadow: `0 0 8px ${userProfile.status?.st_cor || '#6B7280'}`,
+                                            flexShrink: 0
+                                        }}></div>
+                                        <span style={{ textTransform: 'capitalize' }}>
+                                            {userProfile.status?.st_status || 'offline'}
+                                        </span>
                                     </span>
                                     <span
                                         className="profile-userid"

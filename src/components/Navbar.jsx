@@ -115,7 +115,26 @@ function Navbar({ onOpenLogin }) {
                 Credits
               </Link>
               {session && (
-                <Link to="/profile" className="nav-link nav-username-steam" onClick={(e) => handleNavClick(e, '/profile')} style={{ color: '#f0c674', fontWeight: 700, letterSpacing: '1px' }}>
+                <Link
+                  to="/profile"
+                  className="nav-link nav-username-steam"
+                  onClick={(e) => handleNavClick(e, '/profile')}
+                  style={{
+                    color: '#f0c674',
+                    fontWeight: 700,
+                    letterSpacing: '1px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <div style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: userProfile?.status?.st_cor || '#6B7280',
+                    boxShadow: `0 0 5px ${userProfile?.status?.st_cor || '#6B7280'}`
+                  }}></div>
                   {userProfile?.jo_user || 'PROFILE'}
                 </Link>
               )}

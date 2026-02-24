@@ -12,8 +12,7 @@ function EditProfile() {
     const [formData, setFormData] = useState({
         jo_user: '',
         jo_user_jogo: '',
-        jo_descricao: '',
-        jo_status: 'offline'
+        jo_descricao: ''
     })
 
     const [saving, setSaving] = useState(false)
@@ -27,8 +26,7 @@ function EditProfile() {
             setFormData({
                 jo_user: userProfile.jo_user || '',
                 jo_user_jogo: userProfile.jo_user_jogo || '',
-                jo_descricao: userProfile.jo_descricao || '',
-                jo_status: userProfile.jo_status || 'offline'
+                jo_descricao: userProfile.jo_descricao || ''
             })
         }
     }, [session, loading, navigate, userProfile])
@@ -49,8 +47,7 @@ function EditProfile() {
                 .update({
                     jo_user: formData.jo_user,
                     jo_user_jogo: formData.jo_user_jogo,
-                    jo_descricao: formData.jo_descricao,
-                    jo_status: formData.jo_status
+                    jo_descricao: formData.jo_descricao
                 })
                 .eq('jo_email', session.user.email)
 
@@ -140,18 +137,31 @@ function EditProfile() {
                             </div>
 
                             <div className="form-group">
-                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Estado Atual</label>
-                                <select
-                                    name="jo_status"
-                                    value={formData.jo_status}
-                                    onChange={handleChange}
-                                    style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '6px', color: '#fff' }}
-                                >
-                                    <option value="online">🟢 Online</option>
-                                    <option value="away">🟡 Ausente (Away)</option>
-                                    <option value="idle">🌙 Inativo (Idle)</option>
-                                    <option value="offline">⚪ Offline</option>
-                                </select>
+                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.8rem' }}>Estado Atual</label>
+                                <div style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    padding: '0.8rem 1.2rem',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    borderRadius: '8px',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    color: '#fff'
+                                }}>
+                                    <div style={{
+                                        width: '10px',
+                                        height: '10px',
+                                        borderRadius: '50%',
+                                        backgroundColor: userProfile.status?.st_cor || '#6B7280',
+                                        boxShadow: `0 0 10px ${userProfile.status?.st_cor || '#6B7280'}`
+                                    }}></div>
+                                    <span style={{ textTransform: 'capitalize', fontWeight: '500' }}>
+                                        {userProfile.status?.st_status || 'offline'}
+                                    </span>
+                                    <small style={{ color: '#888', marginLeft: '10px', fontStyle: 'italic' }}>
+                                        (Calculado automaticamente pelas sessões)
+                                    </small>
+                                </div>
                             </div>
                         </section>
 
