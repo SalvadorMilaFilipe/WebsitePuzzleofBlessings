@@ -36,12 +36,11 @@ export const AuthProvider = ({ children }) => {
                     await fetchUserProfile(currentSession.user.email)
                 }
             } else {
-                if (currentSiteSessionId.current) {
-                    await endSiteSession()
-                }
+                // When logging out, we clear everything
                 setUserProfile(null)
                 setIsNewUser(false)
                 lastFetchedEmail.current = null
+                currentSiteSessionId.current = null
                 setLoading(false)
             }
         })
@@ -115,25 +114,45 @@ export const AuthProvider = ({ children }) => {
         if (fetchingProfile.current) return
         if (!silent) setLoading(true)
 
+        console.log('Fetching profile for email:', email)
         fetchingProfile.current = true
         try {
+            // First attempt with join
             const { data, error } = await supabase
                 .from('jogador')
                 .select('*, status:jo_status(*)')
                 .eq('jo_email', email)
-                .maybeSingle() // maybeSingle avoids error if row not found
+                .maybeSingle()
 
             if (error) {
-                console.error('Error fetching profile:', error)
+                console.error('Error fetching profile with join:', error)
+                // Fallback: try without join to see if it's a join issue (e.g. data type mismatch)
+                const { data: simpleData, error: simpleError } = await supabase
+                    .from('jogador')
+                    .select('*')
+                    .eq('jo_email', email)
+                    .maybeSingle()
+
+                if (simpleError) throw simpleError
+                if (simpleData) {
+                    console.warn('Profile found but status join failed. Check jo_status data type.')
+                    setUserProfile(simpleData)
+                    setIsNewUser(false)
+                    lastFetchedEmail.current = email
+                } else {
+                    setIsNewUser(true)
+                }
             } else if (data) {
+                console.log('Profile loaded successfully:', data.jo_user)
                 setUserProfile(data)
                 setIsNewUser(false)
                 lastFetchedEmail.current = email
             } else {
+                console.log('No profile found for this email. Marking as new user.')
                 setIsNewUser(true)
             }
         } catch (err) {
-            console.error(err)
+            console.error('Fetch profile fatal error:', err)
         } finally {
             setLoading(false)
             fetchingProfile.current = false
@@ -176,9 +195,23 @@ export const AuthProvider = ({ children }) => {
     }
 
     const logout = async () => {
-        const { error } = await supabase.auth.signOut()
-        if (error) console.error('Error logging out:', error.message)
-        // State clearing is handled by onAuthStateChange
+        try {
+            // 1. End the session in the database while we are still authenticated
+            if (currentSiteSessionId.current) {
+                await endSiteSession()
+            }
+            // 2. Clear local storage just in case (optional, depends on your use case)
+            localStorage.removeItem('dailyRewardsCollected')
+            localStorage.removeItem('isLoggedIn')
+
+            // 3. Sign out from Supabase
+            const { error } = await supabase.auth.signOut()
+            if (error) throw error
+        } catch (error) {
+            console.error('Error during logout process:', error.message)
+            // Even if database update fails, we force sign out
+            await supabase.auth.signOut()
+        }
     }
 
     const completeRegistration = async (username, gameUser, gamePassword, sitePassword = null, birthYear, country = null) => {
