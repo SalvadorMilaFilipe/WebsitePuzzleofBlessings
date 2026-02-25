@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [isNewUser, setIsNewUser] = useState(false)
     const fetchingProfile = useRef(false)
     const lastFetchedEmail = useRef(null)
+    const currentSiteSessionId = useRef(null)
 
     useEffect(() => {
         // 1. Get initial session
@@ -27,20 +28,34 @@ export const AuthProvider = ({ children }) => {
         // 2. Listen for auth changes (Only ONCE)
         const {
             data: { subscription },
-        } = supabase.auth.onAuthStateChange((event, currentSession) => {
+        } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
             setSession(currentSession)
 
             if (currentSession) {
                 if (currentSession.user.email !== lastFetchedEmail.current || !userProfile) {
-                    fetchUserProfile(currentSession.user.email)
+                    await fetchUserProfile(currentSession.user.email)
                 }
             } else {
+                if (currentSiteSessionId.current) {
+                    await endSiteSession()
+                }
                 setUserProfile(null)
                 setIsNewUser(false)
                 lastFetchedEmail.current = null
                 setLoading(false)
             }
         })
+
+        const handleBeforeUnload = () => {
+            if (currentSiteSessionId.current) {
+                // Use navigator.sendBeacon or a synchronous fetch if possible, 
+                // but with Supabase/PostgREST we'll just try to close it.
+                // Note: Reliability of this varies by browser.
+                endSiteSession()
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
 
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible' && lastFetchedEmail.current) {
@@ -53,8 +68,48 @@ export const AuthProvider = ({ children }) => {
         return () => {
             subscription.unsubscribe()
             document.removeEventListener('visibilitychange', handleVisibilityChange)
+            window.removeEventListener('beforeunload', handleBeforeUnload)
         }
     }, [])
+
+    // Effect to handle session creation once userProfile is loaded
+    useEffect(() => {
+        if (userProfile && session && !currentSiteSessionId.current) {
+            startSiteSession(userProfile.jo_cod)
+        }
+    }, [userProfile, session])
+
+    const startSiteSession = async (playerCod) => {
+        try {
+            const { data, error } = await supabase
+                .from('sessao')
+                .insert([{
+                    se_jogador: playerCod,
+                    se_tipo: 'site'
+                }])
+                .select('se_cod')
+                .single()
+
+            if (error) throw error
+            currentSiteSessionId.current = data.se_cod
+        } catch (err) {
+            console.error('Error starting site session:', err)
+        }
+    }
+
+    const endSiteSession = async () => {
+        if (!currentSiteSessionId.current) return
+        try {
+            await supabase
+                .from('sessao')
+                .update({ se_datafim: new Date().toISOString() })
+                .eq('se_cod', currentSiteSessionId.current)
+
+            currentSiteSessionId.current = null
+        } catch (err) {
+            console.error('Error ending site session:', err)
+        }
+    }
 
     const fetchUserProfile = async (email, silent = false) => {
         if (fetchingProfile.current) return
