@@ -88,6 +88,7 @@ export const AuthProvider = ({ children }) => {
 
     const startSiteSession = async (playerCod) => {
         try {
+            // Note: se_dataini and se_horaini have defaults in the database (CURRENT_DATE/TIME)
             const { data, error } = await supabase
                 .from('sessao')
                 .insert([{
@@ -99,6 +100,7 @@ export const AuthProvider = ({ children }) => {
 
             if (error) throw error
             currentSiteSessionId.current = data.se_cod
+            console.log('[Auth] Site session started:', data.se_cod)
         } catch (err) {
             console.error('Error starting site session:', err)
         }
@@ -106,13 +108,23 @@ export const AuthProvider = ({ children }) => {
 
     const endSiteSession = async () => {
         if (!currentSiteSessionId.current) return
+        const sessionId = currentSiteSessionId.current
+        currentSiteSessionId.current = null // Clear immediatey to prevent double-calls
+
+        const now = new Date()
+        const dateStr = now.toISOString().split('T')[0]
+        const timeStr = now.toTimeString().split(' ')[0]
+
         try {
             await supabase
                 .from('sessao')
-                .update({ se_datafim: new Date().toISOString() })
-                .eq('se_cod', currentSiteSessionId.current)
+                .update({
+                    se_datafim: dateStr,
+                    se_horafim: timeStr
+                })
+                .eq('se_cod', sessionId)
 
-            currentSiteSessionId.current = null
+            console.log('[Auth] Site session ended:', sessionId)
         } catch (err) {
             console.error('Error ending site session:', err)
         }
