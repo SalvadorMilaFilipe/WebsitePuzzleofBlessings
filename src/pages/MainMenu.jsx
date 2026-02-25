@@ -20,7 +20,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
 function MainMenu() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [collectedDays, setCollectedDays] = useState(() => {
-    const stored = localStorage.getItem('dailyRewardsCollected')
+    const stored = sessionStorage.getItem('dailyRewardsCollected')
     return stored ? JSON.parse(stored) : []
   })
   const [showCalendar, setShowCalendar] = useState(false)
@@ -28,7 +28,7 @@ function MainMenu() {
 
   useEffect(() => {
     const checkLogin = () => {
-      const loggedIn = localStorage.getItem('isLoggedIn') === 'true'
+      const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true'
       setIsLoggedIn(loggedIn)
     }
     checkLogin()
@@ -47,14 +47,14 @@ function MainMenu() {
 
   const handleLogin = () => {
     setIsLoggedIn(true)
-    localStorage.setItem('isLoggedIn', 'true')
+    sessionStorage.setItem('isLoggedIn', 'true')
   }
 
   const handleCollectReward = (dateStr) => {
     if (!collectedDays.includes(dateStr)) {
       const newCollected = [...collectedDays, dateStr]
       setCollectedDays(newCollected)
-      localStorage.setItem('dailyRewardsCollected', JSON.stringify(newCollected))
+      sessionStorage.setItem('dailyRewardsCollected', JSON.stringify(newCollected))
     }
   }
 

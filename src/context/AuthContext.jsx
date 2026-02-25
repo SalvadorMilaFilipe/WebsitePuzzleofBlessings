@@ -15,8 +15,17 @@ export const AuthProvider = ({ children }) => {
     const currentSiteSessionId = useRef(null)
 
     useEffect(() => {
+        // Safety timeout: Never stay in loading state for more than 10 seconds
+        const timeout = setTimeout(() => {
+            if (loading) {
+                console.warn('Auth loading safety timeout reached. Forcing loading to false.')
+                setLoading(false)
+            }
+        }, 10000)
+
         // 1. Get initial session
         supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+            console.log('Initial session check:', initialSession ? 'Found' : 'Not found')
             setSession(initialSession)
             if (initialSession) {
                 fetchUserProfile(initialSession.user.email)
@@ -25,18 +34,19 @@ export const AuthProvider = ({ children }) => {
             }
         })
 
-        // 2. Listen for auth changes (Only ONCE)
+        // 2. Listen for auth changes
         const {
             data: { subscription },
-        } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+        } = supabase.auth.onAuthStateChange((event, currentSession) => {
+            console.log('Auth state change event:', event)
             setSession(currentSession)
 
             if (currentSession) {
                 if (currentSession.user.email !== lastFetchedEmail.current || !userProfile) {
-                    await fetchUserProfile(currentSession.user.email)
+                    fetchUserProfile(currentSession.user.email)
                 }
             } else {
-                // When logging out, we clear everything
+                // Clear state on logout
                 setUserProfile(null)
                 setIsNewUser(false)
                 lastFetchedEmail.current = null
@@ -47,9 +57,6 @@ export const AuthProvider = ({ children }) => {
 
         const handleBeforeUnload = () => {
             if (currentSiteSessionId.current) {
-                // Use navigator.sendBeacon or a synchronous fetch if possible, 
-                // but with Supabase/PostgREST we'll just try to close it.
-                // Note: Reliability of this varies by browser.
                 endSiteSession()
             }
         }
@@ -65,6 +72,7 @@ export const AuthProvider = ({ children }) => {
         document.addEventListener('visibilitychange', handleVisibilityChange)
 
         return () => {
+            clearTimeout(timeout)
             subscription.unsubscribe()
             document.removeEventListener('visibilitychange', handleVisibilityChange)
             window.removeEventListener('beforeunload', handleBeforeUnload)
@@ -111,13 +119,23 @@ export const AuthProvider = ({ children }) => {
     }
 
     const fetchUserProfile = async (email, silent = false) => {
-        if (fetchingProfile.current) return
-        if (!silent) setLoading(true)
+        if (!email) {
+            setLoading(false)
+            return
+        }
 
-        console.log('Fetching profile for email:', email)
+        // If already fetching, don't start another one but ensure loading is handled if not silent
+        if (fetchingProfile.current) {
+            return
+        }
+
+        if (!silent) setLoading(true)
         fetchingProfile.current = true
+
+        console.log(`[Auth] Fetching profile for: ${email}`)
+
         try {
-            // First attempt with join
+            // First try with status join
             const { data, error } = await supabase
                 .from('jogador')
                 .select('*, status:jo_status(*)')
@@ -125,8 +143,8 @@ export const AuthProvider = ({ children }) => {
                 .maybeSingle()
 
             if (error) {
-                console.error('Error fetching profile with join:', error)
-                // Fallback: try without join to see if it's a join issue (e.g. data type mismatch)
+                console.warn('[Auth] Join fetch failed, trying simple fetch:', error.message)
+                // Fallback to simple fetch if join fails (e.g. table schema transition)
                 const { data: simpleData, error: simpleError } = await supabase
                     .from('jogador')
                     .select('*')
@@ -134,25 +152,24 @@ export const AuthProvider = ({ children }) => {
                     .maybeSingle()
 
                 if (simpleError) throw simpleError
+
                 if (simpleData) {
-                    console.warn('Profile found but status join failed. Check jo_status data type.')
                     setUserProfile(simpleData)
                     setIsNewUser(false)
-                    lastFetchedEmail.current = email
                 } else {
                     setIsNewUser(true)
                 }
             } else if (data) {
-                console.log('Profile loaded successfully:', data.jo_user)
                 setUserProfile(data)
                 setIsNewUser(false)
                 lastFetchedEmail.current = email
             } else {
-                console.log('No profile found for this email. Marking as new user.')
+                console.log('[Auth] No profile found in jogador table.')
                 setIsNewUser(true)
             }
         } catch (err) {
-            console.error('Fetch profile fatal error:', err)
+            console.error('[Auth] Fatal error loading profile:', err)
+            // Even on error, we don't want to show the loading screen forever
         } finally {
             setLoading(false)
             fetchingProfile.current = false
@@ -200,9 +217,9 @@ export const AuthProvider = ({ children }) => {
             if (currentSiteSessionId.current) {
                 await endSiteSession()
             }
-            // 2. Clear local storage just in case (optional, depends on your use case)
-            localStorage.removeItem('dailyRewardsCollected')
-            localStorage.removeItem('isLoggedIn')
+            // 2. Clear session storage
+            sessionStorage.removeItem('dailyRewardsCollected')
+            sessionStorage.removeItem('isLoggedIn')
 
             // 3. Sign out from Supabase
             const { error } = await supabase.auth.signOut()
