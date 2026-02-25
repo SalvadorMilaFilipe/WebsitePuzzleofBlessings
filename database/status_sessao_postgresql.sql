@@ -71,14 +71,14 @@ BEGIN
         WHERE se_jogador = p_jo_cod AND se_tipo = 'site' AND se_datafim IS NULL
     ) INTO v_site_ativo;
 
-    -- Lógica:
+    -- Lógica solicitada:
     -- Online: Jogo + Site
-    -- Inativo: Apenas Jogo
-    -- Offline: Nenhum ou apenas Site (conforme o pedido: "inativo (online no jogo, mas n no site) e offline (nos dois)")
+    -- Inativo: Apenas Jogo OU Apenas Site
+    -- Offline: Nenhum
     
     IF v_jogo_ativo AND v_site_ativo THEN
         RETURN 1; -- online
-    ELSIF v_jogo_ativo THEN
+    ELSIF v_jogo_ativo OR v_site_ativo THEN
         RETURN 2; -- inativo
     ELSE
         RETURN 3; -- offline
