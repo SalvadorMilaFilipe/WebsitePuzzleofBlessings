@@ -14,13 +14,13 @@
 }
 
 .login-modal {
-    background: #1a1a1a;
+    background: #0F1A12;
     padding: 2.5rem;
     border-radius: 12px;
     width: 90%;
     max-width: 400px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    border: 1px solid #333;
+    border: 1px solid rgba(107, 203, 119, 0.2);
     color: #ededed;
     position: relative;
     font-family: 'Inter', sans-serif;
@@ -71,8 +71,8 @@
 .form-group input {
     width: 100%;
     padding: 0.8rem;
-    background: #2a2a2a;
-    border: 1px solid #444;
+    background: rgba(15, 26, 18, 0.9);
+    border: 1px solid rgba(107, 203, 119, 0.25);
     border-radius: 6px;
     color: #fff;
     font-size: 1rem;
@@ -81,14 +81,14 @@
 
 .form-group input:focus {
     outline: none;
-    border-color: #646cff;
+    border-color: #81D89E;
 }
 
 .btn-primary.full-width {
     width: 100%;
     padding: 0.8rem;
     margin-top: 1rem;
-    background: linear-gradient(90deg, #646cff, #535bf2);
+    background: linear-gradient(135deg, #3CB371, #2BA89C, #4DA6C9);
     color: white;
     border: none;
     border-radius: 6px;
@@ -113,7 +113,7 @@
 .divider::after {
     content: "";
     flex: 1;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid rgba(107, 203, 119, 0.2);
 }
 
 .divider span {
@@ -153,7 +153,7 @@
 }
 
 .toggle-view span {
-    color: #646cff;
+    color: #81D89E;
     cursor: pointer;
     font-weight: 600;
     margin-left: 5px;

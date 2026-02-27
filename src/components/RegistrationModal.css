@@ -14,15 +14,15 @@
 }
 
 .registration-modal {
-  background: linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(20, 20, 30, 0.98));
+  background: linear-gradient(135deg, rgba(15, 30, 20, 0.97), rgba(10, 20, 15, 0.99));
   padding: 2rem;
   border-radius: 16px;
   width: 90%;
   max-width: 500px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5),
-    0 0 15px rgba(255, 215, 0, 0.1);
+    0 0 15px rgba(60, 179, 113, 0.15);
   /* Gold glow hint */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(107, 203, 119, 0.2);
   color: #fff;
   font-family: 'Inter', sans-serif;
   animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -31,8 +31,8 @@
 .registration-modal h2 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: #f0c674;
-  /* Gold-ish accent */
+  color: var(--green-accent, #81D89E);
+  /* Nature green accent */
   text-align: center;
   font-size: 1.8rem;
 }
@@ -60,7 +60,7 @@
   width: 100%;
   padding: 0.8rem;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid #444;
+  border: 1px solid rgba(107, 203, 119, 0.25);
   border-radius: 8px;
   color: #fff;
   font-size: 1rem;
@@ -70,8 +70,8 @@
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #f0c674;
-  box-shadow: 0 0 0 2px rgba(240, 198, 116, 0.2);
+  border-color: var(--green-accent, #81D89E);
+  box-shadow: 0 0 0 2px rgba(129, 216, 158, 0.25);
 }
 
 .error-message {
@@ -109,9 +109,9 @@
   transform: translateY(0);
 }
 
-.btn-primary {
-  background: linear-gradient(to right, #f0c674, #dcb055);
-  color: #1a1a1a;
+.registration-modal .btn-primary {
+  background: linear-gradient(135deg, #3CB371 0%, #2BA89C 50%, #4DA6C9 100%);
+  color: #fff;
 }
 
 .btn-secondary {
@@ -178,9 +178,9 @@
 }
 
 .step-indicator span.active {
-  background: rgba(240, 198, 116, 0.1);
-  color: #f0c674;
-  border-color: #f0c674;
+  background: rgba(60, 179, 113, 0.15);
+  color: var(--green-accent, #81D89E);
+  border-color: var(--green-accent, #81D89E);
 }
 
 .form-group small {

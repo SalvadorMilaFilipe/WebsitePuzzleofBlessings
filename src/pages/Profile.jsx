@@ -99,9 +99,9 @@ function Profile() {
                                 className="edit-profile-btn"
                                 onClick={() => navigate('/edit-profile')}
                                 style={{
-                                    background: 'rgba(240, 198, 116, 0.1)',
-                                    border: '1px solid #f0c674',
-                                    color: '#f0c674',
+                                    background: 'rgba(129, 216, 158, 0.1)',
+                                    border: '1px solid #81D89E',
+                                    color: '#81D89E',
                                     padding: '0.5rem 1.2rem',
                                     borderRadius: '6px',
                                     cursor: 'pointer',
@@ -111,11 +111,11 @@ function Profile() {
                                     marginBottom: '5px'
                                 }}
                                 onMouseOver={(e) => {
-                                    e.target.style.background = 'rgba(240, 198, 116, 0.2)'
+                                    e.target.style.background = 'rgba(129, 216, 158, 0.2)'
                                     e.target.style.transform = 'translateY(-2px)'
                                 }}
                                 onMouseOut={(e) => {
-                                    e.target.style.background = 'rgba(240, 198, 116, 0.1)'
+                                    e.target.style.background = 'rgba(129, 216, 158, 0.1)'
                                     e.target.style.transform = 'translateY(0)'
                                 }}
                             >

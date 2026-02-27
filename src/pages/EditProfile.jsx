@@ -81,7 +81,7 @@ function EditProfile() {
                 <div className="profile-container" style={{ maxWidth: '800px', margin: '0 auto', background: 'rgba(20, 20, 30, 0.95)', border: '1px solid rgba(255,255,255,0.1)' }}>
 
                     <div style={{ padding: '2rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                        <h2 style={{ color: '#f0c674', margin: 0 }}>Editar Perfil</h2>
+                        <h2 style={{ color: '#81D89E', margin: 0 }}>Editar Perfil</h2>
                         <p style={{ color: '#888', marginTop: '0.5rem' }}>Personalize a sua identidade no site e no jogo.</p>
                     </div>
 
@@ -89,7 +89,7 @@ function EditProfile() {
 
                         {/* SECÇÃO: Dados do Site */}
                         <section style={{ marginBottom: '2.5rem' }}>
-                            <h3 style={{ color: '#fff', fontSize: '1.1rem', marginBottom: '1.2rem', borderLeft: '3px solid #f0c674', paddingLeft: '10px' }}>
+                            <h3 style={{ color: '#fff', fontSize: '1.1rem', marginBottom: '1.2rem', borderLeft: '3px solid #81D89E', paddingLeft: '10px' }}>
                                 Identidade no Site
                             </h3>
 

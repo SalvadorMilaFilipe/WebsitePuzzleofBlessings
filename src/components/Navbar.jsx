@@ -120,7 +120,7 @@ function Navbar({ onOpenLogin }) {
                   className="nav-link nav-username-steam"
                   onClick={(e) => handleNavClick(e, '/profile')}
                   style={{
-                    color: '#f0c674',
+                    color: '#81D89E',
                     fontWeight: 700,
                     letterSpacing: '1px',
                     display: 'flex',
@@ -158,7 +158,7 @@ function Navbar({ onOpenLogin }) {
                     title="Click once: Profile | Double click: Copy ID"
                     style={{
                       borderRadius: '50%',
-                      border: '2px solid #6b8da8',
+                      border: '2px solid #3CB371',
                       width: '40px',
                       height: '40px',
                       filter: 'brightness(0) invert(1)',
@@ -262,7 +262,7 @@ function Navbar({ onOpenLogin }) {
                     src={displayAvatar}
                     alt="Avatar"
                     className="nav-user-icon mobile-user-icon"
-                    style={{ borderRadius: '50%', border: '2px solid #6b8da8', filter: 'brightness(0) invert(1)' }}
+                    style={{ borderRadius: '50%', border: '2px solid #3CB371', filter: 'brightness(0) invert(1)' }}
                   />
                   <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>In-game Avatar</span>
                 </div>
