@@ -82,40 +82,49 @@ export const AuthProvider = ({ children }) => {
     // Effect to handle session creation once userProfile is loaded
     useEffect(() => {
         if (userProfile && session && !currentSiteSessionId.current) {
-            startSiteSession(userProfile.jo_cod)
+            startSiteSession(userProfile.jo_cod) // Pass ID now for DB consistency
         }
     }, [userProfile, session])
 
-    const startSiteSession = async (playerCod) => {
+    const startSiteSession = async (playerName) => {
+        if (!playerName) return
         try {
-            // Note: se_dataini and se_horaini have defaults in the database (CURRENT_DATE/TIME)
+            console.log(`[Auth] Attempting to start site session for player: ${playerName}`)
+
+            const now = new Date()
+            const dateStr = now.toISOString().split('T')[0]
+            const timeStr = now.toTimeString().split(' ')[0]
+
             const { data, error } = await supabase
                 .from('sessao')
                 .insert([{
-                    se_jogador: playerCod,
-                    se_tipo: 'site'
+                    se_jogador: playerName,
+                    se_tipo: 'site',
+                    se_dataini: dateStr,
+                    se_horaini: timeStr
                 }])
                 .select('se_cod')
                 .single()
 
             if (error) throw error
             currentSiteSessionId.current = data.se_cod
-            console.log('[Auth] Site session started:', data.se_cod)
+            console.log('[Auth] Site session started successfully:', data.se_cod)
         } catch (err) {
-            console.error('Error starting site session:', err)
+            console.error('[Auth] Fatal error starting site session:', err.message)
         }
     }
 
     const endSiteSession = async () => {
         if (!currentSiteSessionId.current) return
         const sessionId = currentSiteSessionId.current
-        currentSiteSessionId.current = null // Clear immediatey to prevent double-calls
+        currentSiteSessionId.current = null // Clear immediately
 
         const now = new Date()
         const dateStr = now.toISOString().split('T')[0]
         const timeStr = now.toTimeString().split(' ')[0]
 
         try {
+            console.log(`[Auth] Ending site session: ${sessionId}`)
             await supabase
                 .from('sessao')
                 .update({
@@ -124,9 +133,9 @@ export const AuthProvider = ({ children }) => {
                 })
                 .eq('se_cod', sessionId)
 
-            console.log('[Auth] Site session ended:', sessionId)
+            console.log('[Auth] Site session ended successfully')
         } catch (err) {
-            console.error('Error ending site session:', err)
+            console.error('[Auth] Error ending site session:', err.message)
         }
     }
 
@@ -151,7 +160,7 @@ export const AuthProvider = ({ children }) => {
             const { data, error } = await supabase
                 .from('jogador')
                 .select('*, status:jo_status(*)')
-                .eq('jo_email', email)
+                .ilike('jo_email', email)
                 .maybeSingle()
 
             if (error) {
@@ -160,7 +169,7 @@ export const AuthProvider = ({ children }) => {
                 const { data: simpleData, error: simpleError } = await supabase
                     .from('jogador')
                     .select('*')
-                    .eq('jo_email', email)
+                    .ilike('jo_email', email)
                     .maybeSingle()
 
                 if (simpleError) throw simpleError
