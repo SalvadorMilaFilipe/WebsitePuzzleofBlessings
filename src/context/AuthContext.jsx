@@ -156,10 +156,10 @@ export const AuthProvider = ({ children }) => {
         console.log(`[Auth] Fetching profile for: ${email}`)
 
         try {
-            // First try with status join
+            // First try with status join using explicitly named reference
             const { data, error } = await supabase
                 .from('jogador')
-                .select('*, status:jo_status(*)')
+                .select('*, status:fk_jogador_status(*)')
                 .ilike('jo_email', email)
                 .maybeSingle()
 
