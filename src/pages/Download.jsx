@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import Footer from '../components/Footer'
+// import PuzzleAnimation from '../components/PuzzleAnimation'
+
+const PuzzleAnimation = lazy(() => import('../components/PuzzleAnimation'))
 
 function Download() {
   useEffect(() => {
@@ -31,12 +34,15 @@ function Download() {
   return (
     <>
       {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-content">
+      <section className="hero" style={{ position: 'relative', overflow: 'hidden' }}>
+        <Suspense fallback={null}>
+          <PuzzleAnimation type="assemble" />
+        </Suspense>
+        <div className="hero-content" style={{ position: 'relative', zIndex: 2 }}>
           <div className="hero-text">
             <h1 className="hero-title">Puzzle of Blessings</h1>
             <p className="hero-subtitle">
-              A 3D educational puzzle game that develops cognitive, executive, and sensory skills 
+              A 3D educational puzzle game that develops cognitive, executive, and sensory skills
               through spatial problem-solving and cooperative interactions
             </p>
             <div className="hero-buttons">
@@ -47,13 +53,12 @@ function Download() {
             </div>
           </div>
           <div className="hero-image">
-            <div className="game-preview lowpoly-style">
-              <div className="preview-placeholder">
-                <div className="lowpoly-shape shape-1"></div>
-                <div className="lowpoly-shape shape-2"></div>
-                <div className="lowpoly-shape shape-3"></div>
+            <div className="game-preview lowpoly-style" style={{ background: 'transparent', boxShadow: 'none', border: 'none' }}>
+              {/* The 3D animation occupies the background of the hero, 
+                   but we can keep this div for layout balance if needed or add a specific 3D view here */}
+              <div className="preview-placeholder" style={{ opacity: 0.8, background: 'transparent', boxShadow: 'none' }}>
                 <span className="preview-icon">🧩</span>
-                <p>Low-Poly 3D Puzzle</p>
+                <p>3D Interactive Experience</p>
               </div>
             </div>
           </div>
@@ -68,7 +73,7 @@ function Download() {
             <p className="download-description">
               Download Puzzle of Blessings or update your existing installation to the latest version!
             </p>
-            
+
             <div className="download-card lowpoly-card">
               <div className="download-info">
                 <h3>Puzzle of Blessings</h3>
@@ -123,8 +128,8 @@ function Download() {
               </div>
               <div className="update-notice">
                 <p>
-                  <strong>Note:</strong> We recommend backing up your save files before updating, 
-                  though our update system preserves your progress automatically. If you encounter any issues, 
+                  <strong>Note:</strong> We recommend backing up your save files before updating,
+                  though our update system preserves your progress automatically. If you encounter any issues,
                   check our <Link to="/forum">Forum</Link> for help.
                 </p>
               </div>

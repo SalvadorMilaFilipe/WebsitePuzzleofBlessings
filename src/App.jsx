@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import MainMenu from './pages/MainMenu'
-import Download from './pages/Download'
+// import Download from './pages/Download' // Removed static import
 import Centro from './pages/Centro'
 import Forum from './pages/Forum'
 import Wiki from './pages/Wiki'
@@ -13,6 +13,9 @@ import EditProfile from './pages/EditProfile'
 import { AuthProvider } from './context/AuthContext'
 import RegistrationModal from './components/RegistrationModal'
 import LoginModal from './components/LoginModal'
+
+// Lazy load the Download page
+const Download = lazy(() => import('./pages/Download'))
 
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -26,7 +29,14 @@ function App() {
           <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
           <Routes>
             <Route path="/" element={<MainMenu />} />
-            <Route path="/download" element={<Download />} />
+            <Route
+              path="/download"
+              element={
+                <Suspense fallback={<div className="container" style={{ padding: '100px', textAlign: 'center' }}>Carregando área 3D...</div>}>
+                  <Download />
+                </Suspense>
+              }
+            />
             <Route path="/centro" element={<Centro />} />
             <Route path="/forum" element={<Forum />} />
             <Route path="/wiki" element={<Wiki />} />
