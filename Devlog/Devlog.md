@@ -122,8 +122,10 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 ## 04/03/2026 - Devlog #16
 
 - **Redesign de Autenticação:** Overhaul total dos modais de Sign In e Registro (Configurar Perfil).
-- **Estética Low-Poly Premium:** Implementação de um design moderno com cantos angulados (octogonais) e efeitos de brilho/glassmorphism, alinhando a web ao motor de jogo.
-- **Otimização UX/UI:** Redimensionamento estratégico de todos os elementos para garantir que os modais caibam perfeitamente no ecrã a 100% de zoom, eliminando scrolls desnecessários.
-- **Unificação Visual:** Aplicação da linguagem visual do registro diretamente no ecrã de login para uma experiência de utilizador coesa e fluida.
+- **Tradução para Inglês:** Todo o portal de autenticação foi traduzido para Inglês para consistência global.
+- **Estética Low-Poly Premium:** Implementação de um design moderno com cantos angulados (octogonais) e efeitos de brilho/glassmorphism em ambos os modais.
+- **Otimização UX/UI:** Redimensionamento estratégico para garantir compatibilidade com 100% de zoom, eliminando scrolls desnecessários.
+- **Fluxo de Registro Integrado:** O ecrã de Sign In agora inclui o esquema multi-etapas de "Configuração de Perfil" diretamente no fluxo de registro por email, unificando a experiência.
+- **Unificação Visual:** Sincronização de cores e estilos entre o Login e o Completo Registro de Conta.
 
 

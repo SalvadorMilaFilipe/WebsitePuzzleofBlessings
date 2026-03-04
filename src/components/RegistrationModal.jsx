@@ -62,8 +62,8 @@ function RegistrationModal() {
         <div className="registration-modal-overlay">
             <div className="registration-modal">
                 <div className="step-indicator">
-                    <span className={step === 1 ? 'active' : ''}>1. Perfil</span>
-                    <span className={step === 2 ? 'active' : ''}>2. Jogo</span>
+                    <span className={step === 1 ? 'active' : ''}>1. Profile</span>
+                    <span className={step === 2 ? 'active' : ''}>2. Game</span>
                 </div>
 
                 {session?.user?.app_metadata?.provider === 'google' && (
@@ -72,41 +72,41 @@ function RegistrationModal() {
                     </div>
                 )}
 
-                <h2>{step === 1 ? 'Configurar Perfil' : 'Conta do Jogo'}</h2>
-                <p>Quase lá, <strong>{session?.user?.user_metadata?.full_name?.split(' ')[0] || 'Jogador'}</strong>! Precisamos de mais uns detalhes para a tua conta.</p>
+                <h2>{step === 1 ? 'Configure Profile' : 'Game Account'}</h2>
+                <p>Welcome, <strong>{session?.user?.user_metadata?.full_name?.split(' ')[0] || 'Traveler'}</strong>! We need a few more details to complete your registration.</p>
 
                 {step === 1 ? (
                     <form onSubmit={handleNextStep}>
                         <div className="form-group">
-                            <label htmlFor="username">Username Público</label>
+                            <label htmlFor="username">Public Username</label>
                             <input
                                 type="text"
                                 id="username"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Como queres ser visto no site"
+                                placeholder="How you will be seen on the site"
                                 required
                             />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="sitePassword">Palavra-passe do Site</label>
+                            <label htmlFor="sitePassword">Site Password</label>
                             <input
                                 type="password"
                                 id="sitePassword"
                                 value={sitePassword}
                                 onChange={(e) => setSitePassword(e.target.value)}
-                                placeholder="Define uma password para o portal"
+                                placeholder="Set a password for the portal"
                                 required
                             />
                             {session?.user?.app_metadata?.provider === 'google' && (
-                                <small>Como entraste com Google, define esta para login via email se preferires no futuro.</small>
+                                <small>Since you signed in with Google, set this for future email-only logins.</small>
                             )}
                         </div>
 
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <div className="form-group" style={{ flex: 1 }}>
-                                <label htmlFor="birthYear">Ano Nascimento</label>
+                                <label htmlFor="birthYear">Birth Year</label>
                                 <select
                                     id="birthYear"
                                     value={birthYear}
@@ -119,7 +119,7 @@ function RegistrationModal() {
                             </div>
 
                             <div className="form-group" style={{ flex: 1 }}>
-                                <label htmlFor="country">País</label>
+                                <label htmlFor="country">Country</label>
                                 <div className="country-select-wrapper">
                                     {country && (
                                         <img
@@ -134,7 +134,7 @@ function RegistrationModal() {
                                         onChange={(e) => setCountry(e.target.value)}
                                         className={country ? 'has-flag' : ''}
                                     >
-                                        <option value="">Selecionar...</option>
+                                        <option value="">Select...</option>
                                         {countries.map((c) => (
                                             <option key={c.code} value={c.name}>
                                                 {getFlagEmoji(c.code)} {c.name}
@@ -149,35 +149,35 @@ function RegistrationModal() {
 
                         <div className="modal-actions">
                             <button type="button" className="btn-secondary" onClick={logout}>
-                                Cancelar
+                                Logout
                             </button>
                             <button type="submit" className="btn-primary">
-                                Seguinte →
+                                Next →
                             </button>
                         </div>
                     </form>
                 ) : (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="gameUser">Username no Jogo (Unity)</label>
+                            <label htmlFor="gameUser">In-Game Username (Unity)</label>
                             <input
                                 type="text"
                                 id="gameUser"
                                 value={gameUser}
                                 onChange={(e) => setGameUser(e.target.value)}
-                                placeholder="O teu nome dentro do jogo"
+                                placeholder="Your name inside the game"
                                 required
                             />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="gamePassword">Palavra-passe do Jogo</label>
+                            <label htmlFor="gamePassword">In-Game Password</label>
                             <input
                                 type="password"
                                 id="gamePassword"
                                 value={gamePassword}
                                 onChange={(e) => setGamePassword(e.target.value)}
-                                placeholder="Password exclusiva para o Unity"
+                                placeholder="Exclusive password for Unity"
                                 required
                             />
                         </div>
@@ -186,10 +186,10 @@ function RegistrationModal() {
 
                         <div className="modal-actions">
                             <button type="button" className="btn-secondary" onClick={() => setStep(1)} disabled={loading}>
-                                ← Voltar
+                                ← Back
                             </button>
                             <button type="submit" className="btn-primary" disabled={loading}>
-                                {loading ? 'A processar...' : 'Concluir Registo'}
+                                {loading ? 'Processing...' : 'Finish Registration'}
                             </button>
                         </div>
                     </form>
