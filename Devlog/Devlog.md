@@ -4,28 +4,37 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 
 ---
 
+**Outubro de 2025 - Fase de Concepção**
+*   **Ideia Base:** Criação do conceito central do projeto: um ecossistema onde um Website e um Jogo (Unity) coexistem e partilham progresso.
+*   **Planeamento de Lore:** Definição das "Bênçãos" como mecânica central e os "Puzzles" como forma de interação e progressão.
+*   **Design de Sistema:** Esboço inicial da arquitetura de base de dados para suportar a sincronização em tempo real.
+
+---
+
 ## 04/11/2025 - Devlog #1: O Nascimento do Conceito
-*   **Implementação:** Criação de um protótipo inicial utilizando a framework **Bootstrap**. O foco foi estabelecer uma estrutura de grelha (grid) sólida e um sistema de navegação funcional para testar a disposição dos elementos.
-*   **Planeamento:** Definição das páginas base no código HTML, servindo de roteiro para o que viria a ser o portal oficial do jogo.
+*   **Conceitualização Técnica:** Escolha da framework **Bootstrap** pela sua flexibilidade e rapidez na prototipagem de layouts responsivos. O foco inicial centrou-se na criação de um "Wireframe interativo", testando a disposição de elementos críticos como as secções de Puzzles e o News Log.
+*   **Arquitetura de Navegação:** Definição da hierarquia de páginas (Home, Puzzles, Credits, Updates). Foi estabelecido um sistema de grelha (grid) robusto que serviu de esqueleto para todas as iterações futuras do projeto.
+*   **Identidade Visual Inicial:** Primeiros testes com paletas de cores que remetem para o tema de "Blessings" (Dourado e Tons Escuros), garantindo que a tipografia fosse legível em diferentes resoluções.
 
 ---
 
 ## 19/11/2025 - Devlog #2: Transição para Modernidade
-*   **Arquitetura:** Migração total da base de código para **React.js**. Esta mudança foi estratégica para permitir uma gestão de estado ("state management") eficiente, essencial para a interatividade em tempo real entre o utilizador e o servidor.
-*   **Novas Funcionalidades:** Introdução da página **“The Center”**, desenhada para ser o núcleo de interação com os puzzles, utilizando componentes dinâmicos que podem ser atualizados sem recarregar a página.
+*   **Refatoração Tecnológica:** Abandono do modelo de páginas estáticas em favor do **React.js (Single Page Application)**. Esta transição permitiu a componentização do site, facilitando a manutenção e a reutilização de elementos como a Navbar e o Footer em toda a plataforma.
+*   **Inauguração do "The Center":** Criação do componente dinâmico principal para gestão de puzzles. A lógica foi desenhada para suportar carregamento assíncrono de conteúdo, preparando o terreno para a integração futura com o backend.
+*   **Otimização de Performance:** Implementação do **React Router DOM** para navegação instantânea entre secções, eliminando tempos de carregamento desnecessários e melhorando significativamente a experiência do utilizador.
 
 ---
 
 ## 21/11/2025 - Devlog #3: Refinamento de UX/UI
-*   **Navegação:** Fusão estética da página de download com o menu principal, reduzindo o número de cliques necessários para o utilizador aceder ao jogo.
-*   **Interface de Autenticação:** Criação visual do sistema de login. Embora ainda sem funcionalidade de backend, foram desenhados os formulários e botões com foco na experiência do utilizador.
-*   **Design:** Ajuste da paleta de cores nos títulos para garantir conformidade com as normas de acessibilidade e melhor legibilidade.
+*   **Padronização Estética:** Fusão estética da página de download com o menu principal, reduzindo o número de cliques necessários para o utilizador aceder ao jogo.
+*   **Interface de Autenticação (Protótipo):** Criação visual do sistema de login. Embora ainda sem funcionalidade de backend nesta fase, foram desenhados os formulários e botões com foco na experiência do utilizador e feedback visual.
+*   **Design de Acessibilidade:** Ajuste da paleta de cores nos títulos e elementos interativos para garantir conformidade com as normas de acessibilidade (contraste) e melhor legibilidade.
 
 ---
 
 ## 23/11/2025 - Devlog #4: Responsividade e Mecânicas de Retenção
-*   **Mobile First:** Ajuste do CSS (Media Queries) para garantir que o site é perfeitamente utilizável em smartphones.
-*   **Login Rewards:** Implementação de uma lógica visual de recompensas. O sistema foi programado para distinguir dias da semana (coletados vs. não coletados) e apresentar informações dinâmicas sobre os itens que o jogador pode ganhar.
+*   **Mobile First & Media Queries:** Ajuste profundo do CSS para garantir que o site é perfeitamente utilizável em smartphones, com menus colapsáveis e imagens adaptativas.
+*   **Gamificação (Login Rewards):** Implementação de uma lógica visual de recompensas diárias. O sistema foi programado para distinguir dias da semana (coletados vs. não coletados) e apresentar informações dinâmicas sobre os itens que o jogador pode ganhar, incentivando o regresso diário ao portal.
 
 ---
 
@@ -69,11 +78,42 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 
 ## 20/02/2026 - Devlog #11: Integração Híbrida Unity + Web
 *   **Fluxo em 2 Passos com API Customizada:** Refatoração da lógica de registo. A API de supabase foi configurada para lidar com uma inserção manual no momento da finalização do registo, separando logicamente as credenciais do site das do motor de jogo.
-*   **Deep Linking (A Ponte para o Unity):** Introdução do conceito de **Scheme dinâmico** (`puzzleofblessings://`). Foi programado o frontend para que, após a validação da API no site, o navegador envie o `session_token` de volta para o Unity, permitindo o login sem fricção dentro do jogo através do protocolo de deep links.
+*   **Deep Linking (A Ponte para o Unity):** Introdução do concept de **Scheme dinâmico** (`puzzleofblessings://`). Foi programado o frontend para que, após a validação da API no site, o navegador envie o `session_token` de volta para o Unity, permitindo o login sem fricção dentro do jogo através do protocolo de deep links.
 *   **Reengenharia da Tabela `jogador`:** Modificação estrutural (SQL) para campos de password encriptada para o jogo (`jo_password_jogo`), preparando a API para validações externas vindas de fora do navegador.
+
 ---
 
 ## 21/02/2026 - Devlog #12: Deployment e Gestão de Versões
 *   **Página de Perfil (V1):** Lançamento da primeira versão funcional da página de perfil e edição. Foi implementada a lógica para separar dados editáveis (nome de utilizador, bio, estado do jogador) de dados fixos do sistema.
 *   **Versionamento com Git:** Criação do repositório oficial no GitHub (**WebsitePuzzleofBlessings**). Todo o projeto foi organizado e transferido via comandos de terminal (CLI), estabelecendo uma base sólida para colaboração e histórico de alterações.
 *   **Integração Contínua (Vercel):** Implementação da plataforma de hosting **Vercel**. O projeto foi importado diretamente do GitHub, configurando uma pipeline de CI/CD onde cada "push" para o repositório resulta numa atualização automática e imediata do site em produção.
+
+---
+
+## 25/02/2026 - Devlog #13
+
+- **Correção de Autenticação:** Resolução de erro onde o site não detetava corretamente o utilizador logado após recarregar a página.
+- **Gestão de Sessões:** Criação de um sistema de persistência de sessão para cada utilizador na base de dados, permitindo rastrear a atividade em tempo real.
+
+[Imagens](https://www.notion.so/Imagens-3120e6a69da180baaf3bef9c38ae9b05?pvs=21)
+
+---
+
+## 27/02/2026 - Devlog #14
+
+- **Status Dinâmico:** Adição e integração do status de Jogador (Offline, Online no site, Online no jogo).
+- **Progressão:** Criação de uma tabela de níveis com valores predefinidos, estabelecendo a base para o sistema de experiência (XP).
+- **Refresco Visual:** Mudança estratégica do padrão de cores do Website para garantir uma estética mais "premium" e coesa com o Jogo.
+
+[Imagens](https://www.notion.so/Imagens-3140e6a69da180438b8bea74c6e31865?pvs=21)
+
+---
+
+## 03/03/2026 - Devlog #15
+
+- **React Three Fiber:** Instalação e configuração da biblioteca para renderização 3D no browser através do terminal.
+- **Animações 3D:** Criação de uma animação temática com peças de puzzle 3D interativas na tela de download, elevando a qualidade visual do portal.
+- **Refinamento de Status:** Correção e expansão dos estados de atividade (Offline, Online no site, Online no jogo, Online em ambos).
+
+[Imagens](https://www.notion.so/Imagens-3180e6a69da180e49cfddd546223296b?pvs=21)
+

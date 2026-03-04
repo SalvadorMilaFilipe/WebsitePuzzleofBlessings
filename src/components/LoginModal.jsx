@@ -49,52 +49,51 @@ function LoginModal({ isOpen, onClose }) {
 
     return (
         <div className="login-modal-overlay" onClick={onClose}>
-            <div className="login-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="login-modal google-style" onClick={(e) => e.stopPropagation()}>
                 <button className="close-btn" onClick={onClose}>×</button>
+                <div className="google-header">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="google-logo" />
+                    <h2>{isLoginView ? 'Sign in' : 'Create account'}</h2>
+                    <p className="subtitle">to continue to Puzzle of Blessings</p>
+                </div>
 
-                <h2>{isLoginView ? 'Welcome Back' : 'Create Account'}</h2>
-                <p className="subtitle">
-                    {isLoginView
-                        ? 'Enter your credentials to access the realm.'
-                        : 'Join us and start your journey.'}
-                </p>
-
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
                         <input
                             type="email"
                             id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="mage@example.com"
+                            placeholder="Email"
                             required
                         />
                     </div>
-
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
                         <input
                             type="password"
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="••••••••"
+                            placeholder="Enter your password"
                             required
                             minLength={6}
                         />
                     </div>
-
                     {error && <p className="error-message">{error}</p>}
 
-                    <button type="submit" className="btn-primary full-width" disabled={loading}>
-                        {loading ? 'Processing...' : (isLoginView ? 'Log In' : 'Sign Up')}
-                    </button>
+                    <div className="auth-footer">
+                        <div className="toggle-view">
+                            <span onClick={() => setIsLoginView(!isLoginView)}>
+                                {isLoginView ? 'Create account' : 'Sign in instead'}
+                            </span>
+                        </div>
+                        <button type="submit" className="btn-primary full-width" disabled={loading}>
+                            {loading ? 'Processing…' : 'Next'}
+                        </button>
+                    </div>
                 </form>
 
-                <div className="divider">
-                    <span>OR</span>
-                </div>
+                <div className="divider"><span>OR</span></div>
 
                 <button
                     type="button"
@@ -103,20 +102,11 @@ function LoginModal({ isOpen, onClose }) {
                     disabled={loading}
                 >
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="google-icon" />
-                    {isLoginView ? 'Log in with Google' : 'Sign up with Google'}
+                    {isLoginView ? 'Sign in with Google' : 'Sign up with Google'}
                 </button>
-
-                <div className="toggle-view">
-                    {isLoginView ? (
-                        <p>Don't have an account? <span onClick={() => setIsLoginView(false)}>Sign Up</span></p>
-                    ) : (
-                        <p>Already have an account? <span onClick={() => setIsLoginView(true)}>Log In</span></p>
-                    )}
-                </div>
-
             </div>
         </div>
-    )
+    );
 }
 
 export default LoginModal
