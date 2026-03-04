@@ -62,58 +62,64 @@ function RegistrationModal() {
         <div className="registration-modal-overlay">
             <div className="registration-modal">
                 <div className="step-indicator">
-                    <span className={step === 1 ? 'active' : ''}>1. Site</span>
+                    <span className={step === 1 ? 'active' : ''}>1. Perfil</span>
                     <span className={step === 2 ? 'active' : ''}>2. Jogo</span>
                 </div>
 
-                <h2>{step === 1 ? 'Perfil do Site' : 'Conta do Jogo'}</h2>
-                <p>Olá, {session?.user?.user_metadata?.full_name || 'Jogador'}! Vamos configurar a sua conta.</p>
+                {session?.user?.app_metadata?.provider === 'google' && (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style={{ width: '24px' }} />
+                    </div>
+                )}
+
+                <h2>{step === 1 ? 'Configurar Perfil' : 'Conta do Jogo'}</h2>
+                <p>Quase lá, <strong>{session?.user?.user_metadata?.full_name?.split(' ')[0] || 'Jogador'}</strong>! Precisamos de mais uns detalhes para a tua conta.</p>
 
                 {step === 1 ? (
                     <form onSubmit={handleNextStep}>
                         <div className="form-group">
-                            <label htmlFor="username">Username (Site):</label>
+                            <label htmlFor="username">Username Público</label>
                             <input
                                 type="text"
                                 id="username"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Nome para usar no site/fórum"
+                                placeholder="Como queres ser visto no site"
                                 required
                             />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="sitePassword">Palavra-passe (Site):</label>
+                            <label htmlFor="sitePassword">Palavra-passe do Site</label>
                             <input
                                 type="password"
                                 id="sitePassword"
                                 value={sitePassword}
                                 onChange={(e) => setSitePassword(e.target.value)}
-                                placeholder="Para login via email no site"
+                                placeholder="Define uma password para o portal"
                                 required
                             />
-                            <small>Se entrou com Google, defina uma para futuro login via email.</small>
+                            {session?.user?.app_metadata?.provider === 'google' && (
+                                <small>Como entraste com Google, define esta para login via email se preferires no futuro.</small>
+                            )}
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="birthYear">Ano de Nascimento:</label>
-                            <select
-                                id="birthYear"
-                                value={birthYear}
-                                onChange={(e) => setBirthYear(Number(e.target.value))}
-                            >
-                                {years.map((year) => (
-                                    <option key={year} value={year}>
-                                        {year}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            <div className="form-group" style={{ flex: 1 }}>
+                                <label htmlFor="birthYear">Ano Nascimento</label>
+                                <select
+                                    id="birthYear"
+                                    value={birthYear}
+                                    onChange={(e) => setBirthYear(Number(e.target.value))}
+                                >
+                                    {years.map((year) => (
+                                        <option key={year} value={year}>{year}</option>
+                                    ))}
+                                </select>
+                            </div>
 
-                        <div className="form-group">
-                            <label htmlFor="country">País:</label>
-                            <div className="country-selector-container">
+                            <div className="form-group" style={{ flex: 1 }}>
+                                <label htmlFor="country">País</label>
                                 <div className="country-select-wrapper">
                                     {country && (
                                         <img
@@ -128,7 +134,7 @@ function RegistrationModal() {
                                         onChange={(e) => setCountry(e.target.value)}
                                         className={country ? 'has-flag' : ''}
                                     >
-                                        <option value="">Selecionar país...</option>
+                                        <option value="">Selecionar...</option>
                                         {countries.map((c) => (
                                             <option key={c.code} value={c.name}>
                                                 {getFlagEmoji(c.code)} {c.name}
@@ -143,35 +149,35 @@ function RegistrationModal() {
 
                         <div className="modal-actions">
                             <button type="button" className="btn-secondary" onClick={logout}>
-                                Sair
+                                Cancelar
                             </button>
                             <button type="submit" className="btn-primary">
-                                Próximo Passo →
+                                Seguinte →
                             </button>
                         </div>
                     </form>
                 ) : (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="gameUser">Username (No Jogo Unity):</label>
+                            <label htmlFor="gameUser">Username no Jogo (Unity)</label>
                             <input
                                 type="text"
                                 id="gameUser"
                                 value={gameUser}
                                 onChange={(e) => setGameUser(e.target.value)}
-                                placeholder="Nome que aparecerá no jogo"
+                                placeholder="O teu nome dentro do jogo"
                                 required
                             />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="gamePassword">Palavra-passe (Para o Jogo):</label>
+                            <label htmlFor="gamePassword">Palavra-passe do Jogo</label>
                             <input
                                 type="password"
                                 id="gamePassword"
                                 value={gamePassword}
                                 onChange={(e) => setGamePassword(e.target.value)}
-                                placeholder="Palavra-passe exclusiva para o Unity"
+                                placeholder="Password exclusiva para o Unity"
                                 required
                             />
                         </div>
@@ -183,7 +189,7 @@ function RegistrationModal() {
                                 ← Voltar
                             </button>
                             <button type="submit" className="btn-primary" disabled={loading}>
-                                {loading ? 'A Criar...' : 'Finalizar Registou'}
+                                {loading ? 'A processar...' : 'Concluir Registo'}
                             </button>
                         </div>
                     </form>
