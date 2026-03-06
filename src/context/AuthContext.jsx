@@ -291,8 +291,58 @@ export const AuthProvider = ({ children }) => {
         return data
     }
 
+    const [showInactivityMessage, setShowInactivityMessage] = useState(false)
+    const inactivityTimer = useRef(null)
+
+    const resetInactivityTimer = () => {
+        if (inactivityTimer.current) clearTimeout(inactivityTimer.current)
+
+        // Only set timer if user is logged in
+        if (session) {
+            inactivityTimer.current = setTimeout(async () => {
+                console.log('[Auth] Inactivity timeout reached. Logging out...')
+                await logout()
+                setShowInactivityMessage(true)
+            }, 30 * 60 * 1000) // 30 minutes
+        }
+    }
+
+    useEffect(() => {
+        // Events that define "activity"
+        const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart']
+
+        const handleActivity = () => {
+            resetInactivityTimer()
+        }
+
+        if (session) {
+            events.forEach(event => window.addEventListener(event, handleActivity))
+            resetInactivityTimer()
+        } else {
+            if (inactivityTimer.current) clearTimeout(inactivityTimer.current)
+        }
+
+        return () => {
+            events.forEach(event => window.removeEventListener(event, handleActivity))
+            if (inactivityTimer.current) clearTimeout(inactivityTimer.current)
+        }
+    }, [session])
+
     return (
-        <AuthContext.Provider value={{ session, userProfile, isNewUser, loading, loginWithGoogle, loginWithEmail, signupWithEmail, logout, completeRegistration, refreshProfile }}>
+        <AuthContext.Provider value={{
+            session,
+            userProfile,
+            isNewUser,
+            loading,
+            showInactivityMessage,
+            setShowInactivityMessage,
+            loginWithGoogle,
+            loginWithEmail,
+            signupWithEmail,
+            logout,
+            completeRegistration,
+            refreshProfile
+        }}>
             {children}
         </AuthContext.Provider>
     )

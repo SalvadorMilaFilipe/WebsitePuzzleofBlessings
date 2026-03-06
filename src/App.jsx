@@ -13,6 +13,7 @@ import EditProfile from './pages/EditProfile'
 import { AuthProvider } from './context/AuthContext'
 import RegistrationModal from './components/RegistrationModal'
 import LoginModal from './components/LoginModal'
+import InactivityModal from './components/InactivityModal'
 
 // Lazy load the Download page
 const Download = lazy(() => import('./pages/Download'))
@@ -27,6 +28,7 @@ function App() {
           <Navbar onOpenLogin={() => setIsLoginModalOpen(true)} />
           <RegistrationModal />
           <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+          <InactivityModal onLoginClick={() => setIsLoginModalOpen(true)} />
           <Routes>
             <Route path="/" element={<MainMenu />} />
             <Route
