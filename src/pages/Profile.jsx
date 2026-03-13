@@ -7,12 +7,47 @@ function Profile() {
     const { session, userProfile, loading } = useAuth()
     const navigate = useNavigate()
     const [copySuccess, setCopySuccess] = useState(false)
+    const [allBlessings, setAllBlessings] = useState([])
+    const [unlockedIds, setUnlockedIds] = useState(new Set())
+    const [blessingsLoading, setBlessingsLoading] = useState(true)
 
     useEffect(() => {
         if (!loading && !session) {
             navigate('/')
         }
-    }, [session, loading, navigate])
+        if (userProfile?.jo_cod) {
+            fetchBlessingsData()
+        }
+    }, [session, loading, navigate, userProfile])
+
+    const fetchBlessingsData = async () => {
+        try {
+            setBlessingsLoading(true)
+            // 1. Fetch all blessings
+            const { data: blessings, error: bError } = await supabase
+                .from('bencao')
+                .select('*')
+                .order('be_cod')
+
+            if (bError) throw bError
+            setAllBlessings(blessings || [])
+
+            // 2. Fetch unlocked ones for this player
+            const { data: unlocked, error: uError } = await supabase
+                .from('jogador_bencao')
+                .select('be_cod')
+                .eq('jo_cod', userProfile.jo_cod)
+
+            if (uError) throw uError
+            const unlockedSet = new Set(unlocked.map(u => u.be_cod))
+            setUnlockedIds(unlockedSet)
+
+        } catch (err) {
+            console.error('Error fetching blessings:', err.message)
+        } finally {
+            setBlessingsLoading(false)
+        }
+    }
 
     const handleCopyId = () => {
         if (userProfile?.jo_id) {
@@ -143,18 +178,39 @@ function Profile() {
 
                         {/* Blessings Section */}
                         <section className="profile-section">
-                            <h3>Blessings (0 / 40)</h3>
+                            <h3>Blessings ({unlockedIds.size} / {allBlessings.length || 40})</h3>
                             <p className="stat-card-total">Colored for obtained, gray for locked.</p>
                             <div className="profile-stats-grid">
-                                {/* Example Placeholder */}
-                                <div className="item-card unobtained">
-                                    <span className="item-card-icon">✨</span>
-                                    <span className="item-card-name">? ? ?</span>
-                                </div>
-                                <div className="item-card unobtained">
-                                    <span className="item-card-icon">🌟</span>
-                                    <span className="item-card-name">? ? ?</span>
-                                </div>
+                                {blessingsLoading ? (
+                                    <p>Loading blessings...</p>
+                                ) : allBlessings.length > 0 ? (
+                                    allBlessings.map((b) => {
+                                        const isUnlocked = unlockedIds.has(b.be_cod)
+                                        return (
+                                            <div
+                                                key={b.be_cod}
+                                                className={`item-card blessing-card ${isUnlocked ? 'obtained' : 'unobtained'}`}
+                                                title={isUnlocked ? b.be_nome : "Locked"}
+                                            >
+                                                <div className="blessing-img-container">
+                                                    <img
+                                                        src={`/blessingscardmodels/${b.be_imagem}`}
+                                                        alt={b.be_nome}
+                                                        className="blessing-card-img"
+                                                    />
+                                                </div>
+                                                <span className="item-card-name">{isUnlocked ? b.be_nome : "? ? ?"}</span>
+                                                {isUnlocked && b.be_rariedade && (
+                                                    <span className={`rarity-badge ${b.be_rariedade.toLowerCase()}`}>
+                                                        {b.be_rariedade}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )
+                                    })
+                                ) : (
+                                    <p>No blessings found in the scroll of destiny.</p>
+                                )}
                             </div>
                         </section>
 

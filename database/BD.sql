@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS `colecionaveis`;
 DROP TABLE IF EXISTS `itens`;
 DROP TABLE IF EXISTS `atributos`;
 DROP TABLE IF EXISTS `bencao`;
+DROP TABLE IF EXISTS `categorias`;
 DROP TABLE IF EXISTS `jogador`;
 DROP TABLE IF EXISTS `avatar`;
 DROP TABLE IF EXISTS `label`;
@@ -80,16 +81,30 @@ CREATE TABLE `sessao` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
+-- TABELA: Categorias
+-- =========================
+CREATE TABLE `categorias` (
+  `ca_id` INT NOT NULL AUTO_INCREMENT,
+  `ca_nome` VARCHAR(100) NOT NULL UNIQUE,
+  `ca_descricao` TEXT NULL,
+  `ca_imagem` TEXT NULL,
+  PRIMARY KEY (`ca_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =========================
 -- TABELA: Bencao
 -- =========================
 CREATE TABLE `bencao` (
   `be_cod` INT NOT NULL AUTO_INCREMENT,
-  `be_designacao` VARCHAR(100) NOT NULL,
+  `be_nome` VARCHAR(100) NOT NULL,
   `be_imagem` TEXT NULL,
   `be_rariedade` VARCHAR(50) NULL,
-  `be_tipo` VARCHAR(50) NULL,
+  `be_tipo` INT NULL,
   `be_descricao` TEXT NULL,
-  PRIMARY KEY (`be_cod`)
+  PRIMARY KEY (`be_cod`),
+  CONSTRAINT `fk_bencao_categoria` FOREIGN KEY (`be_tipo`) REFERENCES `categorias` (`ca_id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
