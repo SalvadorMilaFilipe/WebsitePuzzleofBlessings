@@ -94,6 +94,9 @@ function Navbar({ onOpenLogin }) {
 
             {/* Desktop Navigation */}
             <div className="nav-menu-desktop">
+              <Link to="/" className="nav-link" onClick={(e) => handleNavClick(e, '/')}>
+                Download
+              </Link>
               <Link to="/wiki" className="nav-link" onClick={(e) => handleNavClick(e, '/wiki')}>
                 Wiki
               </Link>
@@ -229,6 +232,9 @@ function Navbar({ onOpenLogin }) {
         </div>
 
         <div className="mobile-sidebar-content">
+          <Link to="/" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/')}>
+            Download
+          </Link>
           <Link to="/wiki" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/wiki')}>
             Wiki
           </Link>
