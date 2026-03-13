@@ -76,15 +76,13 @@ function Navbar({ onOpenLogin }) {
         <div className="container">
           <div className="navbar-content">
             <button
-              className="mobile-menu-btn"
+              className={`mobile-menu-btn ${isMobileMenuOpen ? 'active' : ''}`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle Menu"
             >
-              <div className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
+              <span></span>
+              <span></span>
+              <span></span>
             </button>
 
             <Link to="/" className="logo" onClick={closeMobileMenu}>
@@ -247,19 +245,43 @@ function Navbar({ onOpenLogin }) {
           <Link to="/credits" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/credits')}>
             Credits
           </Link>
+          {session && (
+            <Link to="/profile" className="mobile-nav-link" style={{ color: '#81D89E' }} onClick={(e) => handleNavClick(e, '/profile')}>
+              My Profile
+            </Link>
+          )}
 
           <div className="mobile-sidebar-footer">
             {session ? (
               <div className="mobile-user-profile" style={{ display: 'flex', flexDirection: 'column', gap: '15px', width: '100%', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div
+                  onClick={() => navigate('/profile')}
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+                >
                   <img
                     src={displayAvatar}
                     alt="Avatar"
                     className="nav-user-icon mobile-user-icon"
                     style={{ borderRadius: '50%', border: '2px solid #3CB371', filter: 'brightness(0) invert(1)' }}
                   />
-                  <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>In-game Avatar</span>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ color: '#81D89E', fontWeight: 600 }}>{displayName}</span>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '0.7rem' }}>View Profile</span>
+                  </div>
                 </div>
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    background: 'transparent',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    color: 'var(--text-muted)',
+                    padding: '5px 15px',
+                    borderRadius: '4px',
+                    fontSize: '0.8rem'
+                  }}
+                >
+                  Logout
+                </button>
               </div>
             ) : (
               <button className="btn-login mobile-btn-login" onClick={handleLogin}>

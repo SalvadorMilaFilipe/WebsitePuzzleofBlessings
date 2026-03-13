@@ -509,10 +509,12 @@ body::before {
 .mobile-menu-btn span {
     width: 100%;
     height: 3px;
-    background: var(--green-accent);
-    border-radius: 3px;
-    transition: all 0.3s ease;
+    background-color: #81D89E !important;
+    /* Force visibility with explicit color */
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: center;
+    display: block;
 }
 
 .mobile-menu-btn.active span:nth-child(1) {
