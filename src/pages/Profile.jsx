@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 import '../../css/profile.css'
 
 function Profile() {
@@ -178,7 +179,7 @@ function Profile() {
 
                         {/* Blessings Section */}
                         <section className="profile-section">
-                            <h3>Blessings ({unlockedIds.size} / {allBlessings.length || 40})</h3>
+                            <h3>Blessings ({unlockedIds.size} / {allBlessings.length})</h3>
                             <p className="stat-card-total">Colored for obtained, gray for locked.</p>
                             <div className="profile-stats-grid">
                                 {blessingsLoading ? (
