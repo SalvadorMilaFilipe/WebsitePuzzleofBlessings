@@ -94,14 +94,8 @@ function Navbar({ onOpenLogin }) {
 
             {/* Desktop Navigation */}
             <div className="nav-menu-desktop">
-              <Link to="/" className="nav-link" onClick={(e) => handleNavClick(e, '/')}>
-                Main Menu
-              </Link>
               <Link to="/wiki" className="nav-link" onClick={(e) => handleNavClick(e, '/wiki')}>
                 Wiki
-              </Link>
-              <Link to="/forum" className="nav-link" onClick={(e) => handleNavClick(e, '/forum')}>
-                Forum
               </Link>
               <Link to="/centro" className="nav-centro" onClick={(e) => handleNavClick(e, '/centro')}>
                 <span className="nav-separator">|</span>
@@ -235,14 +229,8 @@ function Navbar({ onOpenLogin }) {
         </div>
 
         <div className="mobile-sidebar-content">
-          <Link to="/" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/')}>
-            Main Menu
-          </Link>
           <Link to="/wiki" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/wiki')}>
             Wiki
-          </Link>
-          <Link to="/forum" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/forum')}>
-            Forum
           </Link>
           <Link to="/centro" className="mobile-nav-link mobile-nav-centro" onClick={(e) => handleNavClick(e, '/centro')}>
             The Center

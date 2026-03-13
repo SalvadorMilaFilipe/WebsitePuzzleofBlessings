@@ -1,10 +1,7 @@
 import { useState, lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import MainMenu from './pages/MainMenu'
-// import Download from './pages/Download' // Removed static import
 import Centro from './pages/Centro'
-import Forum from './pages/Forum'
 import Wiki from './pages/Wiki'
 import UpdateLog from './pages/UpdateLog'
 import Credits from './pages/Credits'
@@ -30,9 +27,8 @@ function App() {
           <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
           <InactivityModal onLoginClick={() => setIsLoginModalOpen(true)} />
           <Routes>
-            <Route path="/" element={<MainMenu />} />
             <Route
-              path="/download"
+              path="/"
               element={
                 <Suspense fallback={<div className="container" style={{ padding: '100px', textAlign: 'center' }}>Carregando área 3D...</div>}>
                   <Download />
@@ -40,7 +36,6 @@ function App() {
               }
             />
             <Route path="/centro" element={<Centro />} />
-            <Route path="/forum" element={<Forum />} />
             <Route path="/wiki" element={<Wiki />} />
             <Route path="/updatelog" element={<UpdateLog />} />
             <Route path="/credits" element={<Credits />} />
