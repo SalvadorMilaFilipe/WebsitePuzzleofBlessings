@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import '../../css/profile.css'
 
 function Profile() {
-    const { session, userProfile, loading } = useAuth()
+    const { session, userProfile, loading, supabase } = useAuth()
     const navigate = useNavigate()
     const [copySuccess, setCopySuccess] = useState(false)
     const [allBlessings, setAllBlessings] = useState([])
@@ -24,10 +23,14 @@ function Profile() {
     const fetchBlessingsData = async () => {
         try {
             setBlessingsLoading(true)
-            // 1. Fetch all blessings
+            if (!supabase) {
+                console.error('Supabase client not available in AuthContext');
+                return;
+            }
+            // 1. Fetch all blessings with their category names
             const { data: blessings, error: bError } = await supabase
                 .from('bencao')
-                .select('*')
+                .select('*, categorias(ca_nome)')
                 .order('be_cod')
 
             if (bError) throw bError

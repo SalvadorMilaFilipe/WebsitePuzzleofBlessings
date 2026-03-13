@@ -341,7 +341,8 @@ export const AuthProvider = ({ children }) => {
             signupWithEmail,
             logout,
             completeRegistration,
-            refreshProfile
+            refreshProfile,
+            supabase
         }}>
             {children}
         </AuthContext.Provider>
