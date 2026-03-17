@@ -3,7 +3,8 @@
    =========================================== */
 
 .wiki-main {
-    padding: 2rem 0;
+    /* Navbar is fixed; keep content visible */
+    padding: 7.5rem 0 2rem;
     min-height: calc(100vh - 200px);
 }
 
@@ -85,14 +86,284 @@
     box-shadow: 0 4px 12px rgba(90, 125, 154, 0.28);
 }
 
-.wiki-grid {
+/* ===========================================
+   ELEMENTS GRID (2 per row like sketch)
+   =========================================== */
+.wiki-elements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
 
-.wiki-item {
+.wiki-element-card {
+    appearance: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    background: linear-gradient(135deg,
+            rgba(62, 65, 67, 0.92) 0%,
+            rgba(74, 77, 79, 0.88) 50%,
+            rgba(62, 65, 67, 0.92) 100%);
+    padding: 0;
+    border: 2px solid var(--border-vintage);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.wiki-element-card-inner {
+    display: flex;
+    gap: 1.25rem;
+    padding: 2rem;
+    align-items: flex-start;
+    min-height: 180px;
+}
+
+.wiki-element-avatar {
+    width: 74px;
+    height: 74px;
+    border-radius: 999px;
+    flex: 0 0 auto;
+    background:
+        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.18), transparent 55%),
+        linear-gradient(135deg, rgba(107, 203, 119, 0.35), rgba(91, 192, 235, 0.28), rgba(154, 138, 200, 0.25));
+    border: 2px solid rgba(123, 163, 196, 0.35);
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.35),
+        0 0 0 6px rgba(255, 255, 255, 0.03) inset;
+}
+
+.wiki-element-meta {
+    min-width: 0;
+}
+
+.wiki-element-title {
+    color: var(--blue-accent);
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+}
+
+.wiki-element-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.wiki-element-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+            rgba(139, 181, 214, 0.10) 0%,
+            rgba(157, 192, 171, 0.10) 50%,
+            rgba(154, 138, 200, 0.10) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.wiki-element-card:hover::before {
+    opacity: 1;
+}
+
+.wiki-element-card:focus-visible {
+    outline: none;
+    border-color: var(--blue-accent);
+    box-shadow:
+        0 0 0 3px rgba(123, 163, 196, 0.22),
+        0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+.wiki-element-card:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border-color: var(--blue-accent);
+}
+
+/* ===========================================
+   MODAL (blur overlay like LoginModal)
+   =========================================== */
+.wiki-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: fadeIn 0.25s ease-out;
+    padding: 1.25rem;
+}
+
+.wiki-modal {
+    width: min(720px, 100%);
+    max-height: 90vh;
+    overflow: auto;
+    background: #0B120E;
+    border-radius: 12px;
+    border: 1px solid rgba(129, 216, 158, 0.10);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(129, 216, 158, 0.05);
+    position: relative;
+    padding: 1.75rem 2.25rem 2rem;
+    clip-path: polygon(20px 0, 100% 0,
+            100% calc(100% - 20px),
+            calc(100% - 20px) 100%,
+            0 100%, 0 20px);
+    animation: scaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wiki-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.wiki-close-btn:hover {
+    color: #fff;
+}
+
+.wiki-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.wiki-modal-avatar {
+    width: 76px;
+    height: 76px;
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.18), transparent 55%),
+        linear-gradient(135deg, rgba(107, 203, 119, 0.35), rgba(91, 192, 235, 0.28), rgba(154, 138, 200, 0.25));
+    border: 2px solid rgba(123, 163, 196, 0.35);
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.35),
+        0 0 0 6px rgba(255, 255, 255, 0.03) inset;
+    flex: 0 0 auto;
+}
+
+.wiki-modal-title {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.wiki-modal-subtitle {
+    margin: 0.25rem 0 0;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.wiki-modal-form {
+    margin-top: 0.75rem;
+}
+
+.wiki-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.wiki-form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: #ccc;
+}
+
+.wiki-form-group input,
+.wiki-form-group textarea {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    background: #2A2F2C;
+    border: none;
+    color: #fff;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    clip-path: polygon(8px 0%, 100% 0%,
+            100% calc(100% - 8px),
+            calc(100% - 8px) 100%,
+            0% 100%, 0% 8px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    font-family: 'Inter', sans-serif;
+    resize: vertical;
+}
+
+.wiki-form-group input:focus,
+.wiki-form-group textarea:focus {
+    outline: none;
+    background: #343A37;
+    box-shadow: inset 0 0 0 1px #81D89E;
+}
+
+.wiki-form-group-full {
+    grid-column: 1 / -1;
+}
+
+.wiki-modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.wiki-btn-secondary,
+.wiki-btn-primary {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    clip-path: polygon(10px 0%, 100% 0%,
+            100% calc(100% - 10px),
+            calc(100% - 10px) 100%,
+            0% 100%, 0% 10px);
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.wiki-btn-secondary {
+    background: #151B18;
+    color: #eee;
+    border: 1px solid #333 !important;
+}
+
+.wiki-btn-primary {
+    background: linear-gradient(135deg, #3CB371, #2BA89C, #4DA6C9);
+    color: white;
+    box-shadow: 0 4px 15px rgba(60, 179, 113, 0.3);
+}
+
+.wiki-btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.wiki-btn-primary:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(60, 179, 113, 0.4);
+}
     background: linear-gradient(
         135deg,
         rgba(62, 65, 67, 0.92) 0%,
@@ -270,24 +541,51 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-    .wiki-grid {
+    .wiki-main {
+        padding-top: 7rem;
+    }
+
+    .wiki-elements-grid {
         grid-template-columns: 1fr;
     }
     
     .filter-tabs {
         justify-content: center;
     }
-    
-    .item-image {
-        width: 50px;
-        height: 50px;
+
+    .wiki-element-card-inner {
+        min-height: 160px;
+        padding: 1.5rem;
     }
-    
-    .item-name {
-        font-size: 1.3rem;
+
+    .wiki-modal {
+        padding: 1.5rem 1.5rem 1.75rem;
     }
-    
-    .item-header-left {
-        gap: 0.75rem;
+
+    .wiki-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animations (local to Wiki) */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
     }
 }
