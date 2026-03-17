@@ -48,7 +48,7 @@ function Centro() {
   }, [])
 
   return (
-    <main className="centro-main" style={{ paddingTop: '100px' }}>
+    <main className="centro-main">
       <div className="container">
         <div className="centro-content">
           <h1 className="centro-title">The Center</h1>

@@ -62,7 +62,7 @@ const WEBSITE_CREDITS = [
       },
       {
         role: 'Real-time Integration',
-        name: 'Integration Specialist',
+        name: 'Salvador Filipe',
         contribution: 'Real-time game-to-site communication, data synchronization'
       }
     ]

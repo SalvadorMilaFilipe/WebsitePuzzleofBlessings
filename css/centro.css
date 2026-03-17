@@ -3,10 +3,11 @@
    =========================================== */
 
 .centro-main {
-    padding: 2rem 0;
+    /* Navbar is fixed; reserve space so title isn't covered */
+    padding: 7.5rem 0 2rem;
     min-height: calc(100vh - 200px);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
 }
 
@@ -129,6 +130,10 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+    .centro-main {
+        padding-top: 7rem;
+    }
+
     .centro-title {
         font-size: 3rem;
     }
@@ -139,6 +144,10 @@
 }
 
 @media (max-width: 480px) {
+    .centro-main {
+        padding-top: 6.5rem;
+    }
+
     .centro-title {
         font-size: 2.5rem;
     }
