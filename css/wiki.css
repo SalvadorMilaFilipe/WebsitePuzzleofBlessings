@@ -96,6 +96,90 @@
     margin-top: 2rem;
 }
 
+.wiki-read-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.wiki-read-card {
+    position: relative;
+    padding: 2.25rem 2rem 2rem;
+    background: linear-gradient(135deg,
+            rgba(62, 65, 67, 0.92) 0%,
+            rgba(74, 77, 79, 0.88) 50%,
+            rgba(62, 65, 67, 0.92) 100%);
+    border: 2px solid var(--border-vintage);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.wiki-read-avatar {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    width: 78px;
+    height: 78px;
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.18), transparent 55%),
+        linear-gradient(135deg, rgba(107, 203, 119, 0.35), rgba(91, 192, 235, 0.28), rgba(154, 138, 200, 0.25));
+    border: 2px solid rgba(123, 163, 196, 0.35);
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.35),
+        0 0 0 6px rgba(255, 255, 255, 0.03) inset;
+    overflow: hidden;
+}
+
+.wiki-read-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.wiki-read-body {
+    padding-left: 104px;
+}
+
+.wiki-read-title {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #a9d3ff;
+    margin-bottom: 0.5rem;
+}
+
+.wiki-read-attribute {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #81D89E;
+    margin-bottom: 0.75rem;
+}
+
+.wiki-read-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+    opacity: 0.95;
+}
+
+.wiki-read-date {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.wiki-read-date span {
+    color: #81D89E;
+    font-weight: 800;
+    margin-right: 0.35rem;
+}
+
 .wiki-subsection-title {
     margin-top: 2rem;
     color: var(--text-secondary);
@@ -549,6 +633,10 @@
     }
 
     .wiki-elements-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wiki-read-grid {
         grid-template-columns: 1fr;
     }
     
