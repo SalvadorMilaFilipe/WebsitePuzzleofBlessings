@@ -29,7 +29,7 @@ function Wiki() {
         if (blessing?.be_cod) {
           const { data: attrsData, error: attrsError } = await supabase
             .from('bencao_atributos')
-            .select('atributo_valor, atributos(at_designacao)')
+            .select('atributo_valor, atributos!at_id(at_designacao)')
             .eq('be_cod', blessing.be_cod)
             .order('jo_cod', { ascending: true })
             .limit(1)
@@ -84,7 +84,7 @@ function Wiki() {
     <main className="wiki-main">
       <div className="container">
         <h1 className="section-title">Wiki</h1>
-        
+
         {/* Search Bar */}
         <div className="search-section">
           <div className="search-container lowpoly-card">
