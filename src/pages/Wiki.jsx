@@ -29,7 +29,7 @@ function Wiki() {
         if (blessing?.be_cod) {
           const { data: attrsData, error: attrsError } = await supabase
             .from('bencao_atributos')
-            .select('atributo_valor, atributos!at_id(at_designacao)')
+            .select('atributo_valor, atributos!fk_bencao_atributos_at(at_designacao)')
             .eq('be_cod', blessing.be_cod)
             .order('jo_cod', { ascending: true })
             .limit(1)
