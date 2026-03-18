@@ -149,8 +149,69 @@ function Wiki() {
           </div>
         </div>
 
-        {/* Categories (from DB) */}
-        {activeFilter === 'categories' ? (
+        {/* Categories (from DB) - shown in "All" and in "Categories" */}
+        {activeFilter === 'all' ? (
+          <>
+            {/* Elements Grid (2 per row) */}
+            {visibleElements.length > 0 ? (
+              <div className="wiki-elements-grid">
+                {visibleElements.map((el) => (
+                  <button
+                    key={el.id}
+                    type="button"
+                    className="wiki-element-card lowpoly-card"
+                    onClick={() => setSelectedElement(el)}
+                  >
+                    <div className="wiki-element-card-inner">
+                      <div className="wiki-element-avatar" aria-hidden="true"></div>
+                      <div className="wiki-element-meta">
+                        <div className="wiki-element-title">{el.title}</div>
+                        <div className="wiki-element-subtitle">{el.subtitle}</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="no-results"><p>No results found. Try a different search term.</p></div>
+            )}
+
+            <div className="wiki-section-divider"></div>
+            <h2 className="wiki-subsection-title">Categories</h2>
+
+            {categoriesLoading ? (
+              <div className="no-results"><p>Loading categories...</p></div>
+            ) : categoriesError ? (
+              <div className="no-results"><p>{categoriesError}</p></div>
+            ) : visibleCategories.length > 0 ? (
+              <div className="wiki-elements-grid">
+                {visibleCategories.map((c) => (
+                  <button
+                    key={c.key}
+                    type="button"
+                    className="wiki-element-card lowpoly-card"
+                    onClick={() => setSelectedCategory(c)}
+                    title={c.name}
+                  >
+                    <div className="wiki-element-card-inner">
+                      <div
+                        className="wiki-element-avatar"
+                        aria-hidden="true"
+                        style={c.image ? { backgroundImage: `url(${c.image})` } : undefined}
+                      ></div>
+                      <div className="wiki-element-meta">
+                        <div className="wiki-element-title">{c.name}</div>
+                        <div className="wiki-element-subtitle">{c.description || 'No description yet.'}</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="no-results"><p>No categories found.</p></div>
+            )}
+          </>
+        ) : activeFilter === 'categories' ? (
           categoriesLoading ? (
             <div className="no-results"><p>Loading categories...</p></div>
           ) : categoriesError ? (
@@ -169,7 +230,7 @@ function Wiki() {
                     <div
                       className="wiki-element-avatar"
                       aria-hidden="true"
-                      style={c.image ? { backgroundImage: `url(${c.image})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+                      style={c.image ? { backgroundImage: `url(${c.image})` } : undefined}
                     ></div>
                     <div className="wiki-element-meta">
                       <div className="wiki-element-title">{c.name}</div>
@@ -183,29 +244,10 @@ function Wiki() {
             <div className="no-results"><p>No categories found.</p></div>
           )
         ) : (
-          /* Elements Grid (2 per row) */
-          visibleElements.length > 0 ? (
-            <div className="wiki-elements-grid">
-              {visibleElements.map((el) => (
-                <button
-                  key={el.id}
-                  type="button"
-                  className="wiki-element-card lowpoly-card"
-                  onClick={() => setSelectedElement(el)}
-                >
-                  <div className="wiki-element-card-inner">
-                    <div className="wiki-element-avatar" aria-hidden="true"></div>
-                    <div className="wiki-element-meta">
-                      <div className="wiki-element-title">{el.title}</div>
-                      <div className="wiki-element-subtitle">{el.subtitle}</div>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="no-results"><p>No results found. Try a different search term.</p></div>
-          )
+          /* Other filters (placeholder for future) */
+          <div className="no-results">
+            <p>Coming soon.</p>
+          </div>
         )}
       </div>
 

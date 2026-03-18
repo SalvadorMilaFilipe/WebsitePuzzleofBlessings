@@ -68,7 +68,35 @@ function Navbar({ onOpenLogin }) {
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
 
   const displayName = userProfile?.jo_user || session?.user?.user_metadata?.full_name || 'User'
-  const displayAvatar = "/img/Player_without_image.png"
+  const initial = (displayName || 'U').trim().charAt(0).toUpperCase()
+  const displayAvatar = `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#6BCB77"/>
+          <stop offset="0.5" stop-color="#5BC0EB"/>
+          <stop offset="1" stop-color="#7B68EE"/>
+        </linearGradient>
+      </defs>
+      <rect width="128" height="128" rx="64" fill="url(#g)"/>
+      <circle cx="64" cy="52" r="22" fill="rgba(0,0,0,0.18)"/>
+      <path d="M28 112c8-22 28-34 36-34s28 12 36 34" fill="rgba(0,0,0,0.18)"/>
+      <text x="64" y="74" text-anchor="middle" font-family="Inter,Segoe UI,Arial" font-size="40" font-weight="800" fill="rgba(255,255,255,0.92)">${initial}</text>
+    </svg>`
+  )}`
+  const unloggedUserIcon = `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#81D89E"/>
+          <stop offset="1" stop-color="#5BC0EB"/>
+        </linearGradient>
+      </defs>
+      <rect width="96" height="96" rx="48" fill="rgba(255,255,255,0.06)"/>
+      <circle cx="48" cy="40" r="16" fill="url(#g)"/>
+      <path d="M20 84c6-16 18-24 28-24s22 8 28 24" fill="url(#g)"/>
+    </svg>`
+  )}`
 
   return (
     <>
@@ -181,7 +209,7 @@ function Navbar({ onOpenLogin }) {
                 <button className="btn-login" onClick={handleLogin}>
                   Log In
                   <img
-                    src="/img/unloggeduser/UnloggedUser.png"
+                    src={unloggedUserIcon}
                     alt="User"
                     className="nav-user-icon"
                   />
