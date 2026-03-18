@@ -9,14 +9,20 @@ const WIKI_ELEMENTS = [
     modalType: 'blessing',
   },
   {
+    id: 'categories',
+    title: 'Categories',
+    subtitle: 'Name, description, date',
+    modalType: 'simple',
+  },
+  {
     id: 'rarities',
     title: 'Rarities',
     subtitle: 'Name, description, date',
     modalType: 'simple',
   },
   {
-    id: 'categories',
-    title: 'Categories',
+    id: 'levels',
+    title: 'Levels',
     subtitle: 'Name, description, date',
     modalType: 'simple',
   },
@@ -80,12 +86,13 @@ function Wiki() {
       const description = c?.ca_descricao ?? c?.ca_desc ?? c?.description ?? c?.descricao ?? ''
       const image = c?.ca_imagem ?? c?.ca_img ?? c?.image ?? c?.imagem ?? ''
       const date = c?.ca_data ?? c?.created_at ?? c?.data ?? ''
+      const isSafeImageUrl = typeof image === 'string' && /^(https?:\/\/|data:)/i.test(image.trim())
       return {
         raw: c,
         key: c?.ca_cod ?? c?.id ?? name,
         name,
         description,
-        image,
+        image: isSafeImageUrl ? image.trim() : '',
         date,
       }
     })
@@ -134,16 +141,22 @@ function Wiki() {
                 Blessings
               </button>
               <button
+                className={`filter-tab ${activeFilter === 'categories' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('categories')}
+              >
+                Categories
+              </button>
+              <button
                 className={`filter-tab ${activeFilter === 'rarities' ? 'active' : ''}`}
                 onClick={() => setActiveFilter('rarities')}
               >
                 Rarities
               </button>
               <button
-                className={`filter-tab ${activeFilter === 'categories' ? 'active' : ''}`}
-                onClick={() => setActiveFilter('categories')}
+                className={`filter-tab ${activeFilter === 'levels' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('levels')}
               >
-                Categories
+                Levels
               </button>
             </div>
           </div>
