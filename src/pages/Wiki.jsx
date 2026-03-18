@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { supabase } from '../lib/supabase'
 
 const WIKI_ELEMENTS = [
   {
@@ -25,6 +26,34 @@ function Wiki() {
   const [searchTerm, setSearchTerm] = useState('')
   const [activeFilter, setActiveFilter] = useState('all')
   const [selectedElement, setSelectedElement] = useState(null)
+  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [categories, setCategories] = useState([])
+  const [categoriesLoading, setCategoriesLoading] = useState(false)
+  const [categoriesError, setCategoriesError] = useState('')
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setCategoriesLoading(true)
+        setCategoriesError('')
+
+        const { data, error } = await supabase
+          .from('categorias')
+          .select('*')
+          .order('ca_cod', { ascending: true })
+
+        if (error) throw error
+        setCategories(data || [])
+      } catch (err) {
+        setCategoriesError(err?.message || 'Failed to load categories')
+        setCategories([])
+      } finally {
+        setCategoriesLoading(false)
+      }
+    }
+
+    fetchCategories()
+  }, [])
 
   const visibleElements = useMemo(() => {
     const byFilter = activeFilter === 'all'
@@ -43,6 +72,35 @@ function Wiki() {
   }, [activeFilter, searchTerm])
 
   const closeModal = () => setSelectedElement(null)
+  const closeCategoryModal = () => setSelectedCategory(null)
+
+  const normalizedCategories = useMemo(() => {
+    return (categories || []).map((c) => {
+      const name = c?.ca_nome ?? c?.name ?? c?.nome ?? 'Unnamed'
+      const description = c?.ca_descricao ?? c?.ca_desc ?? c?.description ?? c?.descricao ?? ''
+      const image = c?.ca_imagem ?? c?.ca_img ?? c?.image ?? c?.imagem ?? ''
+      const date = c?.ca_data ?? c?.created_at ?? c?.data ?? ''
+      return {
+        raw: c,
+        key: c?.ca_cod ?? c?.id ?? name,
+        name,
+        description,
+        image,
+        date,
+      }
+    })
+  }, [categories])
+
+  const visibleCategories = useMemo(() => {
+    if (!searchTerm) return normalizedCategories
+    const q = searchTerm.toLowerCase()
+    return normalizedCategories.filter((c) => {
+      return (
+        c.name.toLowerCase().includes(q) ||
+        (c.description && c.description.toLowerCase().includes(q))
+      )
+    })
+  }, [normalizedCategories, searchTerm])
 
   return (
     <main className="wiki-main">
@@ -91,32 +149,63 @@ function Wiki() {
           </div>
         </div>
 
-        {/* Elements Grid (2 per row) */}
-        {visibleElements.length > 0 ? (
-          <div className="wiki-elements-grid">
-            {visibleElements.map((el) => (
-              <button
-                key={el.id}
-                type="button"
-                className="wiki-element-card lowpoly-card"
-                onClick={() => setSelectedElement(el)}
-              >
-                <div className="wiki-element-card-inner">
-                  <div className="wiki-element-avatar" aria-hidden="true"></div>
-                  <div className="wiki-element-meta">
-                    <div className="wiki-element-title">{el.title}</div>
-                    <div className="wiki-element-subtitle">{el.subtitle}</div>
+        {/* Categories (from DB) */}
+        {activeFilter === 'categories' ? (
+          categoriesLoading ? (
+            <div className="no-results"><p>Loading categories...</p></div>
+          ) : categoriesError ? (
+            <div className="no-results"><p>{categoriesError}</p></div>
+          ) : visibleCategories.length > 0 ? (
+            <div className="wiki-elements-grid">
+              {visibleCategories.map((c) => (
+                <button
+                  key={c.key}
+                  type="button"
+                  className="wiki-element-card lowpoly-card"
+                  onClick={() => setSelectedCategory(c)}
+                  title={c.name}
+                >
+                  <div className="wiki-element-card-inner">
+                    <div
+                      className="wiki-element-avatar"
+                      aria-hidden="true"
+                      style={c.image ? { backgroundImage: `url(${c.image})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+                    ></div>
+                    <div className="wiki-element-meta">
+                      <div className="wiki-element-title">{c.name}</div>
+                      <div className="wiki-element-subtitle">{c.description || 'No description yet.'}</div>
+                    </div>
                   </div>
-                </div>
-              </button>
-            ))}
-          </div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="no-results"><p>No categories found.</p></div>
+          )
         ) : (
-          <div className="no-results">
-            <p>
-              No results found. Try a different search term.
-            </p>
-          </div>
+          /* Elements Grid (2 per row) */
+          visibleElements.length > 0 ? (
+            <div className="wiki-elements-grid">
+              {visibleElements.map((el) => (
+                <button
+                  key={el.id}
+                  type="button"
+                  className="wiki-element-card lowpoly-card"
+                  onClick={() => setSelectedElement(el)}
+                >
+                  <div className="wiki-element-card-inner">
+                    <div className="wiki-element-avatar" aria-hidden="true"></div>
+                    <div className="wiki-element-meta">
+                      <div className="wiki-element-title">{el.title}</div>
+                      <div className="wiki-element-subtitle">{el.subtitle}</div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="no-results"><p>No results found. Try a different search term.</p></div>
+          )
         )}
       </div>
 
@@ -168,6 +257,62 @@ function Wiki() {
 
               <div className="wiki-modal-actions">
                 <button type="button" className="wiki-btn-secondary" onClick={closeModal}>
+                  Close
+                </button>
+                <button type="button" className="wiki-btn-primary" disabled>
+                  Save (soon)
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Category Modal (data from DB) */}
+      {selectedCategory && (
+        <div className="wiki-modal-overlay" onClick={closeCategoryModal} role="dialog" aria-modal="true">
+          <div className="wiki-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="wiki-close-btn" onClick={closeCategoryModal} aria-label="Close">
+              ×
+            </button>
+
+            <div className="wiki-modal-header">
+              <div
+                className="wiki-modal-avatar"
+                aria-hidden="true"
+                style={selectedCategory.image ? { backgroundImage: `url(${selectedCategory.image})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+              ></div>
+              <div className="wiki-modal-header-text">
+                <h2 className="wiki-modal-title">{selectedCategory.name}</h2>
+                <p className="wiki-modal-subtitle">Category details.</p>
+              </div>
+            </div>
+
+            <form className="wiki-modal-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="wiki-form-grid">
+                <div className="wiki-form-group">
+                  <label>Image</label>
+                  <input type="url" defaultValue={selectedCategory.image || ''} placeholder="Image URL (optional)" />
+                </div>
+
+                <div className="wiki-form-group">
+                  <label>Name</label>
+                  <input type="text" defaultValue={selectedCategory.name || ''} placeholder="Name of the category" />
+                </div>
+
+                <div className="wiki-form-group wiki-form-group-full">
+                  <label>Description</label>
+                  <textarea rows={4} defaultValue={selectedCategory.description || ''} placeholder="Write a short description..." />
+                </div>
+
+                <div className="wiki-form-group">
+                  <label>Date Added</label>
+                  <input type="date" defaultValue={selectedCategory.date ? String(selectedCategory.date).slice(0, 10) : ''} />
+                </div>
+              </div>
+
+              <div className="wiki-modal-actions">
+                <button type="button" className="wiki-btn-secondary" onClick={closeCategoryModal}>
                   Close
                 </button>
                 <button type="button" className="wiki-btn-primary" disabled>
