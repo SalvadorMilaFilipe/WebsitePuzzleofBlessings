@@ -5,6 +5,7 @@ function Wiki() {
   const [searchTerm, setSearchTerm] = useState('')
   const [activeFilter, setActiveFilter] = useState('blessings')
   const [doubleJump, setDoubleJump] = useState(null)
+  const [doubleJumpAttr, setDoubleJumpAttr] = useState(null)
   const [blessingsLoading, setBlessingsLoading] = useState(false)
   const [blessingsError, setBlessingsError] = useState('')
 
@@ -22,10 +23,26 @@ function Wiki() {
           .limit(1)
 
         if (error) throw error
-        setDoubleJump((data && data[0]) ? data[0] : null)
+        const blessing = (data && data[0]) ? data[0] : null
+        setDoubleJump(blessing)
+
+        if (blessing?.be_cod) {
+          const { data: attrsData, error: attrsError } = await supabase
+            .from('bencao_atributos')
+            .select('atributo_valor, atributos(at_designacao)')
+            .eq('be_cod', blessing.be_cod)
+            .order('jo_cod', { ascending: true })
+            .limit(1)
+
+          if (attrsError) throw attrsError
+          setDoubleJumpAttr((attrsData && attrsData[0]) ? attrsData[0] : null)
+        } else {
+          setDoubleJumpAttr(null)
+        }
       } catch (err) {
         setBlessingsError(err?.message || 'Failed to load blessing')
         setDoubleJump(null)
+        setDoubleJumpAttr(null)
       } finally {
         setBlessingsLoading(false)
       }
@@ -50,6 +67,18 @@ function Wiki() {
     const desc = (doubleJump.be_descricao || '').toLowerCase()
     return (name.includes(q) || desc.includes(q)) ? doubleJump : null
   }, [doubleJump, searchTerm])
+
+  const visibleAttributeText = useMemo(() => {
+    const designation = doubleJumpAttr?.atributos?.at_designacao
+    const value = doubleJumpAttr?.atributo_valor
+
+    if (designation && value) return `${designation}: ${value}`
+    if (designation) return String(designation)
+    if (value) return String(value)
+
+    // Fallback (until DB is fully populated)
+    return '+1 salto para o jogador enquanto está no ar'
+  }, [doubleJumpAttr])
 
   return (
     <main className="wiki-main">
@@ -124,7 +153,7 @@ function Wiki() {
               <div className="wiki-read-body">
                 <div className="wiki-read-title">{visibleBlessing.be_nome}</div>
                 <div className="wiki-read-attribute">
-                  +1 salto para o jogador enquanto está no ar
+                  {visibleAttributeText}
                 </div>
                 <div className="wiki-read-description">
                   {visibleBlessing.be_descricao || '—'}
