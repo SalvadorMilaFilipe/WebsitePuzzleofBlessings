@@ -384,23 +384,6 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(60, 179, 113, 0.4);
 }
-    background: linear-gradient(
-        135deg,
-        rgba(62, 65, 67, 0.92) 0%,
-        rgba(74, 77, 79, 0.88) 50%,
-        rgba(62, 65, 67, 0.92) 100%
-    );
-    padding: 2rem;
-    backdrop-filter: blur(10px);
-    border: 2px solid var(--border-vintage);
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    position: relative;
-    overflow: hidden;
-}
 
 .wiki-item::before {
     content: '';
