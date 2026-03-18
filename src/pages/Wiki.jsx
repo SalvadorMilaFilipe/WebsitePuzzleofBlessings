@@ -17,8 +17,8 @@ function Wiki() {
 
         const { data, error } = await supabase
           .from('bencao')
-          .select('be_cod, be_nome, be_imagem, be_descricao')
-          .ilike('be_nome', '%duplo%salto%')
+          .select('be_cod, be_nome, be_imagem, be_descricao, be_rariedade, categorias(ca_nome)')
+          .ilike('be_nome', '%salto%duplo%')
           .order('be_cod', { ascending: true })
           .limit(1)
 
@@ -153,7 +153,10 @@ function Wiki() {
               <div className="wiki-read-body">
                 <div className="wiki-read-title">{visibleBlessing.be_nome}</div>
                 <div className="wiki-read-attribute">
-                  {visibleAttributeText}
+                  <span>Categoria:</span> {visibleBlessing.categorias?.ca_nome || 'Desconhecida'} | <span>Raridade:</span> {visibleBlessing.be_rariedade || 'Desconhecida'}
+                </div>
+                <div className="wiki-read-attribute">
+                  <span>Efeito:</span> {visibleAttributeText}
                 </div>
                 <div className="wiki-read-description">
                   {visibleBlessing.be_descricao || '—'}

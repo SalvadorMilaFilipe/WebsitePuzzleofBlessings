@@ -1,0 +1,26 @@
+[
+  {
+    "ca_id": 1,
+    "ca_nome": "Informação/Scanning",
+    "ca_descricao": "Bênçãos que revelam elementos ocultos.",
+    "ca_imagem": "icon_clarifier.png"
+  },
+  {
+    "ca_id": 2,
+    "ca_nome": "Manipulação Física",
+    "ca_descricao": "Interação e alteração de objetos físicos.",
+    "ca_imagem": "icon_magnetic_mold.png"
+  },
+  {
+    "ca_id": 3,
+    "ca_nome": "Criação de Matéria",
+    "ca_descricao": "Criação de plataformas ou objetos temporários.",
+    "ca_imagem": "icon_duplication.png"
+  },
+  {
+    "ca_id": 4,
+    "ca_nome": "Passivas de Ajuda",
+    "ca_descricao": "Habilidades passivas permanentes.",
+    "ca_imagem": "icon_double_jump.png"
+  }
+]

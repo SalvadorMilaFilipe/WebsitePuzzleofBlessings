@@ -1,0 +1,66 @@
+[
+  {
+    "be_cod": 1,
+    "be_nome": "Levitação de Objeto",
+    "be_imagem": "Object levitation.png",
+    "be_rariedade": "Comum",
+    "be_tipo": 2,
+    "be_descricao": "Permite suspender um objeto no ar."
+  },
+  {
+    "be_cod": 2,
+    "be_nome": "Duplicação",
+    "be_imagem": "Duplication.png",
+    "be_rariedade": "Raro",
+    "be_tipo": 3,
+    "be_descricao": "Cria uma cópia temporária de um objeto não-vital."
+  },
+  {
+    "be_cod": 3,
+    "be_nome": "Lente de Padrões",
+    "be_imagem": "Pattern Lens.png",
+    "be_rariedade": "Raro",
+    "be_tipo": 1,
+    "be_descricao": "Revela a sequência correta por 3s."
+  },
+  {
+    "be_cod": 4,
+    "be_nome": "Ponto Efêmera",
+    "be_imagem": "Ephemeral Point.png",
+    "be_rariedade": "Épico",
+    "be_tipo": 3,
+    "be_descricao": "Gera plataforma por 10s."
+  },
+  {
+    "be_cod": 5,
+    "be_nome": "Clarificador",
+    "be_imagem": "Clarifier.png",
+    "be_rariedade": "Raro",
+    "be_tipo": 1,
+    "be_descricao": "Simplifica visualmente um puzzle complexo."
+  },
+  {
+    "be_cod": 6,
+    "be_nome": "Sensor de Ritmo",
+    "be_imagem": "Rhythm Sensor.png",
+    "be_rariedade": "Comum",
+    "be_tipo": 1,
+    "be_descricao": "Transforma pistas sonoras em indicadores visuais."
+  },
+  {
+    "be_cod": 7,
+    "be_nome": "Salto Duplo",
+    "be_imagem": "Double Jump.png",
+    "be_rariedade": "Incomum",
+    "be_tipo": 4,
+    "be_descricao": "Permite ao jogador obter um duplo Salto."
+  },
+  {
+    "be_cod": 8,
+    "be_nome": "Molde Magnético",
+    "be_imagem": "Magnetic Mold.png",
+    "be_rariedade": "Lendário",
+    "be_tipo": 2,
+    "be_descricao": "Atrai peças de metal para posição com ajuste fino."
+  }
+]
