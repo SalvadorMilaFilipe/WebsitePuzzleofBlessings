@@ -145,7 +145,7 @@ function Wiki() {
               <div className="wiki-element-card-inner">
                 <div 
                   className="wiki-element-avatar"
-                  style={{ backgroundImage: visibleBlessing.be_imagem ? `url(/blessingscardmodels/${visibleBlessing.be_imagem})` : 'none' }}
+                  style={{ backgroundImage: visibleBlessing.be_imagem ? `url("/blessingscardmodels/${visibleBlessing.be_imagem}")` : 'none' }}
                 ></div>
                 <div className="wiki-element-meta">
                   <div className="wiki-element-title">{visibleBlessing.be_nome}</div>
@@ -171,7 +171,7 @@ function Wiki() {
               <div 
                 className="wiki-modal-avatar"
                 style={{ 
-                  backgroundImage: selectedBlessing.be_imagem ? `url(/blessingscardmodels/${selectedBlessing.be_imagem})` : 'none',
+                  backgroundImage: selectedBlessing.be_imagem ? `url("/blessingscardmodels/${selectedBlessing.be_imagem}")` : 'none',
                   backgroundSize: 'cover', 
                   backgroundPosition: 'center' 
                 }}
