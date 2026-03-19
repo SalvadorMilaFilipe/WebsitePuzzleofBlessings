@@ -20,9 +20,9 @@ function Wiki() {
           .select(`
             be_cod, be_nome, be_imagem, be_descricao, be_rariedade, 
             categorias(ca_nome),
-            bencao_atributos(
+            bencao_atributos!bencao_id(
               atributo_valor, 
-              atributos!fk_bencao_atributos_at(at_designacao)
+              atributos!atributo_id(at_designacao)
             )
           `)
           .order('be_cod', { ascending: true })
