@@ -22,7 +22,7 @@ function Wiki() {
             categorias(ca_nome),
             bencao_atributos!bencao_id(
               atributo_valor, 
-              atributos!atributo_id(at_designacao)
+              atributos!fk_bencao_atributos_at(at_designacao)
             )
           `)
           .order('be_cod', { ascending: true })
