@@ -8,6 +8,7 @@ function Wiki() {
   const [doubleJumpAttr, setDoubleJumpAttr] = useState(null)
   const [blessingsLoading, setBlessingsLoading] = useState(false)
   const [blessingsError, setBlessingsError] = useState('')
+  const [selectedBlessing, setSelectedBlessing] = useState(null)
 
   useEffect(() => {
     const fetchDoubleJump = async () => {
@@ -136,32 +137,19 @@ function Wiki() {
         ) : blessingsError ? (
           <div className="no-results"><p>{blessingsError}</p></div>
         ) : visibleBlessing ? (
-          <div className="wiki-read-grid">
-            <article className="wiki-read-card lowpoly-card">
-              <div className="wiki-read-avatar">
-                {visibleBlessing.be_imagem ? (
-                  <img
-                    src={`/blessingscardmodels/${visibleBlessing.be_imagem}`}
-                    alt={visibleBlessing.be_nome}
-                    className="wiki-read-avatar-img"
-                    onError={(e) => { e.currentTarget.style.display = 'none' }}
-                  />
-                ) : null}
-              </div>
-
-              <div className="wiki-read-body">
-                <div className="wiki-read-title">{visibleBlessing.be_nome}</div>
-                <div className="wiki-read-attribute">
-                  <span>Categoria:</span> {visibleBlessing.categorias?.ca_nome || 'Desconhecida'} | <span>Raridade:</span> {visibleBlessing.be_rariedade || 'Desconhecida'}
-                </div>
-                <div className="wiki-read-attribute">
-                  <span>Efeito:</span> {visibleAttributeText}
-                </div>
-                <div className="wiki-read-description">
-                  {visibleBlessing.be_descricao || '—'}
-                </div>
-                <div className="wiki-read-date">
-                  <span>Data de Adição:</span> {today}
+          <div className="wiki-elements-grid">
+            <article 
+              className="wiki-element-card lowpoly-card"
+              onClick={() => setSelectedBlessing(visibleBlessing)}
+            >
+              <div className="wiki-element-card-inner">
+                <div 
+                  className="wiki-element-avatar"
+                  style={{ backgroundImage: visibleBlessing.be_imagem ? `url(/blessingscardmodels/${visibleBlessing.be_imagem})` : 'none' }}
+                ></div>
+                <div className="wiki-element-meta">
+                  <div className="wiki-element-title">{visibleBlessing.be_nome}</div>
+                  <div className="wiki-element-subtitle">{visibleAttributeText}</div>
                 </div>
               </div>
             </article>
@@ -170,6 +158,46 @@ function Wiki() {
           <div className="no-results"><p>No results found.</p></div>
         )}
       </div>
+
+      {/* Modal Overlay for Selected Blessing */}
+      {selectedBlessing && (
+        <div className="wiki-modal-overlay" onClick={() => setSelectedBlessing(null)}>
+          <div className="wiki-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="wiki-close-btn" onClick={() => setSelectedBlessing(null)}>
+              &times;
+            </button>
+            
+            <div className="wiki-modal-header">
+              <div 
+                className="wiki-modal-avatar"
+                style={{ 
+                  backgroundImage: selectedBlessing.be_imagem ? `url(/blessingscardmodels/${selectedBlessing.be_imagem})` : 'none',
+                  backgroundSize: 'cover', 
+                  backgroundPosition: 'center' 
+                }}
+              ></div>
+              <div>
+                <h2 className="wiki-modal-title" style={{color: '#a9d3ff'}}>{selectedBlessing.be_nome}</h2>
+                <div className="wiki-read-attribute" style={{marginTop: '0.75rem', marginBottom: 0}}>
+                  <span>Categoria:</span> {selectedBlessing.categorias?.ca_nome || 'Desconhecida'} | <span>Raridade:</span> {selectedBlessing.be_rariedade || 'Desconhecida'}
+                </div>
+              </div>
+            </div>
+
+            <div className="wiki-modal-body" style={{marginTop: '1.5rem'}}>
+              <div className="wiki-read-attribute">
+                <span>Efeito:</span> {visibleAttributeText}
+              </div>
+              <div className="wiki-read-description" style={{marginTop: '1.25rem', marginBottom: '1.5rem', color: '#ccc', fontSize: '1rem', lineHeight: '1.7'}}>
+                {selectedBlessing.be_descricao || '—'}
+              </div>
+              <div className="wiki-read-date" style={{fontSize: '0.9rem', color: '#888'}}>
+                <span style={{color: '#81D89E', fontWeight: 800}}>Data de Adição:</span> {today}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
