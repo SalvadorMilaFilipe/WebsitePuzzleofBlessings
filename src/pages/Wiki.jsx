@@ -4,81 +4,79 @@ import { supabase } from '../lib/supabase'
 function Wiki() {
   const [searchTerm, setSearchTerm] = useState('')
   const [activeFilter, setActiveFilter] = useState('blessings')
-  const [doubleJump, setDoubleJump] = useState(null)
-  const [doubleJumpAttr, setDoubleJumpAttr] = useState(null)
+  const [blessings, setBlessings] = useState([])
   const [blessingsLoading, setBlessingsLoading] = useState(false)
   const [blessingsError, setBlessingsError] = useState('')
   const [selectedBlessing, setSelectedBlessing] = useState(null)
 
   useEffect(() => {
-    const fetchDoubleJump = async () => {
+    const fetchBlessings = async () => {
       try {
         setBlessingsLoading(true)
         setBlessingsError('')
 
         const { data, error } = await supabase
           .from('bencao')
-          .select('be_cod, be_nome, be_imagem, be_descricao, be_rariedade, categorias(ca_nome)')
-          .ilike('be_nome', '%salto%duplo%')
+          .select(`
+            be_cod, be_nome, be_imagem, be_descricao, be_rariedade, 
+            categorias(ca_nome),
+            bencao_atributos(
+              atributo_valor, 
+              atributos!fk_bencao_atributos_at(at_designacao)
+            )
+          `)
           .order('be_cod', { ascending: true })
-          .limit(1)
 
         if (error) throw error
-        const blessing = (data && data[0]) ? data[0] : null
-        setDoubleJump(blessing)
-
-        if (blessing?.be_cod) {
-          const { data: attrsData, error: attrsError } = await supabase
-            .from('bencao_atributos')
-            .select('atributo_valor, atributos!fk_bencao_atributos_at(at_designacao)')
-            .eq('be_cod', blessing.be_cod)
-            .limit(1)
-
-          if (attrsError) throw attrsError
-          setDoubleJumpAttr((attrsData && attrsData[0]) ? attrsData[0] : null)
-        } else {
-          setDoubleJumpAttr(null)
-        }
+        setBlessings(data || [])
       } catch (err) {
-        setBlessingsError(err?.message || 'Failed to load blessing')
-        setDoubleJump(null)
-        setDoubleJumpAttr(null)
+        setBlessingsError(err?.message || 'Failed to load blessings')
       } finally {
         setBlessingsLoading(false)
       }
     }
 
-    fetchDoubleJump()
+    fetchBlessings()
   }, [])
 
-  const today = useMemo(() => {
-    const d = new Date()
-    const yyyy = d.getFullYear()
-    const mm = String(d.getMonth() + 1).padStart(2, '0')
-    const dd = String(d.getDate()).padStart(2, '0')
-    return `${yyyy}-${mm}-${dd}`
-  }, [])
+  const getRarityColor = (rarity) => {
+    if (!rarity) return '#ccc'
+    const r = rarity.toLowerCase()
+    if (r.includes('comum') && !r.includes('incomum')) return '#a9d3ff' // Azul claro
+    if (r.includes('incomum')) return '#81D89E' // Verde
+    if (r.includes('raro')) return '#4da6ff' // Azul
+    if (r.includes('épico') || r.includes('epico')) return '#b388ff' // Roxo
+    if (r.includes('lendário') || r.includes('lendario')) return '#ffd700' // Dourado
+    return '#ccc'
+  }
 
-  const visibleBlessing = useMemo(() => {
-    if (!doubleJump) return null
-    if (!searchTerm) return doubleJump
-    const q = searchTerm.toLowerCase()
-    const name = (doubleJump.be_nome || '').toLowerCase()
-    const desc = (doubleJump.be_descricao || '').toLowerCase()
-    return (name.includes(q) || desc.includes(q)) ? doubleJump : null
-  }, [doubleJump, searchTerm])
+  const getAttributeText = (blessing) => {
+    const attrRows = blessing?.bencao_atributos || []
+    if (attrRows.length > 0) {
+      const best = attrRows[0]
+      const designation = best.atributos?.at_designacao
+      const value = best.atributo_valor
+      if (designation && value) return `${designation}: ${value}`
+      if (designation) return String(designation)
+      if (value) return String(value)
+    }
+    // Fallback based on name
+    if (blessing.be_nome?.toLowerCase().includes('salto')) return '+1 salto para o jogador enquanto está no ar'
+    return 'Sem atributo definido'
+  }
 
-  const visibleAttributeText = useMemo(() => {
-    const designation = doubleJumpAttr?.atributos?.at_designacao
-    const value = doubleJumpAttr?.atributo_valor
-
-    if (designation && value) return `${designation}: ${value}`
-    if (designation) return String(designation)
-    if (value) return String(value)
-
-    // Fallback (until DB is fully populated)
-    return '+1 salto para o jogador enquanto está no ar'
-  }, [doubleJumpAttr])
+  const visibleBlessings = useMemo(() => {
+    if (!blessings) return []
+    let filtered = blessings
+    if (searchTerm) {
+      const q = searchTerm.toLowerCase()
+      filtered = filtered.filter(b => 
+        (b.be_nome || '').toLowerCase().includes(q) || 
+        (b.be_descricao || '').toLowerCase().includes(q)
+      )
+    }
+    return filtered
+  }, [blessings, searchTerm])
 
   return (
     <main className="wiki-main">
@@ -136,23 +134,26 @@ function Wiki() {
           <div className="no-results"><p>Loading blessing...</p></div>
         ) : blessingsError ? (
           <div className="no-results"><p>{blessingsError}</p></div>
-        ) : visibleBlessing ? (
+        ) : visibleBlessings.length > 0 ? (
           <div className="wiki-elements-grid">
-            <article 
-              className="wiki-element-card lowpoly-card"
-              onClick={() => setSelectedBlessing(visibleBlessing)}
-            >
-              <div className="wiki-element-card-inner">
-                <div 
-                  className="wiki-element-avatar"
-                  style={{ backgroundImage: visibleBlessing.be_imagem ? `url("/blessingscardmodels/${visibleBlessing.be_imagem}")` : 'none' }}
-                ></div>
-                <div className="wiki-element-meta">
-                  <div className="wiki-element-title">{visibleBlessing.be_nome}</div>
-                  <div className="wiki-element-subtitle">{visibleAttributeText}</div>
+            {visibleBlessings.map(b => (
+              <article 
+                key={b.be_cod}
+                className="wiki-element-card lowpoly-card"
+                onClick={() => setSelectedBlessing(b)}
+              >
+                <div className="wiki-element-card-inner">
+                  <div 
+                    className="wiki-element-avatar"
+                    style={{ backgroundImage: b.be_imagem ? `url("/blessingscardmodels/${b.be_imagem}")` : 'none' }}
+                  ></div>
+                  <div className="wiki-element-meta">
+                    <div className="wiki-element-title">{b.be_nome}</div>
+                    <div className="wiki-element-subtitle">{getAttributeText(b)}</div>
+                  </div>
                 </div>
-              </div>
-            </article>
+              </article>
+            ))}
           </div>
         ) : (
           <div className="no-results"><p>No results found.</p></div>
@@ -179,20 +180,20 @@ function Wiki() {
               <div>
                 <h2 className="wiki-modal-title" style={{color: '#a9d3ff'}}>{selectedBlessing.be_nome}</h2>
                 <div className="wiki-read-attribute" style={{marginTop: '0.75rem', marginBottom: 0}}>
-                  <span>Categoria:</span> {selectedBlessing.categorias?.ca_nome || 'Desconhecida'} | <span>Raridade:</span> {selectedBlessing.be_rariedade || 'Desconhecida'}
+                  <span>Categoria:</span> {selectedBlessing.categorias?.ca_nome || 'Desconhecida'} | <span>Raridade:</span> <span style={{ color: getRarityColor(selectedBlessing.be_rariedade), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.be_rariedade || 'Desconhecida'}</span>
                 </div>
               </div>
             </div>
 
             <div className="wiki-modal-body" style={{marginTop: '1.5rem'}}>
               <div className="wiki-read-attribute">
-                <span>Efeito:</span> {visibleAttributeText}
+                <span>Efeito:</span> {getAttributeText(selectedBlessing)}
               </div>
               <div className="wiki-read-description" style={{marginTop: '1.25rem', marginBottom: '1.5rem', color: '#ccc', fontSize: '1rem', lineHeight: '1.7'}}>
                 {selectedBlessing.be_descricao || '—'}
               </div>
               <div className="wiki-read-date" style={{fontSize: '0.9rem', color: '#888'}}>
-                <span style={{color: '#81D89E', fontWeight: 800}}>Data de Adição:</span> {today}
+                <span style={{color: '#81D89E', fontWeight: 800}}>Data de Adição:</span> {new Date().toISOString().split('T')[0]}
               </div>
             </div>
           </div>
