@@ -164,6 +164,26 @@ body::before {
     }
 }
 
+/* Globals size reduction */
+section {
+    padding: 3.5rem 0; /* Reduced from 5rem */
+    position: relative;
+}
+
+.section-title {
+    font-size: 2.2rem; /* Reduced from 3rem */
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2rem; /* Reduced from 3rem */
+    background: linear-gradient(135deg, #9fc7e8 0%, #8bb5d6 25%, #aed0bc 50%, #9dc0ab 75%, #8bb5d6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 30px rgba(159, 199, 232, 0.6)) drop-shadow(0 0 50px rgba(174, 208, 188, 0.4));
+    letter-spacing: -0.02em;
+}
+
 /* ===========================================
    NAVBAR (Shared)
    =========================================== */
@@ -182,23 +202,29 @@ body::before {
 }
 
 .nav-container {
-    max-width: 1400px;
+    max-width: 100%; /* Fill the monitor */
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 4rem; /* More horizontal padding */
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between; /* Logo left, Menu right */
     align-items: center;
     width: 100%;
     position: relative;
-    gap: 1.5rem;
 }
 
 .nav-menu-desktop {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 3rem; /* Increased gap to fill space */
+    justify-content: flex-end; /* Links and buttons together at the right */
     flex: 1;
-    justify-content: center;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .logo {
@@ -819,7 +845,7 @@ body::before {
     }
 
     .section-title {
-        font-size: 2.5rem;
+        font-size: 1.8rem; /* Reduced from 2.5rem */
     }
 }
 
@@ -859,7 +885,7 @@ body::before {
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 1.5rem; /* Reduced from 2rem */
     }
 
     .mobile-menu-btn {

@@ -225,6 +225,10 @@ function Register() {
                                 {loading ? 'Processing...' : 'Profile Done →'}
                             </button>
                         </div>
+
+                        <div className="register-login-link">
+                            <p>Already have an account? <span onClick={() => navigate('/login')}>Log In</span></p>
+                        </div>
                     </form>
                 ) : (
                     <form onSubmit={handleSubmit}>
@@ -261,6 +265,10 @@ function Register() {
                             <button type="submit" className="btn-primary" disabled={loading}>
                                 {loading ? 'Processing...' : 'Finish Registration'}
                             </button>
+                        </div>
+
+                        <div className="register-login-link">
+                            <p>Already have an account? <span onClick={() => navigate('/login')}>Log In</span></p>
                         </div>
                     </form>
                 )}

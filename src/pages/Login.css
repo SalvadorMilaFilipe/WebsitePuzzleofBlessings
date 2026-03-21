@@ -26,10 +26,10 @@
 
 .login-card {
     background: #0B120E;
-    padding: 2.5rem 3rem;
+    padding: 1.75rem 2.25rem; /* Compact padding */
     border-radius: 12px;
     width: 100%;
-    max-width: 440px;
+    max-width: 400px; /* Reduced width */
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8),
         0 0 30px rgba(129, 216, 158, 0.05);
     border: 1px solid rgba(129, 216, 158, 0.1);
@@ -57,10 +57,10 @@
 
 .login-card h2 {
     text-align: center;
-    margin-top: 0.2rem;
+    margin-top: 0.1rem;
     color: #fff;
-    margin-bottom: 0.3rem;
-    font-size: 2.2rem;
+    margin-bottom: 0.25rem;
+    font-size: 1.7rem; /* Smaller title */
     font-weight: 800;
     letter-spacing: -0.5px;
 }
@@ -68,19 +68,19 @@
 .subtitle {
     text-align: center;
     color: #888;
-    font-size: 0.95rem;
-    margin-bottom: 2rem;
+    font-size: 0.85rem; /* Smaller text */
+    margin-bottom: 1.25rem; /* Less space */
 }
 
 .form-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.9rem; /* Compact groups */
 }
 
 .form-group label {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     color: #81D89E;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -88,11 +88,11 @@
 
 .form-group input {
     width: 100%;
-    padding: 0.85rem 1.2rem;
+    padding: 0.65rem 1rem; /* Smaller padding */
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
     clip-path: polygon(10px 0%, 100% 0%,
             100% calc(100% - 10px),
@@ -109,16 +109,16 @@
 
 .btn-primary.full-width {
     width: 100%;
-    margin-top: 0.5rem;
+    margin-top: 0.4rem;
 }
 
 .btn-primary {
-    padding: 1rem 2rem;
+    padding: 0.85rem 1.75rem; /* Smaller padding */
     background: linear-gradient(135deg, #3CB371, #2BA89C, #4DA6C9);
     color: white;
     border: none;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 0.95rem; /* Smaller font */
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
@@ -149,7 +149,7 @@
 .divider {
     display: flex;
     align-items: center;
-    margin: 1.8rem 0;
+    margin: 1.2rem 0; /* Less margin */
     color: #555;
     font-size: 0.75rem;
     font-weight: 800;
@@ -172,9 +172,9 @@
     background: #fff;
     color: #111;
     border: none;
-    padding: 0.85rem;
+    padding: 0.75rem; /* Smaller padding */
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.9rem; /* Smaller font */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -194,14 +194,14 @@
 }
 
 .google-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
 }
 
 .toggle-view {
-    margin-top: 2rem;
+    margin-top: 1.25rem; /* Less space */
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #888;
 }
 
