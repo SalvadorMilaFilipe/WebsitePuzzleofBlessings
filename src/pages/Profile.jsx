@@ -27,14 +27,14 @@ function Profile() {
                 console.error('Supabase client not available in AuthContext');
                 return;
             }
-            // 1. Fetch all blessings with their category names
-            const { data: blessings, error: bError } = await supabase
-                .from('blessings')
-                .select('*, categories(cat_name)')
+            // 1. Fetch EVERYTHING from blessing table
+            const { data: allB, error: bError } = await supabase
+                .from('blessing') // Singular
+                .select('*, category(cat_name)') // Singular
                 .order('bl_id')
 
             if (bError) throw bError
-            setAllBlessings(blessings || [])
+            setAllBlessings(allB || [])
 
             // 2. Fetch unlocked ones for this player
             const { data: unlocked, error: uError } = await supabase

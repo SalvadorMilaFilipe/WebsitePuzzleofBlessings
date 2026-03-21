@@ -16,13 +16,13 @@ function Wiki() {
         setBlessingsError('')
 
         const { data, error } = await supabase
-          .from('blessings')
+          .from('blessing') // Singular
           .select(`
-            bl_id, bl_name, bl_image, bl_description, bl_rarity, 
-            categories(cat_name),
-            blessing_attributes!bl_id(
-              attribute_value, 
-              attributes!attr_id(attr_name)
+            *,
+            category ( cat_name ),
+            blessing_attribute (
+              attr_value,
+              attribute ( attr_name )
             )
           `)
           .order('bl_id', { ascending: true })
@@ -51,11 +51,11 @@ function Wiki() {
   }
 
   const getAttributeText = (blessing) => {
-    const attrRows = blessing?.blessing_attributes || []
+    const attrRows = blessing?.blessing_attribute || []
     if (attrRows.length > 0) {
       const best = attrRows[0]
-      const name = best.attributes?.attr_name
-      const value = best.attribute_value
+      const name = best.attribute?.attr_name
+      const value = best.attr_value
       if (name && value) return `${name}: ${value}`
       if (name) return String(name)
       if (value) return String(value)
@@ -147,6 +147,16 @@ function Wiki() {
                     className="wiki-element-avatar"
                     style={{ backgroundImage: b.bl_image ? `url("/blessingscardmodels/${b.bl_image}")` : 'none' }}
                   ></div>
+                  <p className="wiki-blessing-category">
+                    {b.category?.cat_name || 'General'}
+                  </p>
+                  <div className="wiki-blessing-attributes">
+                    {b.blessing_attribute?.slice(0, 2).map((attr, idx) => (
+                      <div key={idx} className="wiki-attr-tag">
+                        {attr.attribute?.attr_name}: {attr.attr_value}
+                      </div>
+                    ))}
+                  </div>
                   <div className="wiki-element-meta">
                     <div className="wiki-element-title">{b.bl_name}</div>
                     <div className="wiki-element-subtitle">{getAttributeText(b)}</div>
