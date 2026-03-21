@@ -209,11 +209,11 @@ function Navbar() {
                 </div>
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <button className="btn-signup-ghost" onClick={() => navigate('/register')}>
-                    Sign Up
-                  </button>
                   <button className="btn-login" onClick={handleLogin}>
                     Log In
+                  </button>
+                  <button className="btn-signup-ghost" onClick={() => navigate('/register')}>
+                    Sign Up
                     <img
                       src={unloggedUserIcon}
                       alt="User"
@@ -320,11 +320,11 @@ function Navbar() {
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', alignItems: 'center' }}>
-                <button className="btn-signup-ghost" style={{ width: '100%', maxWidth: '250px' }} onClick={() => navigate('/register')}>
-                  Sign Up
-                </button>
                 <button className="btn-login mobile-btn-login" onClick={handleLogin}>
                   Log In
+                </button>
+                <button className="btn-signup-ghost" style={{ width: '100%', maxWidth: '250px' }} onClick={() => navigate('/register')}>
+                  Sign Up
                   <img
                     src="/img/unloggeduser/UnloggedUser.png"
                     alt="User"

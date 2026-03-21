@@ -153,6 +153,13 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     clip-path: polygon(10px 0%, 100% 0%, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0% 100%, 0% 10px);
+    
+    /* Centralization */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
 }
 
 .btn-primary {
