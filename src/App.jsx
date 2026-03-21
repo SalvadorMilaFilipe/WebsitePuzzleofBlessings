@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Centro from './pages/Centro'
@@ -8,6 +8,7 @@ import Credits from './pages/Credits'
 import Profile from './pages/Profile'
 import EditProfile from './pages/EditProfile'
 import { AuthProvider } from './context/AuthContext'
+import InactivityModal from './components/InactivityModal'
 // Lazy load the Download page
 const Download = lazy(() => import('./pages/Download'))
 const Login = lazy(() => import('./pages/Login'))
