@@ -18,13 +18,13 @@ function Wiki() {
         const { data, error } = await supabase
           .from('blessing') // Singular
           .select(`
-            *,
-            category ( cat_name ),
-            blessing_attribute (
-              attr_value,
-              attribute ( attr_name )
-            )
-          `)
+          *,
+          category:category ( cat_name ),
+          blessing_attribute:blessing_attribute!fk_blessing_attr_blessing (
+            attr_value,
+            attribute:attribute!fk_blessing_attr_attribute ( attr_name )
+          )
+        `)
           .order('bl_id', { ascending: true })
 
         if (error) throw error

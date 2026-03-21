@@ -30,7 +30,7 @@ function Profile() {
             // 1. Fetch EVERYTHING from blessing table
             const { data: allB, error: bError } = await supabase
                 .from('blessing') // Singular
-                .select('*, category(cat_name)') // Singular
+                .select('*, category:category(cat_name)') // Singular with alias
                 .order('bl_id')
 
             if (bError) throw bError
