@@ -5,9 +5,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 120px 20px 60px; /* Offset for navbar */
+    padding: 40px 20px; /* Navbar is hidden, no need for large padding */
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 /* Subtle background pattern */

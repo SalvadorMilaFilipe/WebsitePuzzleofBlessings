@@ -97,6 +97,8 @@ function Navbar() {
       <path d="M20 84c6-16 18-24 28-24s22 8 28 24" fill="url(#g)"/>
     </svg>`
   )}`
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register'
+  if (isAuthPage) return null
 
   return (
     <>
@@ -206,14 +208,19 @@ function Navbar() {
                   </span>
                 </div>
               ) : (
-                <button className="btn-login" onClick={handleLogin}>
-                  Log In
-                  <img
-                    src={unloggedUserIcon}
-                    alt="User"
-                    className="nav-user-icon"
-                  />
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <button className="btn-signup-ghost" onClick={() => navigate('/register')}>
+                    Sign Up
+                  </button>
+                  <button className="btn-login" onClick={handleLogin}>
+                    Log In
+                    <img
+                      src={unloggedUserIcon}
+                      alt="User"
+                      className="nav-user-icon"
+                    />
+                  </button>
+                </div>
               )}
 
             </div>
@@ -312,14 +319,19 @@ function Navbar() {
                 </button>
               </div>
             ) : (
-              <button className="btn-login mobile-btn-login" onClick={handleLogin}>
-                Log In
-                <img
-                  src="/img/unloggeduser/UnloggedUser.png"
-                  alt="User"
-                  className="nav-user-icon mobile-user-icon"
-                />
-              </button>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', alignItems: 'center' }}>
+                <button className="btn-signup-ghost" style={{ width: '100%', maxWidth: '250px' }} onClick={() => navigate('/register')}>
+                  Sign Up
+                </button>
+                <button className="btn-login mobile-btn-login" onClick={handleLogin}>
+                  Log In
+                  <img
+                    src="/img/unloggeduser/UnloggedUser.png"
+                    alt="User"
+                    className="nav-user-icon mobile-user-icon"
+                  />
+                </button>
+              </div>
             )}
           </div>
         </div>

@@ -352,6 +352,37 @@ body::before {
     transform: translateY(3px);
 }
 
+.btn-signup-ghost {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #888;
+    padding: 0 1.2rem;
+    height: 48px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.btn-signup-ghost:hover {
+    color: #fff;
+    border-color: rgba(129, 216, 158, 0.5);
+    background: rgba(129, 216, 158, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-signup-ghost:active {
+    transform: translateY(0);
+}
+
 /* ===========================================
    FOOTER (Shared)
    =========================================== */
