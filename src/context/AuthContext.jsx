@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
     // Effect to handle session creation once userProfile is loaded
     useEffect(() => {
         if (userProfile && session && !currentSiteSessionId.current) {
-            startSiteSession(userProfile.jo_cod) // Pass ID now for DB consistency
+            startSiteSession(userProfile.pl_id) // Updated to pl_id
         }
     }, [userProfile, session])
 
@@ -96,19 +96,19 @@ export const AuthProvider = ({ children }) => {
             const timeStr = now.toTimeString().split(' ')[0]
 
             const { data, error } = await supabase
-                .from('sessao')
+                .from('session') // Updated from sessao
                 .insert([{
-                    se_jogador: playerName,
-                    se_tipo: 'site',
-                    se_dataini: dateStr,
-                    se_horaini: timeStr
+                    ss_player_id: playerName, // Updated from se_jogador
+                    ss_type: 'site', // Updated from se_tipo
+                    ss_date_start: dateStr, // Updated from se_dataini
+                    ss_time_start: timeStr // Updated from se_horaini
                 }])
-                .select('se_cod')
+                .select('ss_id') // Updated from se_cod
                 .single()
 
             if (error) throw error
-            currentSiteSessionId.current = data.se_cod
-            console.log('[Auth] Site session started successfully:', data.se_cod)
+            currentSiteSessionId.current = data.ss_id
+            console.log('[Auth] Site session started successfully:', data.ss_id)
         } catch (err) {
             console.error('[Auth] Fatal error starting site session:', err.message)
         }
@@ -126,12 +126,12 @@ export const AuthProvider = ({ children }) => {
         try {
             console.log(`[Auth] Ending site session: ${sessionId}`)
             await supabase
-                .from('sessao')
+                .from('session') // Updated from sessao
                 .update({
-                    se_datafim: dateStr,
-                    se_horafim: timeStr
+                    ss_date_end: dateStr, // Updated from se_datafim
+                    ss_time_end: timeStr // Updated from se_horafim
                 })
-                .eq('se_cod', sessionId)
+                .eq('ss_id', sessionId) // Updated from se_cod
 
             console.log('[Auth] Site session ended successfully')
         } catch (err) {
@@ -158,18 +158,18 @@ export const AuthProvider = ({ children }) => {
         try {
             // First try with status join using explicitly named reference
             const { data, error } = await supabase
-                .from('jogador')
-                .select('*, status:fk_jogador_status(*)')
-                .ilike('jo_email', email)
+                .from('player') // Updated from jogador
+                .select('*, status:fk_player_status(*)') // Updated FK reference
+                .ilike('pl_email', email) // Updated from jo_email
                 .maybeSingle()
 
             if (error) {
                 console.warn('[Auth] Join fetch failed, trying simple fetch:', error.message)
                 // Fallback to simple fetch if join fails (e.g. table schema transition)
                 const { data: simpleData, error: simpleError } = await supabase
-                    .from('jogador')
+                    .from('player') // Updated from jogador
                     .select('*')
-                    .ilike('jo_email', email)
+                    .ilike('pl_email', email) // Updated from jo_email
                     .maybeSingle()
 
                 if (simpleError) throw simpleError
@@ -185,7 +185,7 @@ export const AuthProvider = ({ children }) => {
                 setIsNewUser(false)
                 lastFetchedEmail.current = email
             } else {
-                console.log('[Auth] No profile found in jogador table.')
+                console.log('[Auth] No profile found in player table.')
                 setIsNewUser(true)
             }
         } catch (err) {
@@ -266,20 +266,20 @@ export const AuthProvider = ({ children }) => {
         }
 
         const newProfile = {
-            jo_id: generateJoId(),
-            jo_user: username, // Site/System Username
-            jo_email: session.user.email,
-            jo_password_site: sitePassword, // Store site password (if email registration)
-            jo_password_jogo: gamePassword, // Specific password for Unity
-            jo_user_jogo: gameUser,       // Specific username for Unity
-            jo_anonascimento: birthYear,
-            jo_pais: country,
-            jo_lingua: 'pt',
-            jo_avatar: null
+            pl_code: generateJoId(), // Updated from jo_id
+            pl_username: username, // Updated from jo_user
+            pl_email: session.user.email, // Updated from jo_email
+            pl_password_site: sitePassword, // Updated from jo_password_site
+            pl_password_game: gamePassword, // Updated from jo_password_jogo
+            pl_username_game: gameUser,       // Updated from jo_user_jogo
+            pl_birth_year: birthYear, // Updated from jo_anonascimento
+            pl_country: country, // Updated from jo_pais
+            pl_language: 'en', // Updated from jo_lingua, default to English
+            pl_avatar_id: null // Updated from jo_avatar
         }
 
         const { data, error } = await supabase
-            .from('jogador')
+            .from('player') // Updated from jogador
             .insert([newProfile])
             .select()
             .single()

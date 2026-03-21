@@ -10,9 +10,9 @@ function EditProfile() {
 
     // Estados para campos editáveis
     const [formData, setFormData] = useState({
-        jo_user: '',
-        jo_user_jogo: '',
-        jo_descricao: ''
+        pl_username: '',
+        pl_username_game: '',
+        pl_description: ''
     })
 
     const [saving, setSaving] = useState(false)
@@ -24,9 +24,9 @@ function EditProfile() {
         }
         if (userProfile) {
             setFormData({
-                jo_user: userProfile.jo_user || '',
-                jo_user_jogo: userProfile.jo_user_jogo || '',
-                jo_descricao: userProfile.jo_descricao || ''
+                pl_username: userProfile.pl_username || '',
+                pl_username_game: userProfile.pl_username_game || '',
+                pl_description: userProfile.pl_description || ''
             })
         }
     }, [session, loading, navigate, userProfile])
@@ -43,13 +43,13 @@ function EditProfile() {
 
         try {
             const { error } = await supabase
-                .from('jogador')
+                .from('player') // Updated from jogador
                 .update({
-                    jo_user: formData.jo_user,
-                    jo_user_jogo: formData.jo_user_jogo,
-                    jo_descricao: formData.jo_descricao
+                    pl_username: formData.pl_username,
+                    pl_username_game: formData.pl_username_game,
+                    pl_description: formData.pl_description
                 })
-                .eq('jo_email', session.user.email)
+                .eq('pl_email', session.user.email) // Updated from jo_email
 
             if (error) throw error
 
@@ -97,8 +97,8 @@ function EditProfile() {
                                 <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Nome de Utilizador (Site)</label>
                                 <input
                                     type="text"
-                                    name="jo_user"
-                                    value={formData.jo_user}
+                                    name="pl_username" // Updated
+                                    value={formData.pl_username}
                                     onChange={handleChange}
                                     style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '6px', color: '#fff' }}
                                     required
@@ -108,8 +108,8 @@ function EditProfile() {
                             <div className="form-group">
                                 <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Descrição / Bio</label>
                                 <textarea
-                                    name="jo_descricao"
-                                    value={formData.jo_descricao}
+                                    name="pl_description" // Updated
+                                    value={formData.pl_description}
                                     onChange={handleChange}
                                     rows="4"
                                     placeholder="Escreve algo sobre ti..."
@@ -128,8 +128,8 @@ function EditProfile() {
                                 <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Nome de Jogador (In-Game)</label>
                                 <input
                                     type="text"
-                                    name="jo_user_jogo"
-                                    value={formData.jo_user_jogo}
+                                    name="pl_username_game" // Updated
+                                    value={formData.pl_username_game}
                                     onChange={handleChange}
                                     style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '6px', color: '#fff' }}
                                     required
@@ -152,8 +152,8 @@ function EditProfile() {
                                         width: '10px',
                                         height: '10px',
                                         borderRadius: '50%',
-                                        backgroundColor: userProfile.status?.st_cor || '#6B7280',
-                                        boxShadow: `0 0 10px ${userProfile.status?.st_cor || '#6B7280'}`
+                                        backgroundColor: userProfile.status?.st_color || '#6B7280',
+                                        boxShadow: `0 0 10px ${userProfile.status?.st_color || '#6B7280'}`
                                     }}></div>
                                     <span style={{ textTransform: 'capitalize', fontWeight: '500' }}>
                                         {userProfile.status?.st_status || 'offline'}
@@ -173,19 +173,19 @@ function EditProfile() {
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', background: 'rgba(0,0,0,0.1)', padding: '1rem', borderRadius: '8px' }}>
                                 <div>
                                     <small style={{ color: '#888' }}>ID Único</small>
-                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.jo_id}</p>
+                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_code}</p>
                                 </div>
                                 <div>
                                     <small style={{ color: '#888' }}>E-mail Associado</small>
-                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.jo_email}</p>
+                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_email}</p>
                                 </div>
                                 <div>
                                     <small style={{ color: '#888' }}>País</small>
-                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.jo_pais || 'Não definido'}</p>
+                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_country || 'Não definido'}</p>
                                 </div>
                                 <div>
                                     <small style={{ color: '#888' }}>Ano de Nascimento</small>
-                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.jo_anonascimento}</p>
+                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_birth_year}</p>
                                 </div>
                             </div>
                         </section>

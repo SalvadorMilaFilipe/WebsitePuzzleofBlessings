@@ -1,229 +1,194 @@
--- BD.sql (MySQL/phpMyAdmin) - Updated on 2026-03-21
--- Includes profile fields and unique player ID
--- Translated all blessing-related tables and columns to English
+-- BD.sql — Updated schema: 2026-03-21
+-- Full English translation of all table and column names
+-- Based on live Supabase migration (migration_pt_to_en.sql)
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+-- =====================================================================
+-- TABLE: status
+-- (name unchanged, columns renamed)
+-- =====================================================================
+CREATE TABLE status (
+  st_id          INT NOT NULL AUTO_INCREMENT,
+  st_status      VARCHAR(50),
+  st_active_site BOOLEAN,
+  st_color       CHAR(7),
+  st_active_game BOOLEAN,
+  PRIMARY KEY (st_id)
+);
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+-- =====================================================================
+-- TABLE: level (was: nivel)
+-- =====================================================================
+CREATE TABLE level (
+  lv_id          INT NOT NULL AUTO_INCREMENT,
+  lv_name        VARCHAR(100),
+  lv_description TEXT,
+  lv_type        VARCHAR(50),
+  PRIMARY KEY (lv_id)
+);
 
-SET FOREIGN_KEY_CHECKS = 0;
+-- =====================================================================
+-- TABLE: rarity (was: rariedade)
+-- =====================================================================
+CREATE TABLE rarity (
+  rar_id          INT NOT NULL AUTO_INCREMENT,
+  rar_name        VARCHAR(100),
+  rar_description TEXT,
+  rar_card_image  TEXT,
+  PRIMARY KEY (rar_id)
+);
 
-DROP TABLE IF EXISTS `blessing_attributes`;
-DROP TABLE IF EXISTS `player_blessings`;
-DROP TABLE IF EXISTS `jogador_itens`;
-DROP TABLE IF EXISTS `jogador_colecionaveis`;
-DROP TABLE IF EXISTS `sessao`;
-DROP TABLE IF EXISTS `colecionaveis`;
-DROP TABLE IF EXISTS `itens`;
-DROP TABLE IF EXISTS `attributes`;
-DROP TABLE IF EXISTS `blessings`;
-DROP TABLE IF EXISTS `categories`;
-DROP TABLE IF EXISTS `jogador`;
-DROP TABLE IF EXISTS `avatar`;
-DROP TABLE IF EXISTS `label`;
+-- =====================================================================
+-- TABLE: category (was: categorias)
+-- =====================================================================
+CREATE TABLE category (
+  cat_id          INT NOT NULL AUTO_INCREMENT,
+  cat_name        VARCHAR(100) NOT NULL UNIQUE,
+  cat_description TEXT,
+  cat_image       TEXT,
+  PRIMARY KEY (cat_id)
+);
 
--- =========================
--- TABLE: Avatar
--- =========================
-CREATE TABLE `avatar` (
-  `av_cod` INT NOT NULL AUTO_INCREMENT,
-  `av_img` TEXT NULL,
-  PRIMARY KEY (`av_cod`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =====================================================================
+-- TABLE: attribute (was: atributos)
+-- =====================================================================
+CREATE TABLE attribute (
+  attr_id   INT NOT NULL AUTO_INCREMENT,
+  attr_name VARCHAR(100) NOT NULL,
+  PRIMARY KEY (attr_id)
+);
 
--- =========================
--- TABLE: Jogador (Player)
--- =========================
-CREATE TABLE `jogador` (
-  `jo_cod` INT NOT NULL AUTO_INCREMENT,
-  `jo_id` VARCHAR(9) NOT NULL,
-  `jo_user` VARCHAR(50) NOT NULL,
-  `jo_email` VARCHAR(100) NOT NULL,
-  `jo_password_site` VARCHAR(255) NULL,
-  `jo_password_jogo` VARCHAR(255) NULL,
-  `jo_user_jogo` VARCHAR(100) NULL,
-  `jo_descricao` TEXT NULL,
-  `jo_anonascimento` BIGINT NULL,
-  `jo_lingua` VARCHAR(20) DEFAULT 'en',
-  `jo_pais` VARCHAR(50) NULL,
-  `jo_status` VARCHAR(20) DEFAULT 'offline',
-  `jo_avatar` INT NULL,
-  `jo_banner` TEXT NULL,
-  `jo_foto_url` TEXT NULL,
-  PRIMARY KEY (`jo_cod`),
-  UNIQUE KEY `uq_jogador_id` (`jo_id`),
-  UNIQUE KEY `uq_jogador_user` (`jo_user`),
-  UNIQUE KEY `uq_jogador_email` (`jo_email`),
-  KEY `idx_jogador_avatar` (`jo_avatar`),
-  CONSTRAINT `fk_jogador_avatar` FOREIGN KEY (`jo_avatar`) REFERENCES `avatar` (`av_cod`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =====================================================================
+-- TABLE: collectible (was: colecionaveis)
+-- =====================================================================
+CREATE TABLE collectible (
+  cl_id          INT NOT NULL AUTO_INCREMENT,
+  cl_name        VARCHAR(100) NOT NULL,
+  cl_description TEXT,
+  PRIMARY KEY (cl_id)
+);
 
--- =========================
--- TABLE: Sessao (Session)
--- =========================
-CREATE TABLE `sessao` (
-  `se_cod` INT NOT NULL AUTO_INCREMENT,
-  `se_jogador` INT NOT NULL,
-  `se_dataini` DATE NOT NULL,
-  `se_horaini` TIME NOT NULL,
-  `se_datafim` DATE NULL,
-  `se_horafim` TIME NULL,
-  PRIMARY KEY (`se_cod`),
-  KEY `idx_sessao_jogador` (`se_jogador`),
-  CONSTRAINT `fk_sessao_jogador` FOREIGN KEY (`se_jogador`) REFERENCES `jogador` (`jo_cod`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =====================================================================
+-- TABLE: cointest (was: label)
+-- =====================================================================
+CREATE TABLE cointest (
+  id         INT NOT NULL AUTO_INCREMENT,
+  coin_count BIGINT,
+  PRIMARY KEY (id)
+);
 
--- =========================
--- TABLE: Categories
--- =========================
-CREATE TABLE `categories` (
-  `cat_id` INT NOT NULL AUTO_INCREMENT,
-  `cat_name` VARCHAR(100) NOT NULL UNIQUE,
-  `cat_description` TEXT NULL,
-  `cat_image` TEXT NULL,
-  PRIMARY KEY (`cat_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =====================================================================
+-- TABLE: player (was: jogador)
+-- =====================================================================
+CREATE TABLE player (
+  pl_id            INT NOT NULL AUTO_INCREMENT,
+  pl_code          VARCHAR(9) NOT NULL,           -- #XXXXXXXX friend code
+  pl_username      VARCHAR(50) NOT NULL UNIQUE,
+  pl_email         VARCHAR(100) NOT NULL UNIQUE,
+  pl_password_site VARCHAR(255),
+  pl_password_game VARCHAR(255),
+  pl_username_game VARCHAR(100),
+  pl_description   TEXT,
+  pl_birth_year    BIGINT,
+  pl_language      VARCHAR(20) DEFAULT 'en',
+  pl_country       VARCHAR(50),
+  pl_status_id     INT,
+  pl_level_id      INT,
+  pl_avatar_id     INT,
+  pl_banner        TEXT,
+  pl_photo_url     TEXT,
+  PRIMARY KEY (pl_id),
+  UNIQUE KEY uq_player_code (pl_code),
+  CONSTRAINT fk_player_status FOREIGN KEY (pl_status_id)
+    REFERENCES status(st_id) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT fk_player_level FOREIGN KEY (pl_level_id)
+    REFERENCES level(lv_id) ON DELETE SET NULL ON UPDATE CASCADE
+);
 
--- =========================
--- TABLE: Blessings
--- =========================
-CREATE TABLE `blessings` (
-  `bl_id` INT NOT NULL AUTO_INCREMENT,
-  `bl_name` VARCHAR(100) NOT NULL,
-  `bl_image` TEXT NULL,
-  `bl_rarity` VARCHAR(50) NULL,
-  `bl_category_id` INT NULL,
-  `bl_description` TEXT NULL,
-  PRIMARY KEY (`bl_id`),
-  CONSTRAINT `fk_blessing_category` FOREIGN KEY (`bl_category_id`) REFERENCES `categories` (`cat_id`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =====================================================================
+-- TABLE: blessing (was: bencao)
+-- =====================================================================
+CREATE TABLE blessing (
+  bl_id          INT NOT NULL AUTO_INCREMENT,
+  bl_name        VARCHAR(100) NOT NULL,
+  bl_image       TEXT,
+  bl_rarity      VARCHAR(50),
+  bl_category_id INT,
+  bl_description TEXT,
+  PRIMARY KEY (bl_id),
+  CONSTRAINT fk_blessing_category FOREIGN KEY (bl_category_id)
+    REFERENCES category(cat_id) ON DELETE SET NULL ON UPDATE CASCADE
+);
 
--- =========================
--- TABLE: Attributes
--- =========================
-CREATE TABLE `attributes` (
-  `attr_id` INT NOT NULL AUTO_INCREMENT,
-  `attr_name` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`attr_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =====================================================================
+-- TABLE: blessing_attribute (was: bencao_atributos)
+-- =====================================================================
+CREATE TABLE blessing_attribute (
+  bl_id      INT NOT NULL,
+  attr_id    INT NOT NULL,
+  attr_value TEXT,
+  PRIMARY KEY (bl_id, attr_id),
+  CONSTRAINT fk_blessing_attr_blessing FOREIGN KEY (bl_id)
+    REFERENCES blessing(bl_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_blessing_attr_attribute FOREIGN KEY (attr_id)
+    REFERENCES attribute(attr_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
--- =========================
--- TABLE: Itens
--- =========================
-CREATE TABLE `itens` (
-  `it_cod` INT NOT NULL AUTO_INCREMENT,
-  `it_nome` VARCHAR(100) NOT NULL,
-  `it_descricao` TEXT NULL,
-  `it_lore` TEXT NULL,
-  `it_rariedade` VARCHAR(50) NULL,
-  `it_imagem` TEXT NULL,
-  PRIMARY KEY (`it_cod`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =====================================================================
+-- TABLE: session (was: sessao)
+-- Stores both site and game sessions
+-- =====================================================================
+CREATE TABLE session (
+  ss_id         INT NOT NULL AUTO_INCREMENT,
+  ss_player_id  INT NOT NULL,
+  ss_date_start DATE NOT NULL,
+  ss_time_start TIME NOT NULL,
+  ss_date_end   DATE,
+  ss_time_end   TIME,
+  ss_type       VARCHAR(20),  -- 'site' | 'game'
+  PRIMARY KEY (ss_id),
+  CONSTRAINT fk_session_player FOREIGN KEY (ss_player_id)
+    REFERENCES player(pl_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
--- =========================
--- TABLE: Colecionaveis
--- =========================
-CREATE TABLE `colecionaveis` (
-  `co_cod` INT NOT NULL AUTO_INCREMENT,
-  `co_nome` VARCHAR(100) NOT NULL,
-  `co_descricao` TEXT NULL,
-  `co_imagem` TEXT NULL,
-  PRIMARY KEY (`co_cod`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =====================================================================
+-- TABLE: save (name unchanged)
+-- =====================================================================
+CREATE TABLE save (
+  sv_id         INT NOT NULL AUTO_INCREMENT,
+  sv_level_id   INT,
+  sv_player_pos TEXT,
+  sv_session_id INT,
+  sv_updated_at TIMESTAMP WITH TIME ZONE,
+  PRIMARY KEY (sv_id),
+  CONSTRAINT fk_save_level FOREIGN KEY (sv_level_id)
+    REFERENCES level(lv_id) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT fk_save_session FOREIGN KEY (sv_session_id)
+    REFERENCES session(ss_id) ON DELETE SET NULL ON UPDATE CASCADE
+);
 
--- =========================
--- TABLE: Label
--- =========================
-CREATE TABLE `label` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nmoedas` INT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =====================================================================
+-- TABLE: player_blessing (was: jogador_bencao)
+-- =====================================================================
+CREATE TABLE player_blessing (
+  pl_id         INT NOT NULL,
+  bl_id         INT NOT NULL,
+  date_obtained DATE NOT NULL DEFAULT (CURRENT_DATE),
+  PRIMARY KEY (pl_id, bl_id),
+  CONSTRAINT fk_player_blessing_player FOREIGN KEY (pl_id)
+    REFERENCES player(pl_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_player_blessing_blessing FOREIGN KEY (bl_id)
+    REFERENCES blessing(bl_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
--- =========================
--- TABLE: Jogador_Colecionaveis
--- =========================
-CREATE TABLE `jogador_colecionaveis` (
-  `jo_cod` INT NOT NULL,
-  `co_cod` INT NOT NULL,
-  PRIMARY KEY (`jo_cod`, `co_cod`),
-  KEY `idx_jogador_colecionaveis_co` (`co_cod`),
-  CONSTRAINT `fk_jogador_colecionaveis_jo` FOREIGN KEY (`jo_cod`) REFERENCES `jogador` (`jo_cod`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_jogador_colecionaveis_co` FOREIGN KEY (`co_cod`) REFERENCES `colecionaveis` (`co_cod`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =========================
--- TABLE: Jogador_Itens
--- =========================
-CREATE TABLE `jogador_itens` (
-  `jo_cod` INT NOT NULL,
-  `it_cod` INT NOT NULL,
-  `date_obtained` DATE NOT NULL DEFAULT (CURRENT_DATE),
-  PRIMARY KEY (`jo_cod`, `it_cod`),
-  KEY `idx_jogador_itens_it` (`it_cod`),
-  CONSTRAINT `fk_jogador_itens_jo` FOREIGN KEY (`jo_cod`) REFERENCES `jogador` (`jo_cod`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_jogador_itens_it` FOREIGN KEY (`it_cod`) REFERENCES `itens` (`it_cod`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =========================
--- TABLE: Player_Blessings
--- =========================
-CREATE TABLE `player_blessings` (
-  `jo_cod` INT NOT NULL,
-  `bl_id` INT NOT NULL,
-  `date_obtained` DATE NOT NULL DEFAULT (CURRENT_DATE),
-  PRIMARY KEY (`jo_cod`, `bl_id`),
-  KEY `idx_player_blessings_bl` (`bl_id`),
-  CONSTRAINT `fk_player_blessings_jo` FOREIGN KEY (`jo_cod`) REFERENCES `jogador` (`jo_cod`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_player_blessings_bl` FOREIGN KEY (`bl_id`) REFERENCES `blessings` (`bl_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =========================
--- TABLE: Blessing_Attributes
--- =========================
-CREATE TABLE `blessing_attributes` (
-  `bl_id` INT NOT NULL,
-  `jo_cod` INT NOT NULL,
-  `attr_id` INT NOT NULL,
-  `attribute_value` DECIMAL(10,2) NULL,
-  PRIMARY KEY (`bl_id`, `jo_cod`, `attr_id`),
-  KEY `idx_blessing_attributes_jo` (`jo_cod`),
-  KEY `idx_blessing_attributes_attr` (`attr_id`),
-  CONSTRAINT `fk_blessing_attributes_bl` FOREIGN KEY (`bl_id`) REFERENCES `blessings` (`bl_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_blessing_attributes_jo` FOREIGN KEY (`jo_cod`) REFERENCES `jogador` (`jo_cod`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_blessing_attributes_attr` FOREIGN KEY (`attr_id`) REFERENCES `attributes` (`attr_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- =====================================================================
+-- TABLE: player_collectible (was: jogador_colecionaveis)
+-- =====================================================================
+CREATE TABLE player_collectible (
+  pl_id INT NOT NULL,
+  cl_id INT NOT NULL,
+  PRIMARY KEY (pl_id, cl_id),
+  CONSTRAINT fk_player_collectible_player FOREIGN KEY (pl_id)
+    REFERENCES player(pl_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_player_collectible_collectible FOREIGN KEY (cl_id)
+    REFERENCES collectible(cl_id) ON DELETE CASCADE ON UPDATE CASCADE
+);

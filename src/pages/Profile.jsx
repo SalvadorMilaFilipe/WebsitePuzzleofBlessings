@@ -15,7 +15,7 @@ function Profile() {
         if (!loading && !session) {
             navigate('/')
         }
-        if (userProfile?.jo_cod) {
+        if (userProfile?.pl_id) {
             fetchBlessingsData()
         }
     }, [session, loading, navigate, userProfile])
@@ -38,9 +38,9 @@ function Profile() {
 
             // 2. Fetch unlocked ones for this player
             const { data: unlocked, error: uError } = await supabase
-                .from('player_blessings')
+                .from('player_blessing') // Updated to singular
                 .select('bl_id')
-                .eq('jo_cod', userProfile.jo_cod)
+                .eq('pl_id', userProfile.pl_id) // Updated from jo_cod
 
             if (uError) throw uError
             const unlockedSet = new Set(unlocked.map(u => u.bl_id))
@@ -54,8 +54,8 @@ function Profile() {
     }
 
     const handleCopyId = () => {
-        if (userProfile?.jo_id) {
-            navigator.clipboard.writeText(userProfile.jo_id)
+        if (userProfile?.pl_code) {
+            navigator.clipboard.writeText(userProfile.pl_code)
             setCopySuccess(true)
             setTimeout(() => setCopySuccess(false), 2000)
         }
@@ -78,8 +78,8 @@ function Profile() {
                 <div className="profile-container">
                     {/* Banner Section */}
                     <div className="profile-banner-container">
-                        {userProfile.jo_banner ? (
-                            <img src={userProfile.jo_banner} alt="Banner" className="profile-banner-img" />
+                        {userProfile.pl_banner ? (
+                            <img src={userProfile.pl_banner} alt="Banner" className="profile-banner-img" />
                         ) : (
                             <div className="profile-banner-placeholder"></div>
                         )}
@@ -96,9 +96,9 @@ function Profile() {
                         </div>
                         <div className="profile-title-section" style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingBottom: '1rem' }}>
                             <div className="profile-name-info">
-                                <h1 className="profile-username" style={{ margin: 0, lineHeight: 1.2 }}>{userProfile.jo_user}</h1>
+                                <h1 className="profile-username" style={{ margin: 0, lineHeight: 1.2 }}>{userProfile.pl_username}</h1>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '5px' }}>
-                                    <p className="profile-realname" style={{ margin: 0 }}>{userProfile.jo_user_jogo}</p>
+                                    <p className="profile-realname" style={{ margin: 0 }}>{userProfile.pl_username_game}</p>
                                     <span style={{
                                         fontSize: '0.8rem',
                                         background: 'rgba(255,255,255,0.05)',
@@ -114,8 +114,8 @@ function Profile() {
                                             width: '8px',
                                             height: '8px',
                                             borderRadius: '50%',
-                                            backgroundColor: userProfile.status?.st_cor || '#6B7280',
-                                            boxShadow: `0 0 8px ${userProfile.status?.st_cor || '#6B7280'}`,
+                                            backgroundColor: userProfile.status?.st_color || '#6B7280',
+                                            boxShadow: `0 0 8px ${userProfile.status?.st_color || '#6B7280'}`,
                                             flexShrink: 0
                                         }}></div>
                                         <span style={{ textTransform: 'capitalize' }}>
@@ -128,7 +128,7 @@ function Profile() {
                                         title="Click to copy"
                                         style={{ fontSize: '0.8rem', padding: '2px 8px' }}
                                     >
-                                        {userProfile.jo_id || '#00000000'}
+                                        {userProfile.pl_code || '#00000000'}
                                         {copySuccess && <span style={{ fontSize: '0.6rem', marginLeft: '5px', color: '#9dc0ab' }}>Copied!</span>}
                                     </span>
                                 </div>
@@ -168,7 +168,7 @@ function Profile() {
                         <section className="profile-section">
                             <h3>Description</h3>
                             <div className="profile-description">
-                                {userProfile.jo_descricao || "This player hasn't written their story yet..."}
+                                {userProfile.pl_description || "This player hasn't written their story yet..."}
                             </div>
                         </section>
 

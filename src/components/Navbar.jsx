@@ -67,7 +67,7 @@ function Navbar() {
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
 
-  const displayName = userProfile?.jo_user || session?.user?.user_metadata?.full_name || 'User'
+  const displayName = userProfile?.pl_username || session?.user?.user_metadata?.full_name || 'User'
   const initial = (displayName || 'U').trim().charAt(0).toUpperCase()
   const displayAvatar = `data:image/svg+xml,${encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
@@ -157,10 +157,10 @@ function Navbar() {
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
-                    backgroundColor: userProfile?.status?.st_cor || '#6B7280',
-                    boxShadow: `0 0 5px ${userProfile?.status?.st_cor || '#6B7280'}`
+                    backgroundColor: userProfile?.status?.st_color || '#6B7280',
+                    boxShadow: `0 0 5px ${userProfile?.status?.st_color || '#6B7280'}`
                   }}></div>
-                  {userProfile?.jo_user || 'PROFILE'}
+                  {userProfile?.pl_username || 'PROFILE'}
                 </Link>
               )}
 
@@ -172,7 +172,7 @@ function Navbar() {
                     className="nav-user-icon logged-in"
                     onClick={(e) => {
                       if (e.detail === 2) {
-                        navigator.clipboard.writeText(userProfile?.jo_id || '')
+                        navigator.clipboard.writeText(userProfile?.pl_code || '')
                         alert('ID copied to clipboard!')
                       } else if (e.detail === 1) {
                         setTimeout(() => {

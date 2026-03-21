@@ -209,27 +209,27 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.rarity-badge.comum {
+.rarity-badge.common {
     background: #94A3B8;
     color: #1E293B;
 }
 
-.rarity-badge.incomum {
+.rarity-badge.uncommon {
     background: #4ADE80;
     color: #064E3B;
 }
 
-.rarity-badge.raro {
+.rarity-badge.rare {
     background: #60A5FA;
     color: #1E3A8A;
 }
 
-.rarity-badge.épico {
+.rarity-badge.epic {
     background: #A855F7;
     color: #4C1D95;
 }
 
-.rarity-badge.lendário {
+.rarity-badge.legendary {
     background: #FACC15;
     color: #713F12;
 }
