@@ -11,8 +11,8 @@ import { AuthProvider } from './context/AuthContext'
 import InactivityModal from './components/InactivityModal'
 // Lazy load the Download page
 const Download = lazy(() => import('./pages/Download'))
-const Login = lazy(() => import('./pages/Login'))
-const Register = lazy(() => import('./pages/Register'))
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 import AuthRedirect from './components/AuthRedirect'
 
