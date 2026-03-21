@@ -8,11 +8,8 @@ function Register() {
     const { session, isNewUser, userProfile, signupWithEmail, completeRegistration, logout, loading: authLoading } = useAuth()
     const navigate = useNavigate()
     
-    // Step logic:
-    // 0: Create account (email + password) - only if no session
-    // 1: Profile details
-    // 2: Game details
-    const [step, setStep] = useState(session ? 1 : 0)
+    // Step logic: Now only 1 (Profile) and 2 (Game)
+    const [step, setStep] = useState(1)
     
     // Form states
     const [email, setEmail] = useState('')
@@ -32,35 +29,36 @@ function Register() {
         return <Navigate to="/" replace />
     }
 
-    // Auto-advance to profile step after signup or OAuth login
-    useEffect(() => {
-        if (!authLoading && session && step === 0) {
-            setStep(1)
-        }
-    }, [session, authLoading, step])
-
-    const handleCreateAccount = async (e) => {
+    const handleNextStep = async (e) => {
         e.preventDefault()
         setError('')
         setLoading(true)
+
         try {
-            await signupWithEmail(email, password)
-            // useEffect will move us to step 1
+            // Se não houver sessão, precisamos de criar a conta primeiro
+            if (!session) {
+                if (!email || !password) {
+                    setError('Email and Password are required to create an account.')
+                    setLoading(false)
+                    return
+                }
+                await signupWithEmail(email, password)
+                // O signupWithEmail no AuthContext deve disparar a criação da sessão
+                // Após o signup, o componente re-renderiza com session, e mantemos o step em 1
+            }
+
+            if (!username.trim()) {
+                setError('Public Username is required')
+                setLoading(false)
+                return
+            }
+
+            setStep(2)
         } catch (err) {
-            setError(err.message || 'Account creation failed')
+            setError(err.message || 'Failed to initialize account.')
         } finally {
             setLoading(false)
         }
-    }
-
-    const handleNextStep = (e) => {
-        e.preventDefault()
-        setError('')
-        if (!username.trim()) {
-            setError('System Username is required')
-            return
-        }
-        setStep(2)
     }
 
     const handleSubmit = async (e) => {
@@ -85,6 +83,11 @@ function Register() {
         }
     }
 
+    const handleLogoutExit = async () => {
+        await logout()
+        navigate('/')
+    }
+
     const currentYear = new Date().getFullYear()
     const years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => currentYear - i)
 
@@ -100,71 +103,52 @@ function Register() {
         <div className="register-page-container">
             <div className="register-card">
                 <div className="step-indicator">
-                    {!session && <span className={step === 0 ? 'active' : ''}>0. Account</span>}
+                    {/* 0. Account removido conforme solicitado */}
                     <span className={step === 1 ? 'active' : ''}>1. Profile</span>
                     <span className={step === 2 ? 'active' : ''}>2. Game</span>
                 </div>
 
-                <h2>
-                    {step === 0 ? 'Create Account' : step === 1 ? 'Configure Profile' : 'Game Account'}
-                </h2>
+                <h2>{step === 1 ? 'Configure Profile' : 'Game Account'}</h2>
                 
                 <p>
-                    {step === 0 
-                        ? 'Join our realm and start your adventure.' 
-                        : `Welcome${session?.user?.user_metadata?.full_name ? ', ' + session.user.user_metadata.full_name.split(' ')[0] : ''}! Please complete your details.`}
+                    {session 
+                        ? `Welcome${session?.user?.user_metadata?.full_name ? ', ' + session.user.user_metadata.full_name.split(' ')[0] : ''}! Please complete your details.` 
+                        : 'Welcome, Traveler! Let\'s create your account and profile.'}
                 </p>
 
-                {step === 0 && (
-                    <form onSubmit={handleCreateAccount}>
+                {step === 1 ? (
+                    <form onSubmit={handleNextStep}>
+                        {/* Se tiver sessão (Google), email é read-only. Se não, é editável para signup. */}
                         <div className="form-group">
-                            <label htmlFor="reg-email">Email</label>
+                            <label htmlFor="reg-email">{session ? 'Email (Verified)' : 'Account Email'}</label>
                             <input
                                 type="email"
                                 id="reg-email"
-                                value={email}
+                                value={session ? session.user.email : email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                readOnly={!!session}
+                                disabled={!!session}
+                                style={session ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
                                 placeholder="mage@example.com"
                                 required
                             />
+                            {session && <small>Account linked via {session?.user?.app_metadata?.provider || 'Auth System'}.</small>}
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="reg-password">Password</label>
-                            <input
-                                type="password"
-                                id="reg-password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="••••••••"
-                                required
-                                minLength={6}
-                            />
-                        </div>
-                        {error && <p className="error-message">{error}</p>}
-                        <div className="register-actions">
-                            <button type="button" className="btn-secondary" onClick={() => navigate('/login')}>
-                                ← Back to Login
-                            </button>
-                            <button type="submit" className="btn-primary" disabled={loading}>
-                                {loading ? 'Creating...' : 'Create Account →'}
-                            </button>
-                        </div>
-                    </form>
-                )}
 
-                {step === 1 && (
-                    <form onSubmit={handleNextStep}>
-                        <div className="form-group">
-                            <label>Email (Verified)</label>
-                            <input
-                                type="email"
-                                value={session?.user?.email || ''}
-                                readOnly
-                                disabled
-                                style={{ opacity: 0.6, cursor: 'not-allowed' }}
-                            />
-                            <small>Account linked via {session?.user?.app_metadata?.provider || 'Auth System'}.</small>
-                        </div>
+                        {!session && (
+                            <div className="form-group">
+                                <label htmlFor="reg-password">Account Password</label>
+                                <input
+                                    type="password"
+                                    id="reg-password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Set account password"
+                                    required
+                                    minLength={6}
+                                />
+                            </div>
+                        )}
 
                         <div className="form-group">
                             <label htmlFor="username">Public Username</label>
@@ -179,13 +163,13 @@ function Register() {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="sitePassword">Site Password</label>
+                            <label htmlFor="sitePassword">Site Password (Portal)</label>
                             <input
                                 type="password"
                                 id="sitePassword"
                                 value={sitePassword}
                                 onChange={(e) => setSitePassword(e.target.value)}
-                                placeholder="Set a password for future portal logins"
+                                placeholder="Set password for future logins"
                                 required
                             />
                         </div>
@@ -234,17 +218,15 @@ function Register() {
                         {error && <p className="error-message">{error}</p>}
 
                         <div className="register-actions">
-                            <button type="button" className="btn-secondary" onClick={() => logout()}>
+                            <button type="button" className="btn-secondary" onClick={handleLogoutExit}>
                                 Logout & Exit
                             </button>
-                            <button type="submit" className="btn-primary">
-                                Profile Done →
+                            <button type="submit" className="btn-primary" disabled={loading}>
+                                {loading ? 'Processing...' : 'Profile Done →'}
                             </button>
                         </div>
                     </form>
-                )}
-
-                {step === 2 && (
+                ) : (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="gameUser">In-Game Username (Unity)</label>
