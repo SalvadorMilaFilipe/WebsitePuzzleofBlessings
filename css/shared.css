@@ -202,22 +202,28 @@ section {
 }
 
 .nav-container {
-    max-width: 100%; /* Fill the monitor */
+    max-width: 100%;
     margin: 0 auto;
-    padding: 0 4rem; /* More horizontal padding */
+    padding: 0 4rem;
     display: flex;
-    justify-content: space-between; /* Logo left, Menu right */
+    justify-content: flex-start; /* Alinha tudo à esquerda inicialmente */
     align-items: center;
     width: 100%;
     position: relative;
+    gap: 3rem; /* Mesmo espaçamento que os links */
 }
 
 .nav-menu-desktop {
     display: flex;
     align-items: center;
-    gap: 3rem; /* Increased gap to fill space */
-    justify-content: flex-end; /* Links and buttons together at the right */
-    flex: 1;
+    gap: 3rem;
+    flex: 1; /* Ocupa o resto do espaço */
+}
+
+/* Os botões de utilizador devem ir para a direita */
+.nav-user-info, 
+.nav-menu-desktop > div:last-child {
+    margin-left: auto;
 }
 
 .navbar-content {
