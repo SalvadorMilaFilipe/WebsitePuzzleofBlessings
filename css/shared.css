@@ -201,36 +201,31 @@ section {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(107, 203, 119, 0.08) inset;
 }
 
-.nav-container {
+.navbar .container {
     max-width: 100%;
     margin: 0 auto;
     padding: 0 4rem;
+    width: 100%;
+}
+
+.navbar-content {
     display: flex;
-    justify-content: flex-start; /* Alinha tudo à esquerda inicialmente */
+    justify-content: flex-start; /* Alinha tudo à esquerda */
     align-items: center;
     width: 100%;
-    position: relative;
-    gap: 3rem; /* Mesmo espaçamento que os links */
+    gap: 3rem; /* Espaçamento entre Logo e Menu Desktop */
 }
 
 .nav-menu-desktop {
     display: flex;
     align-items: center;
-    gap: 3rem;
-    flex: 1; /* Ocupa o resto do espaço */
+    gap: 3rem; /* Espaçamento entre os links */
+    flex: 1;
 }
 
-/* Os botões de utilizador devem ir para a direita */
-.nav-user-info, 
+/* Garante que os botões de auth fiquem encostados à direita */
 .nav-menu-desktop > div:last-child {
     margin-left: auto;
-}
-
-.navbar-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
 }
 
 .logo {
