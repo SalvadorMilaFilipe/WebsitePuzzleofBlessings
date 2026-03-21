@@ -142,24 +142,39 @@ function Wiki() {
                 className="wiki-element-card lowpoly-card"
                 onClick={() => setSelectedBlessing(b)}
               >
-                <div className="wiki-element-card-inner">
-                  <div 
+                <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                  <div
                     className="wiki-element-avatar"
-                    style={{ backgroundImage: b.bl_image ? `url("/blessingscardmodels/${b.bl_image}")` : 'none' }}
+                    style={{ 
+                      backgroundImage: b.bl_image ? `url("/blessingscardmodels/${b.bl_image}")` : 'none',
+                      minWidth: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      backgroundSize: 'contain',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'center',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+                      marginRight: '1.5rem'
+                    }}
                   ></div>
-                  <p className="wiki-blessing-category">
-                    {b.category?.cat_name || 'General'}
-                  </p>
-                  <div className="wiki-blessing-attributes">
-                    {b.blessing_attribute?.slice(0, 2).map((attr, idx) => (
-                      <div key={idx} className="wiki-attr-tag">
-                        {attr.attribute?.attr_name}: {attr.attr_value}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="wiki-element-meta">
-                    <div className="wiki-element-title">{b.bl_name}</div>
-                    <div className="wiki-element-subtitle">{getAttributeText(b)}</div>
+
+                  <div className="wiki-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                    <div className="wiki-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>
+                      {b.bl_name}
+                    </div>
+                    <p className="wiki-blessing-category" style={{ margin: 0, opacity: 0.8, fontSize: '0.9rem', color: '#81D89E' }}>
+                      {b.category?.cat_name || 'General'}
+                    </p>
+                    <div className="wiki-element-subtitle" style={{ fontSize: '1rem', color: '#ccc', marginTop: '4px' }}>
+                      {getAttributeText(b)}
+                    </div>
+                    <div className="wiki-blessing-attributes" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
+                      {b.blessing_attribute?.slice(0, 2).map((attr, idx) => (
+                        <div key={idx} className="wiki-attr-tag" style={{ fontSize: '0.75rem', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '4px' }}>
+                          {attr.attribute?.attr_name}: {attr.attr_value}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </article>
