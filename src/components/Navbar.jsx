@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
-function Navbar({ onOpenLogin }) {
+function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { session, userProfile, logout } = useAuth()
@@ -52,7 +52,7 @@ function Navbar({ onOpenLogin }) {
   }
 
   const handleLogin = () => {
-    onOpenLogin()
+    navigate('/login')
     setIsMobileMenuOpen(false)
   }
 

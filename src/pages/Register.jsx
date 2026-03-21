@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { countries } from '../utils/countries'
-import './RegistrationModal.css'
+import './Register.css'
 
-function RegistrationModal() {
-    const { isNewUser, completeRegistration, logout, session } = useAuth()
+function Register() {
+    const { session, isNewUser, userProfile, completeRegistration, logout, loading: authLoading } = useAuth()
+    const navigate = useNavigate()
+    
     const [step, setStep] = useState(1)
     const [username, setUsername] = useState('')
     const [sitePassword, setSitePassword] = useState('')
@@ -15,7 +18,12 @@ function RegistrationModal() {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
-    if (!isNewUser) return null // Don't render if not a new user
+    // GUARDAS:
+    // 1. Se não houver sessão, ir para login
+    if (!authLoading && !session) return <Navigate to="/login" replace />
+    
+    // 2. Se já tiver perfil e não for "novo", ir para home
+    if (!authLoading && session && !isNewUser && userProfile) return <Navigate to="/" replace />
 
     const handleNextStep = (e) => {
         e.preventDefault()
@@ -40,6 +48,7 @@ function RegistrationModal() {
 
         try {
             await completeRegistration(username, gameUser, gamePassword, sitePassword, birthYear, country)
+            navigate('/')
         } catch (err) {
             console.error(err)
             setError(err.message || 'Error creating profile. Username might be taken.')
@@ -51,32 +60,39 @@ function RegistrationModal() {
     const currentYear = new Date().getFullYear()
     const years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => currentYear - i)
 
-    // Helper to get flag emoji
     const getFlagEmoji = (countryCode) => {
         return countryCode
             .toUpperCase()
             .replace(/./g, char => String.fromCodePoint(char.charCodeAt(0) + 127397))
     }
 
+    if (authLoading) return <div className="register-page-container">Carregando sessão...</div>
+
     return (
-        <div className="registration-modal-overlay">
-            <div className="registration-modal">
+        <div className="register-page-container">
+            <div className="register-card">
                 <div className="step-indicator">
                     <span className={step === 1 ? 'active' : ''}>1. Profile</span>
                     <span className={step === 2 ? 'active' : ''}>2. Game</span>
                 </div>
-
-                {session?.user?.app_metadata?.provider === 'google' && (
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style={{ width: '24px' }} />
-                    </div>
-                )}
 
                 <h2>{step === 1 ? 'Configure Profile' : 'Game Account'}</h2>
                 <p>Welcome, <strong>{session?.user?.user_metadata?.full_name?.split(' ')[0] || 'Traveler'}</strong>! We need a few more details to complete your registration.</p>
 
                 {step === 1 ? (
                     <form onSubmit={handleNextStep}>
+                        <div className="form-group">
+                            <label>Email (Verified)</label>
+                            <input
+                                type="email"
+                                value={session?.user?.email || ''}
+                                readOnly
+                                disabled
+                                style={{ opacity: 0.6, cursor: 'not-allowed' }}
+                            />
+                            <small>Account linked via {session?.user?.app_metadata?.provider || 'Auth System'}.</small>
+                        </div>
+
                         <div className="form-group">
                             <label htmlFor="username">Public Username</label>
                             <input
@@ -96,16 +112,13 @@ function RegistrationModal() {
                                 id="sitePassword"
                                 value={sitePassword}
                                 onChange={(e) => setSitePassword(e.target.value)}
-                                placeholder="Set a password for the portal"
+                                placeholder="Set a password for future portal logins"
                                 required
                             />
-                            {session?.user?.app_metadata?.provider === 'google' && (
-                                <small>Since you signed in with Google, set this for future email-only logins.</small>
-                            )}
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            <div className="form-group" style={{ flex: 1 }}>
+                        <div className="flex-row">
+                            <div className="form-group">
                                 <label htmlFor="birthYear">Birth Year</label>
                                 <select
                                     id="birthYear"
@@ -118,7 +131,7 @@ function RegistrationModal() {
                                 </select>
                             </div>
 
-                            <div className="form-group" style={{ flex: 1 }}>
+                            <div className="form-group">
                                 <label htmlFor="country">Country</label>
                                 <div className="country-select-wrapper">
                                     {country && (
@@ -147,12 +160,12 @@ function RegistrationModal() {
 
                         {error && <p className="error-message">{error}</p>}
 
-                        <div className="modal-actions">
-                            <button type="button" className="btn-secondary" onClick={logout}>
-                                Logout
+                        <div className="register-actions">
+                            <button type="button" className="btn-secondary" onClick={() => logout()}>
+                                Logout & Exit
                             </button>
                             <button type="submit" className="btn-primary">
-                                Next →
+                                Next Step →
                             </button>
                         </div>
                     </form>
@@ -165,7 +178,7 @@ function RegistrationModal() {
                                 id="gameUser"
                                 value={gameUser}
                                 onChange={(e) => setGameUser(e.target.value)}
-                                placeholder="Your name inside the game"
+                                placeholder="Your name inside the game world"
                                 required
                             />
                         </div>
@@ -177,14 +190,14 @@ function RegistrationModal() {
                                 id="gamePassword"
                                 value={gamePassword}
                                 onChange={(e) => setGamePassword(e.target.value)}
-                                placeholder="Exclusive password for Unity"
+                                placeholder="Exclusive password for Unity engine"
                                 required
                             />
                         </div>
 
                         {error && <p className="error-message">{error}</p>}
 
-                        <div className="modal-actions">
+                        <div className="register-actions">
                             <button type="button" className="btn-secondary" onClick={() => setStep(1)} disabled={loading}>
                                 ← Back
                             </button>
@@ -199,4 +212,4 @@ function RegistrationModal() {
     )
 }
 
-export default RegistrationModal
+export default Register 
