@@ -29,21 +29,21 @@ function Profile() {
             }
             // 1. Fetch all blessings with their category names
             const { data: blessings, error: bError } = await supabase
-                .from('bencao')
-                .select('*, categorias(ca_nome)')
-                .order('be_cod')
+                .from('blessings')
+                .select('*, categories(cat_name)')
+                .order('bl_id')
 
             if (bError) throw bError
             setAllBlessings(blessings || [])
 
             // 2. Fetch unlocked ones for this player
             const { data: unlocked, error: uError } = await supabase
-                .from('jogador_bencao')
-                .select('be_cod')
+                .from('player_blessings')
+                .select('bl_id')
                 .eq('jo_cod', userProfile.jo_cod)
 
             if (uError) throw uError
-            const unlockedSet = new Set(unlocked.map(u => u.be_cod))
+            const unlockedSet = new Set(unlocked.map(u => u.bl_id))
             setUnlockedIds(unlockedSet)
 
         } catch (err) {
@@ -189,24 +189,24 @@ function Profile() {
                                     <p>Loading blessings...</p>
                                 ) : allBlessings.length > 0 ? (
                                     allBlessings.map((b) => {
-                                        const isUnlocked = unlockedIds.has(b.be_cod)
+                                        const isUnlocked = unlockedIds.has(b.bl_id)
                                         return (
                                             <div
-                                                key={b.be_cod}
+                                                key={b.bl_id}
                                                 className={`item-card blessing-card ${isUnlocked ? 'obtained' : 'unobtained'}`}
-                                                title={isUnlocked ? b.be_nome : "Locked"}
+                                                title={isUnlocked ? b.bl_name : "Locked"}
                                             >
                                                 <div className="blessing-img-container">
                                                     <img
-                                                        src={`/blessingscardmodels/${b.be_imagem}`}
-                                                        alt={b.be_nome}
+                                                        src={`/blessingscardmodels/${b.bl_image}`}
+                                                        alt={b.bl_name}
                                                         className="blessing-card-img"
                                                     />
                                                 </div>
-                                                <span className="item-card-name">{isUnlocked ? b.be_nome : "? ? ?"}</span>
-                                                {isUnlocked && b.be_rariedade && (
-                                                    <span className={`rarity-badge ${b.be_rariedade.toLowerCase()}`}>
-                                                        {b.be_rariedade}
+                                                <span className="item-card-name">{isUnlocked ? b.bl_name : "? ? ?"}</span>
+                                                {isUnlocked && b.bl_rarity && (
+                                                    <span className={`rarity-badge ${b.bl_rarity.toLowerCase()}`}>
+                                                        {b.bl_rarity}
                                                     </span>
                                                 )}
                                             </div>

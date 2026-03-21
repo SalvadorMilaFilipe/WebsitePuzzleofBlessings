@@ -1,5 +1,6 @@
--- BD.sql (MySQL/phpMyAdmin) - Atualizado em 2026-02-15
--- Inclui campos de perfil e ID único do jogador
+-- BD.sql (MySQL/phpMyAdmin) - Updated on 2026-03-21
+-- Includes profile fields and unique player ID
+-- Translated all blessing-related tables and columns to English
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -11,22 +12,22 @@ SET time_zone = "+00:00";
 
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS `bencao_atributos`;
-DROP TABLE IF EXISTS `jogador_bencao`;
+DROP TABLE IF EXISTS `blessing_attributes`;
+DROP TABLE IF EXISTS `player_blessings`;
 DROP TABLE IF EXISTS `jogador_itens`;
 DROP TABLE IF EXISTS `jogador_colecionaveis`;
 DROP TABLE IF EXISTS `sessao`;
 DROP TABLE IF EXISTS `colecionaveis`;
 DROP TABLE IF EXISTS `itens`;
-DROP TABLE IF EXISTS `atributos`;
-DROP TABLE IF EXISTS `bencao`;
-DROP TABLE IF EXISTS `categorias`;
+DROP TABLE IF EXISTS `attributes`;
+DROP TABLE IF EXISTS `blessings`;
+DROP TABLE IF EXISTS `categories`;
 DROP TABLE IF EXISTS `jogador`;
 DROP TABLE IF EXISTS `avatar`;
 DROP TABLE IF EXISTS `label`;
 
 -- =========================
--- TABELA: Avatar
+-- TABLE: Avatar
 -- =========================
 CREATE TABLE `avatar` (
   `av_cod` INT NOT NULL AUTO_INCREMENT,
@@ -35,7 +36,7 @@ CREATE TABLE `avatar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Jogador
+-- TABLE: Jogador (Player)
 -- =========================
 CREATE TABLE `jogador` (
   `jo_cod` INT NOT NULL AUTO_INCREMENT,
@@ -47,7 +48,7 @@ CREATE TABLE `jogador` (
   `jo_user_jogo` VARCHAR(100) NULL,
   `jo_descricao` TEXT NULL,
   `jo_anonascimento` BIGINT NULL,
-  `jo_lingua` VARCHAR(20) DEFAULT 'pt',
+  `jo_lingua` VARCHAR(20) DEFAULT 'en',
   `jo_pais` VARCHAR(50) NULL,
   `jo_status` VARCHAR(20) DEFAULT 'offline',
   `jo_avatar` INT NULL,
@@ -64,7 +65,7 @@ CREATE TABLE `jogador` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Sessao
+-- TABLE: Sessao (Session)
 -- =========================
 CREATE TABLE `sessao` (
   `se_cod` INT NOT NULL AUTO_INCREMENT,
@@ -81,43 +82,43 @@ CREATE TABLE `sessao` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Categorias
+-- TABLE: Categories
 -- =========================
-CREATE TABLE `categorias` (
-  `ca_id` INT NOT NULL AUTO_INCREMENT,
-  `ca_nome` VARCHAR(100) NOT NULL UNIQUE,
-  `ca_descricao` TEXT NULL,
-  `ca_imagem` TEXT NULL,
-  PRIMARY KEY (`ca_id`)
+CREATE TABLE `categories` (
+  `cat_id` INT NOT NULL AUTO_INCREMENT,
+  `cat_name` VARCHAR(100) NOT NULL UNIQUE,
+  `cat_description` TEXT NULL,
+  `cat_image` TEXT NULL,
+  PRIMARY KEY (`cat_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Bencao
+-- TABLE: Blessings
 -- =========================
-CREATE TABLE `bencao` (
-  `be_cod` INT NOT NULL AUTO_INCREMENT,
-  `be_nome` VARCHAR(100) NOT NULL,
-  `be_imagem` TEXT NULL,
-  `be_rariedade` VARCHAR(50) NULL,
-  `be_tipo` INT NULL,
-  `be_descricao` TEXT NULL,
-  PRIMARY KEY (`be_cod`),
-  CONSTRAINT `fk_bencao_categoria` FOREIGN KEY (`be_tipo`) REFERENCES `categorias` (`ca_id`)
+CREATE TABLE `blessings` (
+  `bl_id` INT NOT NULL AUTO_INCREMENT,
+  `bl_name` VARCHAR(100) NOT NULL,
+  `bl_image` TEXT NULL,
+  `bl_rarity` VARCHAR(50) NULL,
+  `bl_category_id` INT NULL,
+  `bl_description` TEXT NULL,
+  PRIMARY KEY (`bl_id`),
+  CONSTRAINT `fk_blessing_category` FOREIGN KEY (`bl_category_id`) REFERENCES `categories` (`cat_id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Atributos
+-- TABLE: Attributes
 -- =========================
-CREATE TABLE `atributos` (
-  `at_cod` INT NOT NULL AUTO_INCREMENT,
-  `at_designacao` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`at_cod`)
+CREATE TABLE `attributes` (
+  `attr_id` INT NOT NULL AUTO_INCREMENT,
+  `attr_name` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`attr_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Itens
+-- TABLE: Itens
 -- =========================
 CREATE TABLE `itens` (
   `it_cod` INT NOT NULL AUTO_INCREMENT,
@@ -130,7 +131,7 @@ CREATE TABLE `itens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Colecionaveis
+-- TABLE: Colecionaveis
 -- =========================
 CREATE TABLE `colecionaveis` (
   `co_cod` INT NOT NULL AUTO_INCREMENT,
@@ -141,7 +142,7 @@ CREATE TABLE `colecionaveis` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Label
+-- TABLE: Label
 -- =========================
 CREATE TABLE `label` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -150,7 +151,7 @@ CREATE TABLE `label` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Jogador_Colecionaveis
+-- TABLE: Jogador_Colecionaveis
 -- =========================
 CREATE TABLE `jogador_colecionaveis` (
   `jo_cod` INT NOT NULL,
@@ -166,12 +167,12 @@ CREATE TABLE `jogador_colecionaveis` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Jogador_Itens
+-- TABLE: Jogador_Itens
 -- =========================
 CREATE TABLE `jogador_itens` (
   `jo_cod` INT NOT NULL,
   `it_cod` INT NOT NULL,
-  `data_obtencao` DATE NOT NULL DEFAULT (CURRENT_DATE),
+  `date_obtained` DATE NOT NULL DEFAULT (CURRENT_DATE),
   PRIMARY KEY (`jo_cod`, `it_cod`),
   KEY `idx_jogador_itens_it` (`it_cod`),
   CONSTRAINT `fk_jogador_itens_jo` FOREIGN KEY (`jo_cod`) REFERENCES `jogador` (`jo_cod`)
@@ -183,40 +184,40 @@ CREATE TABLE `jogador_itens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Jogador_Bencao
+-- TABLE: Player_Blessings
 -- =========================
-CREATE TABLE `jogador_bencao` (
+CREATE TABLE `player_blessings` (
   `jo_cod` INT NOT NULL,
-  `be_cod` INT NOT NULL,
-  `data_obtencao` DATE NOT NULL DEFAULT (CURRENT_DATE),
-  PRIMARY KEY (`jo_cod`, `be_cod`),
-  KEY `idx_jogador_bencao_be` (`be_cod`),
-  CONSTRAINT `fk_jogador_bencao_jo` FOREIGN KEY (`jo_cod`) REFERENCES `jogador` (`jo_cod`)
+  `bl_id` INT NOT NULL,
+  `date_obtained` DATE NOT NULL DEFAULT (CURRENT_DATE),
+  PRIMARY KEY (`jo_cod`, `bl_id`),
+  KEY `idx_player_blessings_bl` (`bl_id`),
+  CONSTRAINT `fk_player_blessings_jo` FOREIGN KEY (`jo_cod`) REFERENCES `jogador` (`jo_cod`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_jogador_bencao_be` FOREIGN KEY (`be_cod`) REFERENCES `bencao` (`be_cod`)
+  CONSTRAINT `fk_player_blessings_bl` FOREIGN KEY (`bl_id`) REFERENCES `blessings` (`bl_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================
--- TABELA: Bencao_Atributos
+-- TABLE: Blessing_Attributes
 -- =========================
-CREATE TABLE `bencao_atributos` (
-  `be_cod` INT NOT NULL,
+CREATE TABLE `blessing_attributes` (
+  `bl_id` INT NOT NULL,
   `jo_cod` INT NOT NULL,
-  `at_cod` INT NOT NULL,
-  `atributo_valor` DECIMAL(10,2) NULL,
-  PRIMARY KEY (`be_cod`, `jo_cod`, `at_cod`),
-  KEY `idx_bencao_atributos_jo` (`jo_cod`),
-  KEY `idx_bencao_atributos_at` (`at_cod`),
-  CONSTRAINT `fk_bencao_atributos_be` FOREIGN KEY (`be_cod`) REFERENCES `bencao` (`be_cod`)
+  `attr_id` INT NOT NULL,
+  `attribute_value` DECIMAL(10,2) NULL,
+  PRIMARY KEY (`bl_id`, `jo_cod`, `attr_id`),
+  KEY `idx_blessing_attributes_jo` (`jo_cod`),
+  KEY `idx_blessing_attributes_attr` (`attr_id`),
+  CONSTRAINT `fk_blessing_attributes_bl` FOREIGN KEY (`bl_id`) REFERENCES `blessings` (`bl_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_bencao_atributos_jo` FOREIGN KEY (`jo_cod`) REFERENCES `jogador` (`jo_cod`)
+  CONSTRAINT `fk_blessing_attributes_jo` FOREIGN KEY (`jo_cod`) REFERENCES `jogador` (`jo_cod`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_bencao_atributos_at` FOREIGN KEY (`at_cod`) REFERENCES `atributos` (`at_cod`)
+  CONSTRAINT `fk_blessing_attributes_attr` FOREIGN KEY (`attr_id`) REFERENCES `attributes` (`attr_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
