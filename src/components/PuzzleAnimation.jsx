@@ -253,27 +253,44 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
                 justifyContent: 'center',
                 overflow: 'hidden'
             }}>
-                {/* Visible fallback shapes to maintain theme aesthetic */}
-                <div className="lowpoly-shape shape-1" style={{ 
+                <style>
+                    {`
+                        @keyframes float-fallback {
+                            0% { transform: translate(0, 0) rotate(0deg); }
+                            33% { transform: translate(10px, -20px) rotate(5deg); }
+                            66% { transform: translate(-10px, 10px) rotate(-5deg); }
+                            100% { transform: translate(0, 0) rotate(0deg); }
+                        }
+                        .anim-shape {
+                            animation: float-fallback 15s ease-in-out infinite;
+                        }
+                    `}
+                </style>
+
+                {/* Visible fallback shapes with CSS animation */}
+                <div className="lowpoly-shape shape-1 anim-shape" style={{ 
                     opacity: 0.3, 
                     top: '20%', 
                     left: '20%', 
                     background: 'linear-gradient(135deg, #81D89E, #5BC0EB)',
-                    boxShadow: '0 0 30px rgba(129, 216, 158, 0.2)'
+                    boxShadow: '0 0 30px rgba(129, 216, 158, 0.2)',
+                    animationDelay: '0s'
                 }}></div>
-                <div className="lowpoly-shape shape-2" style={{ 
+                <div className="lowpoly-shape shape-2 anim-shape" style={{ 
                     opacity: 0.3, 
                     bottom: '25%', 
                     right: '15%', 
                     background: 'linear-gradient(135deg, #7B68EE, #5BC0EB)',
-                    boxShadow: '0 0 30px rgba(123, 104, 238, 0.2)'
+                    boxShadow: '0 0 30px rgba(123, 104, 238, 0.2)',
+                    animationDelay: '-5s'
                 }}></div>
-                <div className="lowpoly-shape shape-3" style={{ 
+                <div className="lowpoly-shape shape-3 anim-shape" style={{ 
                     opacity: 0.2, 
-                    bottom: '10%', 
-                    left: '45%', 
+                    bottom: '15%', 
+                    left: '40%', 
                     background: 'linear-gradient(135deg, #5BC0EB, #81D89E)',
-                    boxShadow: '0 0 30px rgba(91, 192, 235, 0.2)'
+                    boxShadow: '0 0 30px rgba(91, 192, 235, 0.2)',
+                    animationDelay: '-10s'
                 }}></div>
                 
                 {/* Aesthetic flare */}
