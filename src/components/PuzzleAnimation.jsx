@@ -216,6 +216,51 @@ const InteractivePiece = ({ initialPos, targetPos, rotation, color, speed, offse
 };
 
 const PuzzleAnimation = ({ type = 'assemble' }) => {
+    // Check if WebGL is available to avoid crash on browsers like LibreWolf
+    const [isWebGLSupported, setIsWebGLSupported] = React.useState(true);
+
+    React.useEffect(() => {
+        const checkWebGL = () => {
+            try {
+                const canvas = document.createElement('canvas');
+                return !!(window.WebGLRenderingContext && 
+                       (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+            } catch (e) {
+                return false;
+            }
+        };
+        
+        if (!checkWebGL()) {
+            console.warn('[PuzzleAnimation] WebGL not supported or disabled. Using fallback visual.');
+            setIsWebGLSupported(false);
+        }
+    }, []);
+
+    // Fallback UI if WebGL is disabled
+    if (!isWebGLSupported) {
+        return (
+            <div style={{
+                width: '100%',
+                height: '100%',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                zIndex: 1,
+                pointerEvents: 'none',
+                background: 'radial-gradient(circle at center, rgba(139, 181, 214, 0.1) 0%, rgba(10, 10, 15, 0.6) 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden'
+            }}>
+                {/* Low-poly fallback shapes in CSS to maintain theme */}
+                <div className="lowpoly-shape shape-1" style={{ opacity: 0.05, top: '20%', left: '20%' }}></div>
+                <div className="lowpoly-shape shape-2" style={{ opacity: 0.05, bottom: '20%', right: '20%' }}></div>
+                <div className="lowpoly-shape shape-3" style={{ opacity: 0.05, bottom: '10%', left: '50%' }}></div>
+            </div>
+        );
+    }
+
     return (
         <div style={{
             width: '100%',

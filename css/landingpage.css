@@ -380,7 +380,10 @@ body::before {
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
-    padding: 4rem 2rem;
+    padding: 4rem 5vw;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
     position: relative;
     z-index: 1;
 }
