@@ -247,16 +247,44 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
                 left: 0,
                 zIndex: 1,
                 pointerEvents: 'none',
-                background: 'radial-gradient(circle at center, rgba(139, 181, 214, 0.1) 0%, rgba(10, 10, 15, 0.6) 100%)',
+                background: 'radial-gradient(circle at center, rgba(139, 181, 214, 0.2) 0%, rgba(10, 10, 20, 0.8) 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 overflow: 'hidden'
             }}>
-                {/* Low-poly fallback shapes in CSS to maintain theme */}
-                <div className="lowpoly-shape shape-1" style={{ opacity: 0.05, top: '20%', left: '20%' }}></div>
-                <div className="lowpoly-shape shape-2" style={{ opacity: 0.05, bottom: '20%', right: '20%' }}></div>
-                <div className="lowpoly-shape shape-3" style={{ opacity: 0.05, bottom: '10%', left: '50%' }}></div>
+                {/* Visible fallback shapes to maintain theme aesthetic */}
+                <div className="lowpoly-shape shape-1" style={{ 
+                    opacity: 0.3, 
+                    top: '20%', 
+                    left: '20%', 
+                    background: 'linear-gradient(135deg, #81D89E, #5BC0EB)',
+                    boxShadow: '0 0 30px rgba(129, 216, 158, 0.2)'
+                }}></div>
+                <div className="lowpoly-shape shape-2" style={{ 
+                    opacity: 0.3, 
+                    bottom: '25%', 
+                    right: '15%', 
+                    background: 'linear-gradient(135deg, #7B68EE, #5BC0EB)',
+                    boxShadow: '0 0 30px rgba(123, 104, 238, 0.2)'
+                }}></div>
+                <div className="lowpoly-shape shape-3" style={{ 
+                    opacity: 0.2, 
+                    bottom: '10%', 
+                    left: '45%', 
+                    background: 'linear-gradient(135deg, #5BC0EB, #81D89E)',
+                    boxShadow: '0 0 30px rgba(91, 192, 235, 0.2)'
+                }}></div>
+                
+                {/* Aesthetic flare */}
+                <div style={{
+                    position: 'absolute',
+                    width: '60vw',
+                    height: '60vw',
+                    background: 'radial-gradient(circle, rgba(139, 181, 214, 0.1) 0%, transparent 70%)',
+                    filter: 'blur(100px)',
+                    zIndex: -1
+                }}></div>
             </div>
         );
     }

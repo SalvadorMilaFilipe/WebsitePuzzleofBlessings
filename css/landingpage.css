@@ -235,12 +235,28 @@ body::before {
 .nav-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 4vw; /* Dynamic padding based on resolution */
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     position: relative;
+    gap: 2rem;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.nav-menu-desktop {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2vw, 2.5rem); /* Proportional gap */
+    flex: 1;
+    justify-content: center; /* Center links in the middle */
 }
 
 .logo {
@@ -377,11 +393,11 @@ body::before {
 .hero-content {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(2rem, 5vw, 8rem);
     align-items: center;
-    padding: 4rem 5vw;
-    max-width: 1400px;
+    padding: 4rem 10vw; /* Balanced spacing for any screen */
+    max-width: 1600px; /* Slightly wider for immersive feel */
     margin: 0 auto;
     width: 100%;
     position: relative;
