@@ -130,7 +130,7 @@ function Download() {
                 <p>
                   <strong>Note:</strong> We recommend backing up your save files before updating,
                   though our update system preserves your progress automatically. If you encounter any issues,
-                  check our <Link to="/forum">Forum</Link> for help.
+                  check our documentation for help.
                 </p>
               </div>
             </div>

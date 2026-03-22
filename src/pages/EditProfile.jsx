@@ -53,12 +53,12 @@ function EditProfile() {
 
             if (error) throw error
 
-            setMessage({ text: 'Perfil atualizado com sucesso!', type: 'success' })
+            setMessage({ text: 'Profile updated successfully!', type: 'success' })
             refreshProfile()
             setTimeout(() => navigate('/profile'), 1500)
         } catch (err) {
             console.error(err)
-            setMessage({ text: 'Erro ao atualizar perfil: ' + err.message, type: 'error' })
+            setMessage({ text: 'Error updating profile: ' + err.message, type: 'error' })
         } finally {
             setSaving(false)
         }
@@ -68,7 +68,7 @@ function EditProfile() {
         return (
             <div className="profile-loading" style={{ paddingTop: '150px', textAlign: 'center', color: 'white' }}>
                 <div className="loader"></div>
-                <p>A carregar dados...</p>
+                <p>Loading data...</p>
             </div>
         )
     }
@@ -81,23 +81,23 @@ function EditProfile() {
                 <div className="profile-container" style={{ maxWidth: '800px', margin: '0 auto', background: 'rgba(20, 20, 30, 0.95)', border: '1px solid rgba(255,255,255,0.1)' }}>
 
                     <div style={{ padding: '2rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                        <h2 style={{ color: '#81D89E', margin: 0 }}>Editar Perfil</h2>
-                        <p style={{ color: '#888', marginTop: '0.5rem' }}>Personalize a sua identidade no site e no jogo.</p>
+                        <h2 style={{ color: '#81D89E', margin: 0 }}>Edit Profile</h2>
+                        <p style={{ color: '#888', marginTop: '0.5rem' }}>Personalize your identity for the website and the game.</p>
                     </div>
 
                     <form onSubmit={handleSubmit} style={{ padding: '2rem' }}>
 
-                        {/* SECÇÃO: Dados do Site */}
+                        {/* SECTION: Site Data */}
                         <section style={{ marginBottom: '2.5rem' }}>
                             <h3 style={{ color: '#fff', fontSize: '1.1rem', marginBottom: '1.2rem', borderLeft: '3px solid #81D89E', paddingLeft: '10px' }}>
-                                Identidade no Site
+                                Website Identity
                             </h3>
 
                             <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Nome de Utilizador (Site)</label>
+                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Username (Website)</label>
                                 <input
                                     type="text"
-                                    name="pl_username" // Updated
+                                    name="pl_username"
                                     value={formData.pl_username}
                                     onChange={handleChange}
                                     style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '6px', color: '#fff' }}
@@ -106,29 +106,29 @@ function EditProfile() {
                             </div>
 
                             <div className="form-group">
-                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Descrição / Bio</label>
+                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Description / Bio</label>
                                 <textarea
-                                    name="pl_description" // Updated
+                                    name="pl_description"
                                     value={formData.pl_description}
                                     onChange={handleChange}
                                     rows="4"
-                                    placeholder="Escreve algo sobre ti..."
+                                    placeholder="Tell the world something about you..."
                                     style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '6px', color: '#fff', resize: 'vertical' }}
                                 ></textarea>
                             </div>
                         </section>
 
-                        {/* SECÇÃO: Dados do Jogo */}
+                        {/* SECTION: Game Data */}
                         <section style={{ marginBottom: '2.5rem' }}>
                             <h3 style={{ color: '#fff', fontSize: '1.1rem', marginBottom: '1.2rem', borderLeft: '3px solid #4CAF50', paddingLeft: '10px' }}>
-                                Identidade no Jogo (Unity)
+                                Unity Identity (In-Game)
                             </h3>
 
                             <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Nome de Jogador (In-Game)</label>
+                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.5rem' }}>Username (In-Game)</label>
                                 <input
                                     type="text"
-                                    name="pl_username_game" // Updated
+                                    name="pl_username_game"
                                     value={formData.pl_username_game}
                                     onChange={handleChange}
                                     style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '6px', color: '#fff' }}
@@ -137,7 +137,7 @@ function EditProfile() {
                             </div>
 
                             <div className="form-group">
-                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.8rem' }}>Estado Atual</label>
+                                <label style={{ color: '#ccc', display: 'block', marginBottom: '0.8rem' }}>Current Status</label>
                                 <div style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
@@ -159,32 +159,32 @@ function EditProfile() {
                                         {userProfile.status?.st_status || 'offline'}
                                     </span>
                                     <small style={{ color: '#888', marginLeft: '10px', fontStyle: 'italic' }}>
-                                        (Calculado automaticamente pelas sessões)
+                                        (Automatically detected by server sessions)
                                     </small>
                                 </div>
                             </div>
                         </section>
 
-                        {/* SECÇÃO: Dados Inalteráveis */}
+                        {/* SECTION: Account Metadata */}
                         <section style={{ marginBottom: '2.5rem', opacity: 0.7 }}>
                             <h3 style={{ color: '#fff', fontSize: '1.1rem', marginBottom: '1.2rem', borderLeft: '3px solid #666', paddingLeft: '10px' }}>
-                                Informação de Conta (Inalterável)
+                                Account Information (Fixed)
                             </h3>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', background: 'rgba(0,0,0,0.1)', padding: '1rem', borderRadius: '8px' }}>
                                 <div>
-                                    <small style={{ color: '#888' }}>ID Único</small>
+                                    <small style={{ color: '#888' }}>Unique ID</small>
                                     <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_code}</p>
                                 </div>
                                 <div>
-                                    <small style={{ color: '#888' }}>E-mail Associado</small>
+                                    <small style={{ color: '#888' }}>Registered Email</small>
                                     <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_email}</p>
                                 </div>
                                 <div>
-                                    <small style={{ color: '#888' }}>País</small>
-                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_country || 'Não definido'}</p>
+                                    <small style={{ color: '#888' }}>Country</small>
+                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_country || 'Not defined'}</p>
                                 </div>
                                 <div>
-                                    <small style={{ color: '#888' }}>Ano de Nascimento</small>
+                                    <small style={{ color: '#888' }}>Birth Year</small>
                                     <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_birth_year}</p>
                                 </div>
                             </div>
@@ -211,7 +211,7 @@ function EditProfile() {
                                 className="btn-secondary"
                                 style={{ flex: 1, padding: '1rem', cursor: 'pointer', borderRadius: '8px' }}
                             >
-                                Cancelar
+                                Cancel
                             </button>
                             <button
                                 type="submit"
@@ -219,7 +219,7 @@ function EditProfile() {
                                 className="btn-primary"
                                 style={{ flex: 2, padding: '1rem', cursor: 'pointer', borderRadius: '8px', fontWeight: 'bold' }}
                             >
-                                {saving ? 'A Guardar...' : 'Guardar Alterações'}
+                                {saving ? 'Saving...' : 'Save Changes'}
                             </button>
                         </div>
                     </form>

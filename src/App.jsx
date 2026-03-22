@@ -24,7 +24,7 @@ function App() {
           <AuthRedirect />
           <Navbar />
           <InactivityModal />
-          <Suspense fallback={<div className="container" style={{ padding: '100px', textAlign: 'center' }}>Carregando área...</div>}>
+          <Suspense fallback={<div className="container" style={{ padding: '100px', textAlign: 'center' }}>Loading area...</div>}>
             <Routes>
               <Route path="/" element={<Download />} />
               <Route path="/login" element={<Login />} />
