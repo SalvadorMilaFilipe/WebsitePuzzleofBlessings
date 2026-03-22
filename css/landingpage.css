@@ -254,9 +254,26 @@ body::before {
 .nav-menu-desktop {
     display: flex;
     align-items: center;
-    gap: clamp(1rem, 2vw, 2.5rem); /* Proportional gap */
     flex: 1;
-    justify-content: center; /* Center links in the middle */
+    justify-content: space-between; /* Links in middle, Profile on right */
+    gap: 2rem;
+}
+
+.nav-links-group {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3.5vw, 4rem); /* Very dynamic spacing to fill the navbar */
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto; /* Force to the right */
+    padding-left: 2rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
 }
 
 .logo {

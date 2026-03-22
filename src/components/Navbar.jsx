@@ -122,50 +122,52 @@ function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="nav-menu-desktop">
-              <Link to="/" className="nav-link" onClick={(e) => handleNavClick(e, '/')}>
-                Download
-              </Link>
-              <Link to="/wiki" className="nav-link" onClick={(e) => handleNavClick(e, '/wiki')}>
-                Wiki
-              </Link>
-              <Link to="/centro" className="nav-centro" onClick={(e) => handleNavClick(e, '/centro')}>
-                <span className="nav-separator">|</span>
-                The Center
-                <span className="nav-separator">|</span>
-              </Link>
-              <Link to="/updatelog" className="nav-link" onClick={(e) => handleNavClick(e, '/updatelog')}>
-                Update Log
-              </Link>
-              <Link to="/credits" className="nav-link" onClick={(e) => handleNavClick(e, '/credits')}>
-                Credits
-              </Link>
-              {session && (
-                <Link
-                  to="/profile"
-                  className="nav-link nav-username-steam"
-                  onClick={(e) => handleNavClick(e, '/profile')}
-                  style={{
-                    color: '#81D89E',
-                    fontWeight: 700,
-                    letterSpacing: '1px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}
-                >
-                  <div style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    backgroundColor: userProfile?.status?.st_color || '#6B7280',
-                    boxShadow: `0 0 5px ${userProfile?.status?.st_color || '#6B7280'}`
-                  }}></div>
-                  {userProfile?.pl_username || 'PROFILE'}
+              <div className="nav-links-group" style={{ display: 'flex', gap: 'clamp(0.5rem, 1.5vw, 2rem)', flex: 1, justifyContent: 'center' }}>
+                <Link to="/" className="nav-link" onClick={(e) => handleNavClick(e, '/')}>
+                  Download
                 </Link>
-              )}
+                <Link to="/wiki" className="nav-link" onClick={(e) => handleNavClick(e, '/wiki')}>
+                  Wiki
+                </Link>
+                <Link to="/centro" className="nav-centro" onClick={(e) => handleNavClick(e, '/centro')}>
+                  <span className="nav-separator">|</span>
+                  The Center
+                  <span className="nav-separator">|</span>
+                </Link>
+                <Link to="/updatelog" className="nav-link" onClick={(e) => handleNavClick(e, '/updatelog')}>
+                  Update Log
+                </Link>
+                <Link to="/credits" className="nav-link" onClick={(e) => handleNavClick(e, '/credits')}>
+                  Credits
+                </Link>
+              </div>
 
               {session ? (
-                <div className="nav-user-info" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <div className="nav-user-info" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px' }}>
+                  <Link
+                    to="/profile"
+                    className="nav-link nav-username-steam"
+                    onClick={(e) => handleNavClick(e, '/profile')}
+                    style={{
+                      color: '#81D89E',
+                      fontWeight: 700,
+                      letterSpacing: '1px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: 0
+                    }}
+                  >
+                    <div style={{
+                      width: '6px',
+                      height: '6px',
+                      borderRadius: '50%',
+                      backgroundColor: userProfile?.status?.st_color || '#6B7280',
+                      boxShadow: `0 0 5px ${userProfile?.status?.st_color || '#6B7280'}`
+                    }}></div>
+                    {userProfile?.pl_username || 'PROFILE'}
+                  </Link>
+
                   <img
                     src={displayAvatar}
                     alt="Profile"
@@ -197,7 +199,6 @@ function Navbar() {
                       textDecoration: 'underline',
                       fontSize: '0.7rem',
                       cursor: 'pointer',
-                      marginLeft: '-5px',
                       opacity: 0.7,
                       transition: 'opacity 0.2s'
                     }}
@@ -222,7 +223,6 @@ function Navbar() {
                   </button>
                 </div>
               )}
-
             </div>
           </div>
         </div>
