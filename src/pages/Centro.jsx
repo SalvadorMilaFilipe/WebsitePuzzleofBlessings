@@ -164,10 +164,9 @@ function Centro() {
         <header className="centro-header">
           <div className="header-left">
             <div className="currency-display">
-              <img src="/public/img/puzzle_piece.png" alt="🧩" className="currency-icon" 
+              <img src="/img/puzzle_piece.png" alt="🧩" className="currency-icon" 
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
               <div className="currency-amount">
-                <span className="amount-label">Banked Pieces:</span>
                 <span className="amount-value">{currencyData.amount.toLocaleString()}</span>
               </div>
             </div>
@@ -189,7 +188,7 @@ function Centro() {
         <nav className="centro-sidebar-actions">
           <button className="icon-btn shop-btn" title="Shop" onClick={() => alert("Shop opening soon!")}>
             <div className="btn-icon-wrapper">
-              <img src="/public/img/shop_icon.png" alt="🏪" className="btn-icon" 
+              <img src="/img/shop_icon.png" alt="🏪" className="btn-icon" 
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/1170/1170678.png" }} />
             </div>
             <span className="btn-label">Shop</span>
@@ -202,7 +201,7 @@ function Centro() {
             title={hintCooldown > 0 ? `Cooldown: ${formatTime(hintCooldown)}` : "Get Hint"}
           >
             <div className="btn-icon-wrapper">
-              <img src="/public/img/hint_bulb.png" alt="💡" className="btn-icon" 
+              <img src="/img/hint_bulb.png" alt="💡" className="btn-icon" 
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/702/702797.png" }} />
             </div>
             <span className="btn-label">
@@ -212,7 +211,7 @@ function Centro() {
 
           <button className="icon-btn catalogue-btn" title="Catalogue" onClick={() => alert("Catalogue coming soon!")}>
             <div className="btn-icon-wrapper">
-              <img src="/public/img/catalogue_book.png" alt="📖" className="btn-icon" 
+              <img src="/img/catalogue_book.png" alt="📖" className="btn-icon" 
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/2232/2232688.png" }} />
             </div>
             <span className="btn-label">Catalog</span>
