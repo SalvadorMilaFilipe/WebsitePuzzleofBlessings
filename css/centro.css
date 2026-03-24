@@ -293,7 +293,7 @@
 }
 
 .guest-hero {
-    margin-top: clamp(6rem, 15vh, 10rem);
+    margin-top: clamp(8rem, 18vh, 12rem); /* Increased slightly to push clear of navbar */
     animation: fadeInScale 1s cubic-bezier(0.2, 0.8, 0.2, 1);
     text-align: center;
     max-width: clamp(600px, 80vw, 850px);
@@ -302,9 +302,9 @@
 }
 
 .hero-welcome {
-    font-size: clamp(2.2rem, 8vh, 3.8rem);
+    font-size: clamp(1.8rem, 6vh, 3rem); /* Smaller title */
     font-weight: 900;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem; /* Tighter spacing */
     background: linear-gradient(to bottom, #ffffff, #baaae8);
     -webkit-background-clip: text;
     background-clip: text;
@@ -313,9 +313,9 @@
 }
 
 .hero-tagline {
-    font-size: clamp(0.9rem, 2vh, 1.2rem);
+    font-size: clamp(0.8rem, 1.8vh, 1rem); /* Smaller tagline */
     color: #baaae8;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     letter-spacing: 0.1rem;
 }
 
@@ -377,11 +377,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem; /* Reduced gap to bring button up */
+    margin-top: -1rem; /* Pull slightly higher */
 }
 
 .cta-text {
-    font-size: 1.1rem;
+    font-size: clamp(0.85rem, 1.5vh, 1rem); /* Smaller CTA text */
     color: #fff;
     font-weight: 600;
 }
@@ -390,9 +391,9 @@
     background: linear-gradient(135deg, #81D89E 0%, #4CAF50 100%);
     color: #000;
     border: none;
-    padding: clamp(0.8rem, 2vh, 1.2rem) clamp(2rem, 5vw, 3.5rem);
+    padding: clamp(0.6rem, 1.5vh, 1rem) clamp(1.5rem, 4vw, 2.5rem); /* Slightly smaller button */
     border-radius: 50px;
-    font-size: clamp(1rem, 2.5vh, 1.3rem);
+    font-size: clamp(0.9rem, 2vh, 1.1rem); /* Smaller font */
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1rem;
