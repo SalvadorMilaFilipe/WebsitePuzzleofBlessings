@@ -5,13 +5,14 @@ import '../../css/centro.css'
 
 function Centro() {
   const { userProfile, loading: authLoading } = useAuth()
-  
+
+  // Data States
   // Data States
   const [currencyData, setCurrencyData] = useState({ amount: 0, collected_lv: 0, max_per_lv: 10 })
-  const [playerLevel, setPlayerLevel] = useState({ id: 0, name: 'Trainee' }) // Placeholder level
+  const [playerLevel, setPlayerLevel] = useState({ id: 0, name: 'Trainee' })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  
+
   // Hint Cooldown State (10 minutes = 600,000ms)
   const [hintCooldown, setHintCooldown] = useState(0)
   const COOLDOWN_TIME = 10 * 60 * 1000
@@ -46,32 +47,36 @@ function Centro() {
         setLoading(true)
         setError(null)
 
-        // Fetch Currency Data
+        // Fetch Currency Data (Using actual Supabase column names: cur_ammount, cur_pl_id)
         let { data: cData, error: cError } = await supabase
           .from('currency')
           .select('*')
-          .eq('pl_id', userProfile.pl_id)
+          .eq('cur_pl_id', userProfile.pl_id)
           .maybeSingle()
 
         if (cError) throw cError
-        
+
         // If no record exists, create one for the player
         if (!cData) {
           const { data: newData, error: insertError } = await supabase
             .from('currency')
-            .insert([{ pl_id: userProfile.pl_id, amount: 0, collected_lv: 0, max_per_lv: 10 }])
+            .insert([{ cur_pl_id: userProfile.pl_id, cur_ammount: 0 }])
             .select()
             .single()
-            
+
           if (insertError) {
-              console.warn("Could not auto-create currency record. Check if table 'currency' exists.", insertError)
+            console.warn("Could not auto-create currency record.", insertError)
           } else {
-              cData = newData
+            cData = newData
           }
         }
 
         if (cData) {
-          setCurrencyData(cData)
+          setCurrencyData({
+            amount: cData.cur_ammount || 0,
+            collected_lv: cData.collected_lv || 0, // Fallback if these don't exist yet
+            max_per_lv: cData.max_per_lv || 10
+          })
         }
 
         // Fetch Player Level Info (Placeholder Level 0)
@@ -95,14 +100,14 @@ function Centro() {
   // Functional: Hint System
   const handleHintClick = () => {
     if (hintCooldown > 0) return
-    
+
     // Logic for hint
     alert("Hint: The ancient pillars hold the key to the sequence!")
-    
+
     const now = Date.now()
     localStorage.setItem('last_hint_time', now.toString())
     setHintCooldown(COOLDOWN_TIME)
-    
+
     const timer = setInterval(() => {
       setHintCooldown(prev => {
         if (prev <= 1000) {
@@ -116,33 +121,33 @@ function Centro() {
 
   // Functional: Buy Blessing (Updated with explicit date handling)
   const buyBlessing = async (blessingId) => {
-      if (!userProfile?.pl_id) return;
-      
-      try {
-          // Getting current date in YYYY-MM-DD format (Standard SQL Date)
-          const now = new Date();
-          const dateStr = now.toISOString().split('T')[0];
+    if (!userProfile?.pl_id) return;
 
-          const { error: buyErr } = await supabase
-              .from('player_blessing') // Updated from jogador_bencao
-              .insert([{ 
-                  pl_id: userProfile.pl_id, 
-                  bl_id: blessingId,
-                  date_obtained: dateStr // Explicitly setting the date (DD, MM, YYYY format stored in DB)
-              }]);
-          
-          if (buyErr) throw buyErr;
+    try {
+      // Getting current date in YYYY-MM-DD format (Standard SQL Date)
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0];
 
-          // After purchase, we can update the local state or show feedback
-          alert("Blessing obtained successfully!");
-          
-          // Optionally refresh the currency display or blessings catalog
-          // fetchData(); 
+      const { error: buyErr } = await supabase
+        .from('player_blessing') // Updated from jogador_bencao
+        .insert([{
+          pl_id: userProfile.pl_id,
+          bl_id: blessingId,
+          date_obtained: dateStr // Explicitly setting the date (DD, MM, YYYY format stored in DB)
+        }]);
 
-      } catch (err) {
-          console.error("Error buying blessing:", err);
-          alert("Purchase failed. Maybe you already have it or lack the currency?");
-      }
+      if (buyErr) throw buyErr;
+
+      // After purchase, we can update the local state or show feedback
+      alert("Blessing obtained successfully!");
+
+      // Optionally refresh the currency display or blessings catalog
+      // fetchData(); 
+
+    } catch (err) {
+      console.error("Error buying blessing:", err);
+      alert("Purchase failed. Maybe you already have it or lack the currency?");
+    }
   }
 
   const formatTime = (ms) => {
@@ -159,12 +164,12 @@ function Centro() {
   return (
     <main className="centro-main">
       <div className="centro-container">
-        
+
         {/* HEADER AREA */}
         <header className="centro-header">
           <div className="header-left">
             <div className="currency-display">
-              <img src="/img/puzzle_piece.png" alt="🧩" className="currency-icon" 
+              <img src="/img/puzzle_piece.png" alt="🧩" className="currency-icon"
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
               <div className="currency-amount">
                 <span className="amount-value">{currencyData.amount.toLocaleString()}</span>
@@ -188,20 +193,20 @@ function Centro() {
         <nav className="centro-sidebar-actions">
           <button className="icon-btn shop-btn" title="Shop" onClick={() => alert("Shop opening soon!")}>
             <div className="btn-icon-wrapper">
-              <img src="/img/shop_icon.png" alt="🏪" className="btn-icon" 
+              <img src="/img/shop_icon.png" alt="🏪" className="btn-icon"
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/1170/1170678.png" }} />
             </div>
             <span className="btn-label">Shop</span>
           </button>
 
-          <button 
-            className={`icon-btn hint-btn ${hintCooldown > 0 ? 'cooldown' : ''}`} 
+          <button
+            className={`icon-btn hint-btn ${hintCooldown > 0 ? 'cooldown' : ''}`}
             onClick={handleHintClick}
             disabled={hintCooldown > 0}
             title={hintCooldown > 0 ? `Cooldown: ${formatTime(hintCooldown)}` : "Get Hint"}
           >
             <div className="btn-icon-wrapper">
-              <img src="/img/hint_bulb.png" alt="💡" className="btn-icon" 
+              <img src="/img/hint_bulb.png" alt="💡" className="btn-icon"
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/702/702797.png" }} />
             </div>
             <span className="btn-label">
@@ -211,7 +216,7 @@ function Centro() {
 
           <button className="icon-btn catalogue-btn" title="Catalogue" onClick={() => alert("Catalogue coming soon!")}>
             <div className="btn-icon-wrapper">
-              <img src="/img/catalogue_book.png" alt="📖" className="btn-icon" 
+              <img src="/img/catalogue_book.png" alt="📖" className="btn-icon"
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/2232/2232688.png" }} />
             </div>
             <span className="btn-label">Catalog</span>
@@ -229,7 +234,7 @@ function Centro() {
         {/* FOOTER AREA */}
         <footer className="centro-footer">
           <div className={`level-progress ${progressColorClass}`}>
-             {currencyData.collected_lv} / {currencyData.max_per_lv}
+            {currencyData.collected_lv} / {currencyData.max_per_lv}
           </div>
         </footer>
 
