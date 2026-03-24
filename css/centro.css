@@ -293,7 +293,7 @@
 }
 
 .guest-hero {
-    margin-top: clamp(8rem, 18vh, 12rem); /* Increased slightly to push clear of navbar */
+    margin-top: clamp(12rem, 25vh, 16rem); /* Positioned lower relative to top edge */
     animation: fadeInScale 1s cubic-bezier(0.2, 0.8, 0.2, 1);
     text-align: center;
     max-width: clamp(600px, 80vw, 850px);
@@ -322,9 +322,9 @@
 .center-explanation {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(186, 170, 232, 0.1);
-    padding: clamp(1rem, 3vh, 2rem);
+    padding: clamp(0.8rem, 2vh, 1.5rem); /* Tighter padding */
     border-radius: 20px;
-    margin-bottom: clamp(1.5rem, 4vh, 3rem);
+    margin-bottom: clamp(1rem, 3vh, 2rem); /* Reduced margin */
     backdrop-filter: blur(5px);
 }
 
@@ -338,8 +338,8 @@
 .guest-features {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: clamp(1rem, 2vw, 2.5rem);
-    margin-bottom: clamp(2rem, 5vh, 4rem);
+    gap: clamp(1rem, 2vw, 2rem);
+    margin-bottom: clamp(1.5rem, 4vh, 2.5rem); /* Reduced margin */
 }
 
 .feature-card {
@@ -377,8 +377,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem; /* Reduced gap to bring button up */
-    margin-top: -1rem; /* Pull slightly higher */
+    gap: 0.6rem; /* Even tighter gap */
+    margin-top: -1.5rem; /* Pulled higher */
 }
 
 .cta-text {

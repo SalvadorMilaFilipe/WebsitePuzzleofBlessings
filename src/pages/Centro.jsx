@@ -183,15 +183,9 @@ function Centro() {
     return (
       <main className="centro-main guest-view">
         <div className="centro-container guest-container">
-          <header className="centro-header quest-header">
-             <div className="header-center">
-                <h1 className="centro-title">The Center</h1>
-             </div>
-          </header>
-
           <section className="guest-hero">
              <div className="hero-content">
-                <h2 className="hero-welcome">Welcome, Wanderer</h2>
+                <h3 className="hero-welcome">Welcome, Wanderer</h3>
                 <p className="hero-tagline">"The Center" is the heart of your adventure in <strong>Puzzle of Blessings</strong>.</p>
                 
                 <div className="center-explanation">
