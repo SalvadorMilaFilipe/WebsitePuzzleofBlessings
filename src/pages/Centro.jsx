@@ -76,19 +76,17 @@ function Centro() {
         }
 
         // B. Fetch Player Level Info
-        // 1. Try to get the latest save for the player
+        // 1. Search for the latest save where the sv_player_pos contains the player's username
+        // This is a robust way to find saves even if ss_session_id is null
         const { data: latestSave, error: saveError } = await supabase
           .from('save')
           .select(`
             sv_level_id,
             level:level (
               lv_name
-            ),
-            session!inner (
-              ss_player_id
             )
           `)
-          .eq('session.ss_player_id', userProfile.pl_id)
+          .ilike('sv_player_pos', `%"playerUser":"${userProfile.pl_username}"%`)
           .order('sv_updated_at', { ascending: false })
           .limit(1)
           .maybeSingle()
@@ -96,10 +94,10 @@ function Centro() {
         if (latestSave) {
           setPlayerLevel({
             id: latestSave.sv_level_id || 0,
-            name: latestSave.level?.lv_name || 'Genesis Field'
+            name: latestSave.level?.lv_name || (latestSave.sv_level_id === 0 ? 'Tutorial' : 'Genesis Field')
           })
         } else {
-          // 2. Fallback: Try the player table's current level (more reliable if session is null)
+          // 2. Fallback: Try the player table's current level
           const { data: userData, error: userError } = await supabase
             .from('player')
             .select('pl_level_id, level:level(lv_name)')
@@ -109,10 +107,9 @@ function Centro() {
           if (userData) {
             setPlayerLevel({
               id: userData.pl_level_id || 0,
-              name: userData.level?.lv_name || 'Tutorial'
+              name: userData.level?.lv_name || (userData.pl_level_id === 0 ? 'Tutorial' : 'Genesis Field')
             })
           } else {
-            // Ultimate fallback
             setPlayerLevel({ id: 0, name: 'Tutorial' })
           }
         }
