@@ -32,7 +32,7 @@
 /* --- HEADER AREA --- */
 .centro-header {
     position: absolute;
-    top: clamp(4rem, 10vh, 7rem); /* Responsive top spacing */
+    top: clamp(7.5rem, 13vh, 10rem); /* Increased to clear the thick navbar */
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
