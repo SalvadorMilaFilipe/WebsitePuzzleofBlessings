@@ -1,176 +1,275 @@
 /* ===========================================
-   O CENTRO PAGE STYLES
+   THE CENTER - DASHBOARD LAYOUT
    =========================================== */
 
-.centro-main {
-    /* Navbar is fixed; reserve space so title isn't covered */
-    padding: 7.5rem 0 2rem;
-    min-height: calc(100vh - 200px);
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+:root {
+    --glass-bg: rgba(20, 20, 35, 0.7);
+    --glass-border: rgba(186, 170, 232, 0.2);
+    --accent-glow: rgba(186, 170, 232, 0.4);
+    --gold: #ffd700;
+    --gold-glow: rgba(255, 215, 0, 0.5);
 }
 
-.centro-content {
-    text-align: center;
-    max-width: 900px;
-    margin: 0 auto;
+.centro-main {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 100%);
+    position: relative;
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
+
+.centro-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    padding: 1.5rem;
+}
+
+/* --- HEADER AREA --- */
+.centro-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: flex-start;
+    width: 100%;
+    z-index: 10;
 }
 
 .centro-title {
-    font-size: 4rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    /* Cor similar ao emoji puzzle 🧩 - usando a paleta de lavanda com muito mais brilho */
-    background: linear-gradient(135deg, #baaae8 0%, #aa9ad8 33%, #9a8ac8 66%, #baaae8 100%);
+    font-size: 2.2rem; /* Reduced size */
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    background: linear-gradient(135deg, #baaae8 0%, #ffffff 50%, #baaae8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.2;
-    filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 35px rgba(186, 170, 232, 0.7)) drop-shadow(0 0 60px rgba(154, 138, 200, 0.5));
-    letter-spacing: -0.02em;
+    filter: drop-shadow(0 0 10px rgba(186, 170, 232, 0.5));
 }
 
-.centro-subtitle {
-    font-size: 1.3rem;
-    color: var(--text-secondary);
-    font-weight: 300;
-    line-height: 1.8;
-    margin-bottom: 3rem;
+/* Currency (Top Left) */
+.header-left {
+    display: flex;
+    justify-content: flex-start;
 }
 
-.moedas-counter-box {
-    margin-top: 3rem;
-    padding: 2rem;
-    background: rgba(186, 170, 232, 0.1);
-    border: 2px solid rgba(186, 170, 232, 0.3);
-    border-radius: 16px;
+.currency-display {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
     backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(186, 170, 232, 0.2);
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    min-height: 280px;
-    /* Previne pulos de layout durante atualizações */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-.moedas-counter-content {
+.currency-icon {
+    width: 30px;
+    height: 30px;
+    filter: drop-shadow(0 0 5px var(--accent-glow));
+}
+
+.currency-amount {
+    display: flex;
+    flex-direction: column;
+}
+
+.amount-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #aaa;
+}
+
+.amount-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #baaae8;
+}
+
+/* Level (Top Right) */
+.header-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.level-badge {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    text-align: right;
+    backdrop-filter: blur(10px);
+}
+
+.level-number {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #81D89E;
+}
+
+.level-name {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #ccc;
+    letter-spacing: 0.05rem;
+}
+
+/* --- SIDEBAR ACTIONS (Left) --- */
+.centro-sidebar-actions {
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    z-index: 10;
+}
+
+.icon-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    width: 60px;
+    height: 75px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
-}
-
-.moedas-counter-icon-wrapper {
-    display: flex;
-    align-items: center;
     justify-content: center;
-    width: 180px;
-    height: 180px;
-    margin-bottom: 0.5rem;
-    position: relative;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    padding: 0.5rem;
 }
 
-.moedas-counter-icon {
+.icon-btn:hover {
+    background: rgba(186, 170, 232, 0.2);
+    border-color: #baaae8;
+    transform: translateX(5px) scale(1.05);
+    box-shadow: 0 0 20px rgba(186, 170, 232, 0.3);
+}
+
+.btn-icon-wrapper {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 4px;
+}
+
+.btn-icon {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 20px rgba(186, 170, 232, 0.3));
-    animation: diceFloat 3s ease-in-out infinite;
-    transition: transform 0.3s ease;
-    mix-blend-mode: multiply;
 }
 
-.moedas-counter-icon:hover {
-    transform: scale(1.05) rotate(5deg);
-}
-
-@keyframes diceFloat {
-
-    0%,
-    100% {
-        transform: translateY(0px) rotate(0deg);
-    }
-
-    50% {
-        transform: translateY(-10px) rotate(2deg);
-    }
-}
-
-.moedas-counter-label {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    font-weight: 400;
+.btn-label {
+    font-size: 0.6rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    font-weight: 600;
+    color: #ccc;
 }
 
-.moedas-counter-value {
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: #baaae8;
-    text-shadow: 0 0 20px rgba(186, 170, 232, 0.6),
-        0 0 40px rgba(186, 170, 232, 0.4),
-        2px 2px 4px rgba(0, 0, 0, 0.8);
-    line-height: 1;
+.icon-btn.cooldown {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(1);
 }
 
-.moedas-counter-loading,
-.moedas-counter-error {
-    text-align: center;
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    padding: 1rem;
-}
-
-.moedas-counter-error {
+.icon-btn.cooldown .btn-label {
     color: #ff6b6b;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .centro-main {
-        padding-top: 7rem;
-    }
-
-    .centro-title {
-        font-size: 3rem;
-    }
-
-    .centro-subtitle {
-        font-size: 1.1rem;
-    }
+/* --- PLAYER MODEL AREA (Center) --- */
+.player-model-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
 }
 
-@media (max-width: 480px) {
-    .centro-main {
-        padding-top: 6.5rem;
-    }
-
-    .centro-title {
-        font-size: 2.5rem;
-    }
-
-    .centro-subtitle {
-        font-size: 1rem;
-    }
-
-    .moedas-counter-box {
-        padding: 1.5rem;
-        margin-top: 2rem;
-    }
-
-    .moedas-counter-label {
-        font-size: 1rem;
-    }
-
-    .moedas-counter-value {
-        font-size: 2.5rem;
-    }
-
-    .moedas-counter-icon-wrapper {
-        width: 90px;
-        height: 90px;
-    }
+.model-placeholder {
+    pointer-events: auto;
+    text-align: center;
 }
+
+.player-render {
+    max-height: 60vh;
+    filter: drop-shadow(0 0 30px rgba(186, 170, 232, 0.2));
+    animation: floating 4s ease-in-out infinite;
+}
+
+.model-hint {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+/* --- FOOTER PROGRESS (Bottom Right) --- */
+.centro-footer {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 10;
+}
+
+.level-progress {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 800;
+    backdrop-filter: blur(10px);
+    transition: all 0.5s ease;
+}
+
+.progress-standard {
+    color: #baaae8;
+    text-shadow: 0 0 10px rgba(186, 170, 232, 0.4);
+}
+
+.progress-gold {
+    color: var(--gold);
+    border-color: var(--gold);
+    text-shadow: 0 0 15px var(--gold-glow);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    animation: goldShimmer 2s infinite alternate;
+}
+
+@keyframes goldShimmer {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+/* Loading/Error Screens */
+.centro-loading-screen {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f0f1a;
+    color: #baaae8;
+    font-size: 1.5rem;
+}
+
+/* Responsiveness for small heights */
+@media (max-height: 700px) {
+    .centro-title { font-size: 1.8rem; }
+    .player-render { max-height: 50vh; }
+    .icon-btn { height: 65px; width: 55px; }
+}

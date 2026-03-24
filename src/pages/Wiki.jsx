@@ -53,15 +53,8 @@ function Wiki() {
   const getAttributeText = (blessing) => {
     const attrRows = blessing?.blessing_attribute || []
     if (attrRows.length > 0) {
-      const best = attrRows[0]
-      const name = best.attribute?.attr_name
-      const value = best.attr_value
-      if (name && value) return `${name}: ${value}`
-      if (name) return String(name)
-      if (value) return String(value)
+      return attrRows[0].attribute?.attr_name || ''
     }
-    // Fallback based on name
-    if (blessing.bl_name?.toLowerCase().includes('jump')) return '+1 jump for the player while in the air'
     return 'No attribute defined'
   }
 
@@ -165,13 +158,10 @@ function Wiki() {
                     <p className="wiki-blessing-category" style={{ margin: 0, opacity: 0.8, fontSize: '0.9rem', color: '#81D89E' }}>
                       {b.category?.cat_name || 'General'}
                     </p>
-                    <div className="wiki-element-subtitle" style={{ fontSize: '1rem', color: '#ccc', marginTop: '4px' }}>
-                      {getAttributeText(b)}
-                    </div>
-                    <div className="wiki-blessing-attributes" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
-                      {b.blessing_attribute?.slice(0, 2).map((attr, idx) => (
-                        <div key={idx} className="wiki-attr-tag" style={{ fontSize: '0.75rem', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '4px' }}>
-                          {attr.attribute?.attr_name}: {attr.attr_value}
+                    <div className="wiki-blessing-attributes" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
+                      {b.blessing_attribute?.map((attr, idx) => (
+                        <div key={idx} className="wiki-attr-tag" style={{ fontSize: '0.85rem', color: '#ccc', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: '3px solid #81D89E' }}>
+                           {attr.attribute?.attr_name}
                         </div>
                       ))}
                     </div>
@@ -211,8 +201,12 @@ function Wiki() {
             </div>
 
             <div className="wiki-modal-body" style={{marginTop: '1.5rem'}}>
-              <div className="wiki-read-attribute">
-                <span>Effect:</span> {getAttributeText(selectedBlessing)}
+              <div className="wiki-blessing-attributes">
+                {selectedBlessing.blessing_attribute?.map((attr, idx) => (
+                  <div key={idx} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', borderLeft: '4px solid #81D89E', marginBottom: '1rem', fontStyle: 'italic', color: '#81D89E' }}>
+                    {attr.attribute?.attr_name}
+                  </div>
+                ))}
               </div>
               <div className="wiki-read-description" style={{marginTop: '1.25rem', marginBottom: '1.5rem', color: '#ccc', fontSize: '1rem', lineHeight: '1.7'}}>
                 {selectedBlessing.bl_description || '—'}

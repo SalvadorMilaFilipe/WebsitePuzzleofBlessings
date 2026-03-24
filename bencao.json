@@ -49,18 +49,18 @@
   },
   {
     "be_cod": 7,
-    "be_nome": "Salto Duplo",
-    "be_imagem": "Double Jump.png",
+    "be_nome": "Sequential Jump",
+    "be_imagem": "Sequential Jump.png",
     "be_rariedade": "Incomum",
     "be_tipo": 4,
-    "be_descricao": "Permite ao jogador obter um duplo Salto."
+    "be_descricao": "Allows the player to perform an extra jump mid-air."
   },
   {
     "be_cod": 8,
-    "be_nome": "Molde Magnético",
+    "be_nome": "Magnetic Mold",
     "be_imagem": "Magnetic Mold.png",
     "be_rariedade": "Lendário",
     "be_tipo": 2,
-    "be_descricao": "Atrai peças de metal para posição com ajuste fino."
+    "be_descricao": "Attracts metal pieces to position with fine adjustment."
   }
 ]
