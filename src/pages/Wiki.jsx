@@ -21,7 +21,6 @@ function Wiki() {
           *,
           category:category ( cat_name ),
           blessing_attribute:blessing_attribute!fk_blessing_attr_blessing (
-            attr_value,
             attribute:attribute!fk_blessing_attr_attribute ( attr_name )
           )
         `)
@@ -152,12 +151,23 @@ function Wiki() {
                   ></div>
 
                   <div className="wiki-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
-                    <div className="wiki-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>
-                      {b.bl_name}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div className="wiki-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>
+                        {b.bl_name}
+                      </div>
+                      <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px', color: '#888' }}>
+                        #{b.bl_id}
+                      </span>
                     </div>
-                    <p className="wiki-blessing-category" style={{ margin: 0, opacity: 0.8, fontSize: '0.9rem', color: '#81D89E' }}>
-                      {b.category?.cat_name || 'General'}
+
+                    <p className="wiki-blessing-category" style={{ margin: '4px 0', opacity: 0.8, fontSize: '0.85rem', color: '#81D89E' }}>
+                      {b.category?.cat_name || 'Blessing'}
                     </p>
+
+                    <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '4px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      {b.bl_description}
+                    </p>
+
                     <div className="wiki-blessing-attributes" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
                       {b.blessing_attribute?.map((attr, idx) => (
                         <div key={idx} className="wiki-attr-tag" style={{ fontSize: '0.85rem', color: '#ccc', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: '3px solid #81D89E' }}>
