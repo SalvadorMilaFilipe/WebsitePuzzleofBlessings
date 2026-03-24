@@ -127,6 +127,15 @@
     letter-spacing: 0.05rem;
 }
 
+.level-tutorial-badge {
+    color: #81D89E;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    text-shadow: 0 0 10px rgba(129, 216, 158, 0.3);
+}
+
 /* --- SIDEBAR ACTIONS (Left) --- */
 .centro-sidebar-actions {
     position: absolute;

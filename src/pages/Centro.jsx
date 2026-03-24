@@ -75,8 +75,8 @@ function Centro() {
           })
         }
 
-        // B. Fetch Player Level Info from the latest save
-        // We join with session to filter by player ID, and join with level to get the name
+        // B. Fetch Player Level Info
+        // 1. Try to get the latest save for the player
         const { data: latestSave, error: saveError } = await supabase
           .from('save')
           .select(`
@@ -93,16 +93,28 @@ function Centro() {
           .limit(1)
           .maybeSingle()
 
-        if (saveError) console.warn("Error fetching level from save:", saveError)
-
         if (latestSave) {
           setPlayerLevel({
             id: latestSave.sv_level_id || 0,
             name: latestSave.level?.lv_name || 'Genesis Field'
           })
         } else {
-          // Fallback if no save exists yet
-          setPlayerLevel({ id: 0, name: 'Genesis Field' })
+          // 2. Fallback: Try the player table's current level (more reliable if session is null)
+          const { data: userData, error: userError } = await supabase
+            .from('player')
+            .select('pl_level_id, level:level(lv_name)')
+            .eq('pl_id', userProfile.pl_id)
+            .maybeSingle()
+
+          if (userData) {
+            setPlayerLevel({
+              id: userData.pl_level_id || 0,
+              name: userData.level?.lv_name || 'Tutorial'
+            })
+          } else {
+            // Ultimate fallback
+            setPlayerLevel({ id: 0, name: 'Tutorial' })
+          }
         }
 
       } catch (err) {
@@ -248,8 +260,14 @@ function Centro() {
 
           <div className="header-right">
             <div className="level-badge">
-              <div className="level-number">Level {playerLevel.id}</div>
-              <div className="level-name">{playerLevel.name}</div>
+              {playerLevel.id === 0 ? (
+                <div className="level-tutorial-badge">Tutorial</div>
+              ) : (
+                <>
+                  <div className="level-number">Level {playerLevel.id}</div>
+                  <div className="level-name">{playerLevel.name}</div>
+                </>
+              )}
             </div>
           </div>
         </header>
