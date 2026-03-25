@@ -58,13 +58,13 @@ function Wiki() {
   }
 
   const formatImageName = (name) => {
-    if (!name) return 'none';
-    let formatted = name.replace(/_/g, ' ');
+    if (!name || name === 'null' || name === 'undefined') return 'none';
+    let formatted = String(name).replace(/_/g, ' ').trim();
     // Correct specific capitalizations
     if (formatted.toLowerCase().includes('object levitation')) {
       formatted = 'Object Levitation.png';
     }
-    return `url("/blessingscardmodels/${formatted}")`;
+    return `url("${encodeURI(`/blessingscardmodels/${formatted}`)}")`;
   }
 
   const visibleBlessings = useMemo(() => {
