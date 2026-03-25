@@ -138,7 +138,7 @@ function Wiki() {
                   <div
                     className="wiki-element-avatar"
                     style={{ 
-                      backgroundImage: b.bl_image ? `url("/blessingscardmodels/${b.bl_image}")` : 'none',
+                      backgroundImage: b.bl_image ? `url("/blessingscardmodels/${b.bl_image.replace(/_/g, ' ')}")` : 'none',
                       minWidth: '80px',
                       height: '80px',
                       borderRadius: '50%',
@@ -197,7 +197,7 @@ function Wiki() {
               <div 
                 className="wiki-modal-avatar"
                 style={{ 
-                  backgroundImage: selectedBlessing.bl_image ? `url("/blessingscardmodels/${selectedBlessing.bl_image}")` : 'none',
+                  backgroundImage: selectedBlessing.bl_image ? `url("/blessingscardmodels/${selectedBlessing.bl_image.replace(/_/g, ' ')}")` : 'none',
                   backgroundSize: 'cover', 
                   backgroundPosition: 'center' 
                 }}
