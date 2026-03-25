@@ -12,6 +12,7 @@ function Centro() {
   const [playerLevel, setPlayerLevel] = useState({ id: 0, name: 'Trainee' })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isShopOpen, setIsShopOpen] = useState(false)
 
   // Hint Cooldown State (10 minutes = 600,000ms)
   const [hintCooldown, setHintCooldown] = useState(0)
@@ -271,7 +272,7 @@ function Centro() {
 
         {/* SIDE ACTIONS */}
         <nav className="centro-sidebar-actions">
-          <button className="icon-btn shop-btn" title="Shop" onClick={() => alert("Shop opening soon!")}>
+          <button className="icon-btn shop-btn" title="Shop" onClick={() => setIsShopOpen(true)}>
             <div className="btn-icon-wrapper">
               <img src="/img/shop_icon.png" alt="🏪" className="btn-icon"
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/1170/1170678.png" }} />
@@ -319,6 +320,102 @@ function Centro() {
         </footer>
 
       </div>
+
+      {/* SHOP OVERLAY PREVIEW */}
+      {isShopOpen && (
+        <div className="centro-shop-overlay" onClick={() => setIsShopOpen(false)}>
+          <div className="centro-shop-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="shop-close-btn" onClick={() => setIsShopOpen(false)}>
+              &times;
+            </button>
+            
+            <div className="shop-modal-header">
+              <h2 className="shop-title">The Shop</h2>
+              <p className="shop-subtitle">Exchange your light for divine blessings and lost relics.</p>
+            </div>
+
+            <div className="shop-items-grid">
+              {/* Blessing Placeholder: Pattern Lens */}
+              <div className="shop-item-card">
+                <div className="shop-item-image-wrapper">
+                  <div 
+                    className="shop-item-avatar" 
+                    style={{ backgroundImage: 'url("/blessingscardmodels/Pattern_Lens.png")' }}
+                  ></div>
+                </div>
+                <div className="shop-item-info">
+                  <h3 className="shop-item-name">Pattern Lens</h3>
+                  <div className="shop-item-category">Blessing</div>
+                </div>
+                <button className="shop-buy-btn" onClick={() => buyBlessing(1)}>
+                  <span>Buy - 30</span>
+                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
+                </button>
+              </div>
+
+              {/* Collectible 1 */}
+              <div className="shop-item-card">
+                <div className="shop-item-image-wrapper">
+                  <div className="shop-item-avatar placeholder-collectible">🏺</div>
+                </div>
+                <div className="shop-item-info">
+                  <h3 className="shop-item-name">Ancient Chalice</h3>
+                  <div className="shop-item-category">Collectible</div>
+                </div>
+                <button className="shop-buy-btn">
+                  <span>Buy - 15</span>
+                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
+                </button>
+              </div>
+
+              {/* Collectible 2 */}
+              <div className="shop-item-card">
+                <div className="shop-item-image-wrapper">
+                  <div className="shop-item-avatar placeholder-collectible">📜</div>
+                </div>
+                <div className="shop-item-info">
+                  <h3 className="shop-item-name">Forgotten Scroll</h3>
+                  <div className="shop-item-category">Collectible</div>
+                </div>
+                <button className="shop-buy-btn">
+                  <span>Buy - 25</span>
+                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
+                </button>
+              </div>
+
+              {/* Other Item 1 */}
+              <div className="shop-item-card">
+                <div className="shop-item-image-wrapper">
+                  <div className="shop-item-avatar placeholder-item">🧪</div>
+                </div>
+                <div className="shop-item-info">
+                  <h3 className="shop-item-name">Elixir of Insight</h3>
+                  <div className="shop-item-category">Consumable</div>
+                </div>
+                <button className="shop-buy-btn">
+                  <span>Buy - 10</span>
+                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
+                </button>
+              </div>
+
+              {/* Other Item 2 */}
+              <div className="shop-item-card">
+                <div className="shop-item-image-wrapper">
+                  <div className="shop-item-avatar placeholder-item">🔑</div>
+                </div>
+                <div className="shop-item-info">
+                  <h3 className="shop-item-name">Rusted Key</h3>
+                  <div className="shop-item-category">Utility</div>
+                </div>
+                <button className="shop-buy-btn">
+                  <span>Buy - 5</span>
+                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
