@@ -609,7 +609,8 @@
 
 .shop-item-image-wrapper {
     width: clamp(60px, 10vh, 100px);
-    height: clamp(60px, 10vh, 100px);
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
     margin-bottom: clamp(0.6rem, 1.5vh, 1.2rem);
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.4);

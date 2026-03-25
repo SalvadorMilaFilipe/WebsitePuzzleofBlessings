@@ -340,7 +340,7 @@ function Centro() {
                 <div className="shop-item-image-wrapper">
                   <div 
                     className="shop-item-avatar" 
-                    style={{ backgroundImage: 'url("/blessingscardmodels/Pattern_Lens.png")' }}
+                    style={{ backgroundImage: 'url("/blessingscardmodels/Pattern Lens.png")' }}
                   ></div>
                 </div>
                 <div className="shop-item-info">
