@@ -551,8 +551,8 @@
 
 .shop-items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 16vw, 220px), 1fr));
-    gap: clamp(0.8rem, 2vh, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(clamp(130px, 14vw, 180px), 1fr));
+    gap: clamp(0.6rem, 1.5vh, 1.2rem);
     overflow-y: auto;
     padding-right: 1rem;
     padding-bottom: 1rem;
@@ -577,8 +577,8 @@
 .shop-item-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(186, 170, 232, 0.15);
-    border-radius: clamp(10px, 1.5vw, 15px);
-    padding: clamp(1rem, 2vh, 1.5rem);
+    border-radius: clamp(8px, 1vw, 12px);
+    padding: clamp(0.6rem, 1.2vh, 1rem);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -608,10 +608,10 @@
 }
 
 .shop-item-image-wrapper {
-    width: clamp(60px, 10vh, 100px);
+    width: clamp(45px, 8vh, 75px);
     aspect-ratio: 1 / 1;
     flex-shrink: 0;
-    margin-bottom: clamp(0.6rem, 1.5vh, 1.2rem);
+    margin-bottom: clamp(0.4rem, 1vh, 0.8rem);
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.4);
     box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
@@ -633,7 +633,7 @@
 }
 
 .placeholder-collectible, .placeholder-item {
-    font-size: clamp(2rem, 4vh, 3.5rem);
+    font-size: clamp(1.5rem, 3vh, 2.5rem);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -642,7 +642,7 @@
 
 .shop-item-info {
     z-index: 1;
-    margin-bottom: clamp(0.8rem, 2vh, 1.5rem);
+    margin-bottom: clamp(0.5rem, 1vh, 1rem);
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -650,15 +650,15 @@
 }
 
 .shop-item-name {
-    font-size: clamp(0.95rem, 2vh, 1.25rem);
+    font-size: clamp(0.8rem, 1.5vh, 1rem);
     font-weight: 800;
     color: #fff;
-    margin: 0 0 clamp(0.2rem, 0.5vh, 0.4rem) 0;
+    margin: 0 0 clamp(0.1rem, 0.3vh, 0.3rem) 0;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .shop-item-category {
-    font-size: clamp(0.65rem, 1.2vh, 0.8rem);
+    font-size: clamp(0.55rem, 1vh, 0.7rem);
     color: #81D89E;
     text-transform: uppercase;
     letter-spacing: 0.05rem;
@@ -669,15 +669,15 @@
     background: rgba(129, 216, 158, 0.1);
     border: 1px solid #81D89E;
     color: #fff;
-    padding: clamp(0.5rem, 1vh, 0.7rem) clamp(1rem, 2vw, 1.4rem);
+    padding: clamp(0.4rem, 0.8vh, 0.6rem) clamp(0.8rem, 1.5vw, 1.2rem);
     border-radius: 50px;
     font-weight: 800;
-    font-size: clamp(0.85rem, 1.8vh, 1.05rem);
+    font-size: clamp(0.7rem, 1.2vh, 0.9rem);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: clamp(0.3rem, 1vw, 0.6rem);
+    gap: clamp(0.2rem, 0.5vw, 0.4rem);
     transition: all 0.3s ease;
     width: 100%;
     z-index: 1;
@@ -691,8 +691,8 @@
 }
 
 .buy-currency-icon {
-    width: clamp(16px, 2.5vh, 22px);
-    height: clamp(16px, 2.5vh, 22px);
+    width: clamp(14px, 2vh, 18px);
+    height: clamp(14px, 2vh, 18px);
     filter: drop-shadow(0 0 3px rgba(0,0,0,0.8));
     transition: filter 0.3s;
 }
