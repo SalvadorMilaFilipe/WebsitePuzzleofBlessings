@@ -57,6 +57,16 @@ function Wiki() {
     return 'No attribute defined'
   }
 
+  const formatImageName = (name) => {
+    if (!name) return 'none';
+    let formatted = name.replace(/_/g, ' ');
+    // Correct specific capitalizations
+    if (formatted.toLowerCase().includes('object levitation')) {
+      formatted = 'Object Levitation.png';
+    }
+    return `url("/blessingscardmodels/${formatted}")`;
+  }
+
   const visibleBlessings = useMemo(() => {
     if (!blessings) return []
     let filtered = blessings
@@ -138,7 +148,7 @@ function Wiki() {
                   <div
                     className="wiki-element-avatar"
                     style={{ 
-                      backgroundImage: b.bl_image ? `url("/blessingscardmodels/${b.bl_image.replace(/_/g, ' ')}")` : 'none',
+                      backgroundImage: formatImageName(b.bl_image),
                       minWidth: '80px',
                       height: '80px',
                       borderRadius: '50%',
@@ -197,7 +207,7 @@ function Wiki() {
               <div 
                 className="wiki-modal-avatar"
                 style={{ 
-                  backgroundImage: selectedBlessing.bl_image ? `url("/blessingscardmodels/${selectedBlessing.bl_image.replace(/_/g, ' ')}")` : 'none',
+                  backgroundImage: formatImageName(selectedBlessing.bl_image),
                   backgroundSize: 'cover', 
                   backgroundPosition: 'center' 
                 }}
