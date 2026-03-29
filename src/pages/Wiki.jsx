@@ -42,11 +42,11 @@ function Wiki() {
   const getRarityColor = (rarity) => {
     if (!rarity) return '#ccc'
     const r = rarity.toLowerCase()
-    if (r.includes('common') && !r.includes('uncommon')) return '#a9d3ff' // Light Blue
-    if (r.includes('uncommon')) return '#81D89E' // Green
-    if (r.includes('rare')) return '#4da6ff' // Blue
-    if (r.includes('epic')) return '#b388ff' // Purple
-    if (r.includes('legendary')) return '#ffd700' // Gold
+    if (r.includes('common') && !r.includes('uncommon')) return '#a9d3ff' // Soft Blue
+    if (r.includes('uncommon')) return '#81D89E' // Emerald Green
+    if (r.includes('rare')) return '#4da6ff' // Sky Blue
+    if (r.includes('epic')) return '#d0b3ff' // Royal Purple
+    if (r.includes('legendary')) return '#FFD700' // Burnished Gold
     return '#ccc'
   }
 
@@ -134,6 +134,7 @@ function Wiki() {
                 key={b.bl_id}
                 className="wiki-element-card lowpoly-card"
                 onClick={() => setSelectedBlessing(b)}
+                style={{ borderLeft: `5px solid ${getRarityColor(b.bl_rarity)}` }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
                   <div
@@ -153,7 +154,7 @@ function Wiki() {
 
                   <div className="wiki-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div className="wiki-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>
+                      <div className="wiki-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: getRarityColor(b.bl_rarity) }}>
                         {b.bl_name}
                       </div>
                       <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px', color: '#888' }}>
@@ -161,7 +162,7 @@ function Wiki() {
                       </span>
                     </div>
 
-                    <p className="wiki-blessing-category" style={{ margin: '4px 0', opacity: 0.8, fontSize: '0.85rem', color: '#81D89E' }}>
+                    <p className="wiki-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: getRarityColor(b.bl_rarity), fontWeight: 700 }}>
                       {b.category?.cat_name || 'Blessing'}
                     </p>
 
@@ -171,7 +172,7 @@ function Wiki() {
 
                     <div className="wiki-blessing-attributes" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
                       {b.blessing_attribute?.map((attr, idx) => (
-                        <div key={idx} className="wiki-attr-tag" style={{ fontSize: '0.85rem', color: '#ccc', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: '3px solid #81D89E' }}>
+                        <div key={idx} className="wiki-attr-tag" style={{ fontSize: '0.85rem', color: '#ddd', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: `3px solid ${getRarityColor(b.bl_rarity)}` }}>
                            {attr.attribute?.attr_name}
                         </div>
                       ))}
@@ -204,17 +205,19 @@ function Wiki() {
                 }}
               ></div>
               <div>
-                <h2 className="wiki-modal-title" style={{color: '#a9d3ff'}}>{selectedBlessing.bl_name}</h2>
-                <div className="wiki-read-attribute" style={{marginTop: '0.75rem', marginBottom: 0}}>
-                  <span>Category:</span> {selectedBlessing.categories?.cat_name || 'Unknown'} | <span>Rarity:</span> <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.bl_rarity || 'Unknown'}</span>
+                <h2 className="wiki-modal-title" style={{ color: getRarityColor(selectedBlessing.bl_rarity), textShadow: `0 0 15px ${getRarityColor(selectedBlessing.bl_rarity)}44` }}>
+                  {selectedBlessing.bl_name}
+                </h2>
+                <div className="wiki-read-attribute" style={{ marginTop: '0.75rem', marginBottom: 0 }}>
+                  <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), fontWeight: 700 }}>Category:</span> {selectedBlessing.category?.cat_name || 'Unknown'} | <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), fontWeight: 700 }}>Rarity:</span> <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.bl_rarity || 'Unknown'}</span>
                 </div>
               </div>
             </div>
 
-            <div className="wiki-modal-body" style={{marginTop: '1.5rem'}}>
+            <div className="wiki-modal-body" style={{ marginTop: '1.5rem' }}>
               <div className="wiki-blessing-attributes">
                 {selectedBlessing.blessing_attribute?.map((attr, idx) => (
-                  <div key={idx} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', borderLeft: '4px solid #81D89E', marginBottom: '1rem', fontStyle: 'italic', color: '#81D89E' }}>
+                  <div key={idx} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', borderLeft: `4px solid ${getRarityColor(selectedBlessing.bl_rarity)}`, marginBottom: '1rem', fontStyle: 'italic', color: getRarityColor(selectedBlessing.bl_rarity) }}>
                     {attr.attribute?.attr_name}
                   </div>
                 ))}
