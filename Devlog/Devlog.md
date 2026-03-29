@@ -188,14 +188,14 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 ---
 
 ## 29/03/2026 - Devlog #26: Compatibilidade e Acessibilidade de Animações
-*   **Busca do Erro (Diagnóstico):** Identificou-se que em navegadores com restrições de WebGL (como o LibreWolf), a animação 3D não carregava, deixando a Hero Section com um aspeto vazio e desolado. Embora uma primeira versão de fallback tenha sido tentada, o diagnóstico revelou que as peças eram demasiado transparentes (15% opacidade) e instáveis (saltavam de posição a cada render do React devido ao uso de `Math.random` direto). O log de consola confirmou que o problema estava na renderização, não na deteção.
+*   **Busca do Erro (Diagnóstico):** Identificou-se que em navegadores com restrições de WebGL (como o LibreWolf), a animação 3D não carregava, deixando a Hero Section com um aspeto vazio e desolado. Embora uma primeira versão de fallback tenha sido tentada, o diagnóstico revelou que as peças eram demasiado transparentes (15% opacidade) e instáveis. Além disso, o fallback era puramente passivo, não refletindo a natureza interativa do jogo.
 *   **Planeamento Estratégico:** 
-    *   **Estabilidade:** Utilização de `useMemo` para fixar as posições e propriedades das peças de puzzle SVG, garantindo uma animação fluida e sem saltos.
-    *   **Visibilidade e Estética:** Aumento drástico da opacidade e adição de filtros de brilho (`drop-shadow` neon) para tornar o fallback visualmente vibrante e "carregado".
-    *   **Lógica de Narrativa:** Implementação do efeito de "convergência" para o centro (`piece-assemble`), simulando a física de montagem do puzzle 3D original que é essencial para o avanço da histórica.
-    *   **Acessibilidade de Rota:** Planeamento da criação de um redirecionamento automático para a rota `/download` (atualmente inexistente no router) para evitar páginas em branco.
+    *   **Estabilidade:** Utilização de `useMemo` para fixar as posições e propriedades das peças de puzzle SVG.
+    *   **Visibilidade Máxima:** Aumento da opacidade para 90% e implementação de um sistema de brilho dinâmico (`piece-pulse`) com cores vibrantes para corresponder à identidade visual premium e ao brilho intenso solicitado.
+    *   **Mecânica de Interatividade (Scatter on Click):** Introdução de um estado de "Dispersão". Ao clicar no fundo, as peças devem "fugir" para as extremidades e, após 3 segundos, retornar suavemente ao centro (lógica de atração magnética).
+    *   **Acessibilidade de Rota:** Redirecionamento automático da rota `/download` para evitar erros 404.
 *   **Execução Técnica:** 
-    *   **SVG Fallback Pro:** Substituição de divs genéricas por componentes SVG de peças de puzzle detalhadas com suporte a hover.
-    *   **CSS Keyframes Avançados:** Criação das animações `piece-assemble` e `piece-glow` que operam fora da pipeline de WebGL.
-    *   **Redirecionamento de Router:** Adição de `<Route path="/download" element={<Navigate to="/" replace />} />` no `App.jsx` para lidar com acessos diretos via URL.
-*   **Essência:** Garantir que 100% dos utilizadores, independentemente do browser ou configurações de segurança, tenham acesso aos elementos visuais que ditam o ritmo da narrativa do jogo.
+    *   **Interatividade com `useState` e `useEffect`:** Implementação de um toggle de estado que alterna as coordenadas das peças entre `assembleX/Y` (centro) e `scatterX/Y` (periferia).
+    *   **Transições CSS Fluídas:** Uso de `cubic-bezier(0.34, 1.56, 0.64, 1)` para dar um efeito de "mola" (bounce) quando as peças se afastam e retornam.
+    *   **SVG Glow Hub:** Fortalecimento dos filtros de `drop-shadow` e brilho para garantir que o fallback 2D tenha o mesmo impacto visual que a versão 3D, com cores e intensidades alinhadas com a visão artística do projeto.
+*   **Essência:** Transformar o que era apenas um "remendo" de compatibilidade numa funcionalidade interativa completa que mantém o jogador envolvido com as "Bênçãos" (peças) mesmo em máquinas sem suporte gráfico avançado.

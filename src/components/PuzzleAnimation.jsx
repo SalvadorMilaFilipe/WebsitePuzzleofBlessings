@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, Suspense } from 'react';
+import React, { useRef, useMemo, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Environment, PerspectiveCamera, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
@@ -243,99 +243,114 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
         }
     }, [isWebGLSupported]);
 
-    // Generate stable piece data only once or when type changes
-    const fallbackPieces = React.useMemo(() => {
-        return Array.from({ length: 16 }).map((_, i) => ({
+    const [isScattered, setIsScattered] = useState(false);
+
+    // Reset scattering after a few seconds automatically
+    useEffect(() => {
+        if (isScattered) {
+            const timer = setTimeout(() => setIsScattered(false), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [isScattered]);
+
+    // Generate stable piece data (now with scattered target positions)
+    const fallbackPieces = useMemo(() => {
+        return Array.from({ length: 18 }).map((_, i) => ({
             id: i,
-            startX: (Math.random() - 0.5) * 120, // wider spread
-            startY: (Math.random() - 0.5) * 120,
-            size: 60 + Math.random() * 60,
-            duration: 15 + Math.random() * 15,
-            delay: Math.random() * -20,
-            color: ['#81D89E', '#5BC0EB', '#AA9AD8', '#FFD700'][i % 4]
+            // Original spread for "assemble" (near center with some noise)
+            assembleX: (Math.random() - 0.5) * 15, 
+            assembleY: (Math.random() - 0.5) * 15,
+            // Scatter targets (pushed to corners/boundaries)
+            scatterX: (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 20),
+            scatterY: (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 20),
+            size: 80 + Math.random() * 80,
+            duration: 8 + Math.random() * 10,
+            color: ['#81D89E', '#5BC0EB', '#AA9AD8', '#FFD700', '#F4D35E'][i % 5]
         }));
     }, []);
 
     // Fallback UI if WebGL is disabled
     if (!isWebGLSupported) {
         return (
-            <div style={{
-                width: '100%',
-                height: '100%',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                pointerEvents: 'none',
-                // Subtle gradient to not hide the site's rich background
-                background: 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden'
-            }}>
+            <div 
+                onClick={() => setIsScattered(true)}
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    zIndex: 1,
+                    pointerEvents: 'auto', // Allow clicking the background
+                    cursor: isScattered ? 'default' : 'pointer',
+                    background: 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden'
+                }}>
                 <style>
                     {`
-                        @keyframes piece-assemble {
-                            0% { transform: translate(var(--sx), var(--sy)) rotate(0deg) scale(0.5); opacity: 0; }
-                            15% { opacity: 0.8; }
-                            50% { transform: translate(calc(var(--sx) * 0.4), calc(var(--sy) * 0.4)) rotate(180deg) scale(1.1); opacity: 0.9; }
-                            100% { transform: translate(calc(var(--sx) * 0.08), calc(var(--sy) * 0.08)) rotate(360deg) scale(1); opacity: 0.7; }
-                        }
-                        @keyframes piece-glow {
-                            0%, 100% { filter: drop-shadow(0 0 10px currentColor) brightness(1); }
-                            50% { filter: drop-shadow(0 0 25px currentColor) brightness(1.3); }
+                        @keyframes piece-pulse {
+                            0%, 100% { filter: drop-shadow(0 0 15px currentColor) brightness(1.2); }
+                            50% { filter: drop-shadow(0 0 35px currentColor) brightness(1.6); }
                         }
                         .fallback-piece-container {
                             position: absolute;
-                            opacity: 0;
-                            pointer-events: auto; /* Allow hover if needed */
-                            transition: filter 0.3s ease;
+                            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;
+                            will-change: transform;
                         }
                         .fallback-piece-container:hover {
-                            filter: brightness(1.5) drop-shadow(0 0 30px white) !important;
-                            z-index: 10;
+                            filter: brightness(2) drop-shadow(0 0 40px white) !important;
+                            z-index: 20;
                         }
                     `}
                 </style>
 
-                {fallbackPieces.map((p) => (
-                    <div 
-                        key={p.id}
-                        className="fallback-piece-container"
-                        style={{
-                            '--sx': `${p.startX}vw`,
-                            '--sy': `${p.startY}vh`,
-                            top: '50%',
-                            left: '50%',
-                            width: `${p.size}px`,
-                            height: `${p.size}px`,
-                            color: p.color,
-                            animation: `piece-assemble ${p.duration}s ease-in-out infinite alternate, piece-glow 4s ease-in-out infinite`,
-                            animationDelay: `${p.delay}s, ${p.delay}s`,
-                            transformOrigin: 'center center'
-                        }}
-                    >
-                        <svg viewBox="0 0 100 100" fill="currentColor" style={{ filter: 'drop-shadow(2px 5px 8px rgba(0,0,0,0.5))' }}>
-                            <path d="M 20,20 L 80,20 L 80,42.5 A 7.5,7.5 0 1 1 80,57.5 L 80,80 L 57.5,80 A 7.5,7.5 0 1 0 42.5,80 L 20,80 L 20,20 Z" />
-                        </svg>
-                    </div>
-                ))}
+                {fallbackPieces.map((p) => {
+                    const tx = isScattered ? p.scatterX : p.assembleX;
+                    const ty = isScattered ? p.scatterY : p.assembleY;
+                    const rotate = isScattered ? 180 : 0;
+                    
+                    return (
+                        <div 
+                            key={p.id}
+                            className="fallback-piece-container"
+                            style={{
+                                top: '50%',
+                                left: '50%',
+                                width: `${p.size}px`,
+                                height: `${p.size}px`,
+                                color: p.color,
+                                opacity: isScattered ? 0.4 : 0.9,
+                                transform: `translate(calc(${tx}vw - 50%), calc(${ty}vh - 50%)) rotate(${rotate}deg) scale(1)`,
+                                animation: `piece-pulse 3s ease-in-out infinite`,
+                                animationDelay: `-${p.id * 0.5}s`,
+                                transformOrigin: 'center center'
+                            }}
+                        >
+                            <svg viewBox="0 0 100 100" fill="currentColor" style={{ filter: 'drop-shadow(3px 6px 10px rgba(0,0,0,0.6))' }}>
+                                <path d="M 20,20 L 80,20 L 80,42.5 A 7.5,7.5 0 1 1 80,57.5 L 80,80 L 57.5,80 A 7.5,7.5 0 1 0 42.5,80 L 20,80 L 20,20 Z" />
+                            </svg>
+                        </div>
+                    );
+                })}
                 
-                {/* Visual depth particles */}
-                {Array.from({ length: 30 }).map((_, i) => (
+                {/* Visual particles */}
+                {Array.from({ length: 40 }).map((_, i) => (
                     <div 
                         key={`dot-${i}`}
                         style={{
                             position: 'absolute',
-                            width: `${2 + (i % 3)}px`,
-                            height: `${2 + (i % 3)}px`,
+                            width: `${2 + (i % 4)}px`,
+                            height: `${2 + (i % 4)}px`,
                             borderRadius: '50%',
                             background: 'white',
-                            opacity: 0.1 + (i % 5) * 0.05,
+                            opacity: 0.15 + (i % 5) * 0.05,
                             top: `${(i * 17) % 100}%`,
                             left: `${(i * 23) % 100}%`,
-                            animation: `piece-glow ${3 + (i % 4)}s infinite alternate`
+                            transition: 'transform 1.2s ease-out',
+                            transform: isScattered ? `translate(${(Math.random() - 0.5) * 200}px, ${(Math.random() - 0.5) * 200}px)` : 'none'
                         }}
                     />
                 ))}
