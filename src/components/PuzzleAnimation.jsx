@@ -216,27 +216,34 @@ const InteractivePiece = ({ initialPos, targetPos, rotation, color, speed, offse
 };
 
 const PuzzleAnimation = ({ type = 'assemble' }) => {
-    // Check if WebGL is available to avoid crash on browsers like LibreWolf
-    const [isWebGLSupported, setIsWebGLSupported] = React.useState(true);
-
-    React.useEffect(() => {
-        const checkWebGL = () => {
-            try {
-                const canvas = document.createElement('canvas');
-                return !!(window.WebGLRenderingContext && 
-                       (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-            } catch (e) {
-                return false;
+    // Check if WebGL is available to avoid crash on browsers like Librewolf
+    const [isWebGLSupported, setIsWebGLSupported] = React.useState(() => {
+        // Immediate check to avoid first-render flicker/crash
+        if (typeof window === 'undefined') return true;
+        try {
+            const canvas = document.createElement('canvas');
+            const supported = !!(window.WebGLRenderingContext && 
+                (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+            
+            // Even if technically supported, double check if context creation actually works
+            if (supported) {
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (!gl) return false;
             }
-        };
-        
-        if (!checkWebGL()) {
-            console.warn('[PuzzleAnimation] WebGL not supported or disabled. Using fallback visual.');
-            setIsWebGLSupported(false);
+            return supported;
+        } catch (e) {
+            return false;
         }
-    }, []);
+    });
 
-    // Fallback UI if WebGL is disabled
+    // Re-verify in useEffect just in case of environment changes
+    React.useEffect(() => {
+        if (!isWebGLSupported) {
+            console.warn('[PuzzleAnimation] WebGL not supported or disabled. Using enhanced fallback visual.');
+        }
+    }, [isWebGLSupported]);
+
+    // Fallback UI if WebGL is disabled - Richer experience to match "essential" requirement
     if (!isWebGLSupported) {
         return (
             <div style={{
@@ -247,7 +254,7 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
                 left: 0,
                 zIndex: 1,
                 pointerEvents: 'none',
-                background: 'radial-gradient(circle at 30% 30%, rgba(139, 181, 214, 0.25) 0%, rgba(10, 10, 25, 1) 100%)',
+                background: 'radial-gradient(circle at 30% 30%, rgba(30, 40, 60, 0.4) 0%, rgba(10, 10, 20, 1) 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -255,77 +262,75 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
             }}>
                 <style>
                     {`
-                        @keyframes float-long {
-                            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-                            33% { transform: translate(30px, -50px) rotate(120deg) scale(1.1); }
-                            66% { transform: translate(-20px, 20px) rotate(240deg) scale(0.9); }
-                            100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+                        @keyframes float-complex {
+                            0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.3; }
+                            33% { transform: translate(4vw, -6vh) rotate(120deg) scale(1.1); opacity: 0.5; }
+                            66% { transform: translate(-3vw, 3vh) rotate(240deg) scale(0.9); opacity: 0.4; }
+                            100% { transform: translate(0, 0) rotate(360deg) scale(1); opacity: 0.3; }
                         }
-                        .anim-shape {
-                            animation: float-long 30s linear infinite;
+                        .fallback-piece {
                             position: absolute;
-                            filter: blur(1px);
+                            filter: drop-shadow(0 0 15px rgba(139, 181, 214, 0.2));
+                            opacity: 0.3;
+                            transition: opacity 0.5s ease;
                         }
+                        /* Puzzle piece shape in SVG for fallback */
                     `}
                 </style>
 
-                {/* Rich fallback environment with multiple moving shapes */}
-                <div className="lowpoly-shape shape-1 anim-shape" style={{ 
-                    opacity: 0.4, 
-                    top: '15%', 
-                    left: '10%', 
-                    width: '120px',
-                    height: '120px',
-                    background: 'linear-gradient(135deg, #81D89E, #3CB371)',
-                    boxShadow: '0 0 40px rgba(129, 216, 158, 0.3)',
-                    animationDuration: '35s'
-                }}></div>
-                
-                <div className="lowpoly-shape shape-2 anim-shape" style={{ 
-                    opacity: 0.3, 
-                    bottom: '20%', 
-                    right: '8%', 
-                    width: '150px',
-                    height: '150px',
-                    background: 'linear-gradient(135deg, #5BC0EB, #7B68EE)',
-                    boxShadow: '0 0 40px rgba(91, 192, 235, 0.3)',
-                    animationDuration: '45s',
-                    animationDelay: '-5s'
-                }}></div>
-
-                <div className="lowpoly-shape shape-3 anim-shape" style={{ 
-                    opacity: 0.25, 
-                    top: '40%', 
-                    right: '25%', 
-                    width: '80px',
-                    height: '80px',
-                    clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
-                    background: 'linear-gradient(135deg, #FFD700, #81D89E)',
-                    animationDuration: '25s',
-                    animationDelay: '-12s'
-                }}></div>
-
-                <div className="lowpoly-shape anim-shape" style={{ 
-                    opacity: 0.2, 
-                    bottom: '10%', 
-                    left: '35%', 
-                    width: '100px',
-                    height: '100px',
-                    clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
-                    background: 'linear-gradient(135deg, #81D89E, #5BC0EB)',
-                    animationDuration: '50s',
-                    animationDelay: '-20s'
-                }}></div>
+                {/* Array of SVG puzzle pieces to mimic the 3D scene */}
+                {Array.from({ length: 12 }).map((_, i) => (
+                    <div 
+                        key={i}
+                        className="fallback-piece"
+                        style={{
+                            top: `${15 + (i * 7.5) % 70}%`,
+                            left: `${10 + (i * 13) % 80}%`,
+                            width: `${60 + (i % 3) * 20}px`,
+                            height: `${60 + (i % 3) * 20}px`,
+                            animation: `float-complex ${20 + (i % 5) * 10}s linear infinite`,
+                            animationDelay: `-${i * 3.5}s`,
+                            color: [
+                                'rgba(129, 216, 158, 0.5)', 
+                                'rgba(91, 192, 235, 0.5)', 
+                                'rgba(170, 154, 216, 0.5)',
+                                'rgba(255, 215, 0, 0.4)'
+                            ][i % 4]
+                        }}
+                    >
+                        <svg viewBox="0 0 100 100" fill="currentColor">
+                            <path d="M 20,20 L 80,20 L 80,42.5 A 7.5,7.5 0 1 1 80,57.5 L 80,80 L 57.5,80 A 7.5,7.5 0 1 0 42.5,80 L 20,80 L 20,20 Z" />
+                        </svg>
+                    </div>
+                ))}
                 
                 {/* Aesthetic flare glow */}
                 <div style={{
                     position: 'absolute',
-                    width: '80vw',
-                    height: '80vw',
-                    background: 'radial-gradient(circle, rgba(139, 181, 214, 0.12) 0%, transparent 75%)',
-                    filter: 'blur(120px)',
+                    width: '100vw',
+                    height: '100vh',
+                    background: 'radial-gradient(circle at center, rgba(139, 181, 214, 0.15) 0%, transparent 70%)',
+                    filter: 'blur(80px)',
                     zIndex: -1
                 }}></div>
+
+                {/* Floating particles/dots for extra depth */}
+                {Array.from({ length: 15 }).map((_, i) => (
+                    <div 
+                        key={`dot-${i}`}
+                        style={{
+                            position: 'absolute',
+                            width: '4px',
+                            height: '4px',
+                            borderRadius: '50%',
+                            background: 'white',
+                            opacity: 0.2,
+                            top: `${Math.random() * 100}%`,
+                            left: `${Math.random() * 100}%`,
+                            animation: `float-complex ${15 + Math.random() * 10}s infinite alternate`
+                        }}
+                    />
+                ))}
             </div>
         );
     }

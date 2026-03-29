@@ -90,42 +90,106 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 
 ---
 
-## 25/02/2026 - Devlog #13
-
-- **Correção de Autenticação:** Resolução de erro onde o site não detetava corretamente o utilizador logado após recarregar a página.
-- **Gestão de Sessões:** Criação de um sistema de persistência de sessão para cada utilizador na base de dados, permitindo rastrear a atividade em tempo real.
-
-[Imagens](https://www.notion.so/Imagens-3120e6a69da180baaf3bef9c38ae9b05?pvs=21)
+## 25/02/2026 - Devlog #13: Persistência e Estabilidade de Sessão
+*   **Depuração de Estado Assíncrono:** Resolução de um problema crítico onde o estado de autenticação era "perdido" momentaneamente durante o refresh da página. A solução envolveu a implementação de um listener robusto (`onAuthStateChange`) que sincroniza o `localStorage` com a sessão do Supabase de forma imediata.
+*   **Gestão de Sessões em Larga Escala:** Criação de um sistema de persistência na base de dados para rastrear sessões ativas. Isto permite não só a segurança da conta, mas também a recolha de métricas de atividade que influenciarão o balanceamento de recompensas futuras.
+*   **Refatoração do AuthContext:** Otimização do provider de autenticação para garantir que componentes protegidos só sejam renderizados após a confirmação do estado do utilizador, eliminando o "flash" de conteúdo para convidados.
 
 ---
 
-## 27/02/2026 - Devlog #14
-
-- **Status Dinâmico:** Adição e integração do status de Jogador (Offline, Online no site, Online no jogo).
-- **Progressão:** Criação de uma tabela de níveis com valores predefinidos, estabelecendo a base para o sistema de experiência (XP).
-- **Refresco Visual:** Mudança estratégica do padrão de cores do Website para garantir uma estética mais "premium" e coesa com o Jogo.
-
-[Imagens](https://www.notion.so/Imagens-3140e6a69da180438b8bea74c6e31865?pvs=21)
+## 27/02/2026 - Devlog #14: Ecossistema de Status e Progressão
+*   **Status de Atividade Multidimensional:** Integração de uma lógica de "Presença" (Presence). O sistema agora distingue entre estar apenas a navegar no site (Online), estar ativamente a jogar no Unity (In-Game) ou ambos. Isto foi feito através de triggers na base de dados que atualizam o campo `status` baseado em batimentos cardíacos (heartbeats) de API.
+*   **Arquitetura de Níveis (RPG Core):** Criação da tabela `levels` com curvas de experiência progressivas. A essência deste sistema é preparar o terreno para que cada ação no jogo (Unity) tenha um reflexo visual imediato no prestígio do jogador no Website.
+*   **Renovação Estética "Dark Premium":** Mudança do esquema de cores para tons de cinza carvão e azul profundo com acentos néon (CSS Variables). O objetivo foi afastar o site de uma aparência "genérica" e aproximá-lo da atmosfera imersiva e misteriosa do jogo.
 
 ---
 
-## 03/03/2026 - Devlog #15
-
-- **React Three Fiber:** Instalação e configuração da biblioteca para renderização 3D no browser através do terminal.
-- **Animações 3D:** Criação de uma animação temática com peças de puzzle 3D interativas na tela de download, elevando a qualidade visual do portal.
-- **Refinamento de Status:** Correção e expansão dos estados de atividade (Offline, Online no site, Online no jogo, Online em ambos).
-
-[Imagens](https://www.notion.so/Imagens-3180e6a69da180e49cfddd546223296b?pvs=21)
+## 03/03/2026 - Devlog #15: Imersão 3D no Navegador
+*   **Integração do React Three Fiber (R3F):** Instalação e configuração de uma pipeline de renderização WebGL. Foi necessário configurar o terminal e as dependências do Vite para suportar sombras e shaders complexos em tempo real.
+*   **Animação "Assemble" de Puzzles:** Criação de uma cena 3D interativa para a página de download. As peças de puzzle flutuam e "montam-se" dinamicamente usando física lerp (Linear Interpolation). Isto serve como uma demonstração tecnológica do que o jogador encontrará no motor principal.
+*   **Refinamento de UX nos Status:** Expansão visual das badges de status no perfil, agora com cores dinâmicas e ícones que indicam exatamente onde o utilizador está ativo no ecossistema "Puzzle of Blessings".
 
 ---
 
-## 04/03/2026 - Devlog #16
+## 06/03/2026 - Devlog #16: Reformulação Total de Registro
+*   **Onboarding Multi-etapas:** O ecrã de registo foi transformado num fluxo guiado que recolhe dados essenciais tanto para a conta web como para a conta in-game. Isto simplifica a vida do utilizador, evitando que tenha de se registar duas vezes em plataformas diferentes.
+*   **Sincronização de Campos Críticos:** Implementação de validações em tempo real para nomes de utilizador, garantindo unicidade entre a base de dados do site e a do jogo no momento da escrita.
+*   **Estética Low-Poly Unificada:** Aplicação de `clip-path` avançado no CSS para criar formulários com cantos poligonais, refletindo a linguagem visual "Low-Poly" presente em todo o projeto.
 
-- **Redesign de Autenticação:** Overhaul total dos modais de Sign In e Registro (Configurar Perfil).
-- **Tradução para Inglês:** Todo o portal de autenticação foi traduzido para Inglês para consistência global.
-- **Estética Low-Poly Premium:** Implementação de um design moderno com cantos angulados (octogonais) e efeitos de brilho/glassmorphism em ambos os modais.
-- **Otimização UX/UI:** Redimensionamento estratégico para garantir compatibilidade com 100% de zoom, eliminando scrolls desnecessários.
-- **Fluxo de Registro Integrado:** O ecrã de Sign In agora inclui o esquema multi-etapas de "Configuração de Perfil" diretamente no fluxo de registro por email, unificando a experiência.
-- **Unificação Visual:** Sincronização de cores e estilos entre o Login e o Completo Registro de Conta.
+---
 
+## 11/03/2026 - Devlog #17: Design das 8 Bençãos Iniciais
+*   **Conceitualização Visual:** Início da criação artística das 8 "Blessings" fundamentais do jogo. Cada carta foi desenhada para representar um arquétipo de poder (Ex: Força, Agilidade, Sabedoria). 
+*   **Atribuição de Atributos:** Definição da "essência" mecânica de cada bênção, estabelecendo como elas irão influenciar o gameplay (ex: buffs de salto, velocidade ou resistência).
 
+---
+
+## 12/03/2026 - Devlog #18: Arte Final e Importação de Assets
+*   **Finalização de Cartas:** Conclusão do design high-fidelity das 8 bençãos. Foram criadas versões com transparência e efeitos de brilho para uso no site.
+*   **Pipeline de Media:** Importação e organização dos ficheiros no diretório `/public/assets`. Foi estabelecida uma nomenclatura rigorosa para facilitar a chamada dinâmica de imagens via código através de IDs de base de dados.
+
+---
+
+## 13/03/2026 - Devlog #19: Inventário de Perfil e Estrutura DB
+*   **Visualização de Coleção:** Implementação das bençãos no perfil do utilizador. As cartas aparecem a cores se desbloqueadas e em "grayscale" (escala de cinza) se bloqueadas, criando um incentivo visual à exploração.
+*   **Normalização de Base de Dados:** Criação das tabelas fundamentais:
+    *   `rarity`: Define o nível de raridade (Comum, Raro, Épico, Lendário) e o estilo visual da carta.
+    *   `category`: Agrupa bençãos por tipo (Físicas, Mágicas, Utilitárias).
+    *   `save`: A tabela mais importante para a persistência Jogo-Web, guardando a posição exata e o estado do save do jogador.
+*   **Mapeamento de Chaves Estrangeiras:** Estabelecimento de conexões SQL entre `users`, `blessings` e `inventory` para garantir integridade de dados.
+
+---
+
+## 17/03/2026 - Devlog #20: Fundação da Wiki
+*   **Arquitetura de Conhecimento:** Início da criação da "Wiki of Blessings". A estrutura foi montada para ser um repositório técnico onde o jogador pode consultar cada detalhe das mecânicas.
+*   **Grid de Configuração:** Criação de um layout dinâmico que se adapta ao número de bençãos disponíveis, usando CSS Grid para manter a ordem mesmo em ecrãs pequenos.
+
+---
+
+## 18/03/2026 - Devlog #21: Melhoria de Navegação na Wiki
+*   **Interface por Categorias:** Implementação de seletores visuais para filtros. As categorias foram colocadas em destaque (quadrados interativos) abaixo da barra de pesquisa, facilitando a navegação intuitiva.
+*   **UX de Pesquisa:** Otimização da barra de busca para filtrar bençãos em tempo real conforme o utilizador escreve, sem necessidade de recarregar a página.
+
+---
+
+## 19/03/2026 - Devlog #22: Conteúdo Detalhado e Lore
+*   **Modelo "Sequential Jump":** Implementação do primeiro guia detalhado (antigo Double Jump). Foram adicionados campos para raridade, categoria e custo de mana/energia.
+*   **Preenchimento de Catálogo:** Todas as bençãos desenhadas anteriormente foram oficialmente adicionadas à Wiki, cada uma com o seu lore específico e impacto estatístico no jogo.
+
+---
+
+## 21/03/2026 - Devlog #23: Internacionalização e Refatoração Global
+*   **Transição para Inglês (The Big Pivot):** Decisão estratégica de mudar toda a base de dados e termos técnicos de Português para Inglês. Isto garante compatibilidade com APIs internacionais e prepara o jogo para um lançamento global.
+    *   Tabelas renomeadas (`jogador` -> `users`, `bencao` -> `blessings`, etc.).
+    *   Campos traduzidos para nomes padrão da indústria (`jo_nome` -> `username`).
+*   **Auth UX Overhaul:** 
+    *   Separação total das páginas de Login e Registo.
+    *   Implementação de um botão de "Sign Up" destacado na Navbar para aumentar a taxa de conversão de novos usuários.
+    *   Criação de um fluxo de redirecionamento inteligente: Se um utilizador Google não tiver conta, ele é enviado para o registo com o email já pré-preenchido.
+*   **Compactação de Design:** Redução de fontes e otimização de formulários para um aspeto mais "clean", enquanto a Barra de Navegação foi expandida para acomodar novos itens.
+
+---
+
+## 22/03/2026 - Devlog #24: Polimento de Layout e Bug Fixing
+*   **Navbar Cross-Device:** Padronização absoluta da barra superior. Foi eliminada a inconsistência entre dispositivos, garantindo que o logo e os menus mantêm a mesma proporção em qualquer resolução.
+*   **Integridade de Dados Post-Migration:** Correção intensiva de caminhos e chaves após a mudança para inglês. Foram revistos todos os scripts de conexão com o Supabase para refletir os novos nomes de tabelas e colunas.
+
+---
+
+## 24/03/2026 - Devlog #25: Revamp do "The Center" e Real-Time Gold
+*   **Identidade Contextual:** Mudança do nome "Double Jump" para **"Sequential Jump"** para melhor se adequar ao lore do jogo.
+*   **Dashboard "The Center" 2.0:** Reformulação completa da área central. 
+    *   Adição de sistema de moedas (Gold) e Hints (Dicas) partilhadas com o jogo.
+    *   Criação de um catálogo visual de colecionáveis.
+    *   Implementação de um placeholder para o futuro modelo 3D do jogador.
+*   **Guest Experience:** Criação de uma versão motivacional para utilizadores não logados, explicando o valor do "The Center" como centro de comando do seu progresso.
+*   **Sincronização Viva:** O nível do jogador agora é atualizado em tempo real no dashboard sempre que ele sobe de nível dentro do jogo Unity.
+
+---
+
+## 29/03/2026 - Devlog #26: Compatibilidade e Acessibilidade de Animações
+*   **Otimização para Navegadores "Hardened" (LibreWolf):** Implementação de uma política de fallback robusta para a animação 3D da página de download. Identificou-se que navegadores com WebGL desativado por segurança ficavam com um ecrã vazio.
+*   **Upgrade do Visual de Fallback:** 
+    *   **SVG Dynamic Pieces:** Em vez de divs genéricas, o sistema agora utiliza peças de puzzle em formato SVG que mimetizam perfeitamente as peças 3D.
+    *   **Animações CSS Modernas:** Implementação de animações `float-complex` que garantem que a experiência visual seja mantida mesmo sem aceleração de hardware 3D.
+*   **Robustez de Detecção:** O check de WebGL foi movido para a inicialização do estado, evitando tentativas de renderização que causavam erros de consola graves nos browsers. A "essência" desta atualização é garantir que elementos que influenciarão a história no futuro sejam acessíveis a 100% dos utilizadores, sem exceção.
