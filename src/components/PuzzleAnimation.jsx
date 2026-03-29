@@ -255,17 +255,17 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
 
     // Generate stable piece data (now with scattered target positions)
     const fallbackPieces = useMemo(() => {
-        return Array.from({ length: 18 }).map((_, i) => ({
+        return Array.from({ length: 22 }).map((_, i) => ({
             id: i,
-            // Original spread for "assemble" (near center with some noise)
-            assembleX: (Math.random() - 0.5) * 15, 
-            assembleY: (Math.random() - 0.5) * 15,
-            // Scatter targets (pushed to corners/boundaries)
-            scatterX: (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 20),
-            scatterY: (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 20),
-            size: 80 + Math.random() * 80,
+            // Increased spread for "assemble" to avoid clustering
+            assembleX: (Math.random() - 0.5) * 35, 
+            assembleY: (Math.random() - 0.5) * 35,
+            // Scatter targets (pushed further out)
+            scatterX: (Math.random() > 0.5 ? 1 : -1) * (45 + Math.random() * 25),
+            scatterY: (Math.random() > 0.5 ? 1 : -1) * (45 + Math.random() * 25),
+            size: 70 + Math.random() * 90,
             duration: 8 + Math.random() * 10,
-            color: ['#81D89E', '#5BC0EB', '#AA9AD8', '#FFD700', '#F4D35E'][i % 5]
+            color: ['#81D89E', '#5BC0EB', '#AA9AD8', '#FFD700', '#F4D35E', '#E84855'][i % 6]
         }));
     }, []);
 
@@ -281,7 +281,7 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
                     top: 0,
                     left: 0,
                     zIndex: 1,
-                    pointerEvents: 'auto', // Allow clicking the background
+                    pointerEvents: 'auto', 
                     cursor: isScattered ? 'default' : 'pointer',
                     background: 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
                     display: 'flex',
@@ -292,8 +292,8 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
                 <style>
                     {`
                         @keyframes piece-pulse {
-                            0%, 100% { filter: drop-shadow(0 0 15px currentColor) brightness(1.2); }
-                            50% { filter: drop-shadow(0 0 35px currentColor) brightness(1.6); }
+                            0%, 100% { filter: drop-shadow(0 0 20px currentColor) brightness(1.2); }
+                            50% { filter: drop-shadow(0 0 50px currentColor) brightness(1.7); }
                         }
                         .fallback-piece-container {
                             position: absolute;

@@ -38,8 +38,8 @@ function Download() {
         <Suspense fallback={null}>
           <PuzzleAnimation type="assemble" />
         </Suspense>
-        <div className="hero-content" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="hero-text">
+        <div className="hero-content" style={{ position: 'relative', zIndex: 2, pointerEvents: 'none' }}>
+          <div className="hero-text" style={{ pointerEvents: 'auto' }}>
             <h1 className="hero-title">Puzzle of Blessings</h1>
             <p className="hero-subtitle">
               A 3D educational puzzle game that develops cognitive, executive, and sensory skills
@@ -52,7 +52,7 @@ function Download() {
               </a>
             </div>
           </div>
-          <div className="hero-image">
+          <div className="hero-image" style={{ pointerEvents: 'auto' }}>
             <div className="game-preview lowpoly-style" style={{ background: 'transparent', boxShadow: 'none', border: 'none' }}>
               {/* The 3D animation occupies the background of the hero, 
                    but we can keep this div for layout balance if needed or add a specific 3D view here */}

@@ -188,14 +188,14 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 ---
 
 ## 29/03/2026 - Devlog #26: Compatibilidade e Acessibilidade de Animações
-*   **Busca do Erro (Diagnóstico):** Identificou-se que em navegadores com restrições de WebGL (como o LibreWolf), a animação 3D não carregava, deixando a Hero Section com um aspeto vazio e desolado. Embora uma primeira versão de fallback tenha sido tentada, o diagnóstico revelou que as peças eram demasiado transparentes (15% opacidade) e instáveis. Além disso, o fallback era puramente passivo, não refletindo a natureza interativa do jogo.
+*   **Busca do Erro (Diagnóstico):** Identificou-se que em navegadores com restrições de WebGL (como o LibreWolf), a animação 3D não carregava, deixando a Hero Section com um aspeto vazio e desolado. Diagnósticos posteriores revelaram dois problemas críticos: 1) A camada de texto (`hero-content`) estava com `z-index: 2` e sem restrições de eventos, bloqueando qualquer clique de chegar à animação. 2) No estado inicial, as peças estavam demasiado aglomeradas no centro, parecendo um bloco único em vez de peças individuais.
 *   **Planeamento Estratégico:** 
     *   **Estabilidade:** Utilização de `useMemo` para fixar as posições e propriedades das peças de puzzle SVG.
-    *   **Visibilidade Máxima:** Aumento da opacidade para 90% e implementação de um sistema de brilho dinâmico (`piece-pulse`) com cores vibrantes para corresponder à identidade visual premium e ao brilho intenso solicitado.
+    *   **Visibilidade Máxima:** Aumento da opacidade para 90% e implementação de um sistema de brilho dinâmico (`piece-pulse`) com cores vibrantes e brilho de 50px.
     *   **Mecânica de Interatividade (Scatter on Click):** Introdução de um estado de "Dispersão". Ao clicar no fundo, as peças devem "fugir" para as extremidades e, após 3 segundos, retornar suavemente ao centro (lógica de atração magnética).
-    *   **Acessibilidade de Rota:** Redirecionamento automático da rota `/download` para evitar erros 404.
+    *   **Desbloqueio de Camadas:** Implementação de `pointer-events: none` na UI do herói para permitir que cliques no "espaço vazio" atravessem para a animação.
 *   **Execução Técnica:** 
-    *   **Interatividade com `useState` e `useEffect`:** Implementação de um toggle de estado que alterna as coordenadas das peças entre `assembleX/Y` (centro) e `scatterX/Y` (periferia).
-    *   **Transições CSS Fluídas:** Uso de `cubic-bezier(0.34, 1.56, 0.64, 1)` para dar um efeito de "mola" (bounce) quando as peças se afastam e retornam.
-    *   **SVG Glow Hub:** Fortalecimento dos filtros de `drop-shadow` e brilho para garantir que o fallback 2D tenha o mesmo impacto visual que a versão 3D, com cores e intensidades alinhadas com a visão artística do projeto.
-*   **Essência:** Transformar o que era apenas um "remendo" de compatibilidade numa funcionalidade interativa completa que mantém o jogador envolvido com as "Bênçãos" (peças) mesmo em máquinas sem suporte gráfico avançado.
+    *   **Interatividade com `useState` e `useEffect`:** Implementação de um toggle de estado que alterna as coordenadas das peças entre `assembleX/Y` (centro alargado para 35 unidades) e `scatterX/Y` (periferia).
+    *   **Correção de Fluxo de Eventos:** Edição do `Download.jsx` para garantir que o texto e botões permanecem interativos (`pointer-events: auto`) enquanto a sua div pai permite a passagem de eventos.
+    *   **SVG Glow Hub:** Fortalecimento dos filtros de `drop-shadow` para 50px de raio de brilho.
+*   **Essência:** Transformar o que era apenas um "remendo" de compatibilidade numa funcionalidade interativa completa e visualmente impactante que mantém o jogador envolvido com as "Bênçãos" (peças) mesmo sem WebGL.
