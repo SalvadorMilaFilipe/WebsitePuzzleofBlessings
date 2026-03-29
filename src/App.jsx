@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Centro from './pages/Centro'
 import Wiki from './pages/Wiki'
@@ -27,6 +27,7 @@ function App() {
           <Suspense fallback={<div className="container" style={{ padding: '100px', textAlign: 'center' }}>Loading area...</div>}>
             <Routes>
               <Route path="/" element={<Download />} />
+              <Route path="/download" element={<Navigate to="/" replace />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/centro" element={<Centro />} />

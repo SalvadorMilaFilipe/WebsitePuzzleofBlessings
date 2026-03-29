@@ -33,7 +33,7 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 ---
 
 ## 23/11/2025 - Devlog #4: Responsividade e Mecânicas de Retenção
-*   **Mobile First & Media Queries:** Ajuste profundo do CSS para garantir que o site é perfeitamente utilizável em smartphones, com menus colapsáveis e imagens adaptativas.
+*   **Mobile First & Media Queries:** Ajuste profundo do CSS para garantir que o site é perfeitamente utilizável em smartphones, con menus colapsáveis e imagens adaptativas.
 *   **Gamificação (Login Rewards):** Implementação de uma lógica visual de recompensas diárias. O sistema foi programado para distinguir dias da semana (coletados vs. não coletados) e apresentar informações dinâmicas sobre os itens que o jogador pode ganhar, incentivando o regresso diário ao portal.
 
 ---
@@ -107,7 +107,7 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 ## 03/03/2026 - Devlog #15: Imersão 3D no Navegador
 *   **Integração do React Three Fiber (R3F):** Instalação e configuração de uma pipeline de renderização WebGL. Foi necessário configurar o terminal e as dependências do Vite para suportar sombras e shaders complexos em tempo real.
 *   **Animação "Assemble" de Puzzles:** Criação de uma cena 3D interativa para a página de download. As peças de puzzle flutuam e "montam-se" dinamicamente usando física lerp (Linear Interpolation). Isto serve como uma demonstração tecnológica do que o jogador encontrará no motor principal.
-*   **Refinamento de UX nos Status:** Expansão visual das badges de status no perfil, agora com cores dinâmicas e ícones que indicam exatamente onde o utilizador está ativo no ecossistema "Puzzle of Blessings".
+*   **Refinement de UX nos Status:** Expansão visual das badges de status no perfil, agora com cores dinâmicas e ícones que indicam exatamente onde o utilizador está ativo no ecossistema "Puzzle of Blessings".
 
 ---
 
@@ -188,8 +188,14 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 ---
 
 ## 29/03/2026 - Devlog #26: Compatibilidade e Acessibilidade de Animações
-*   **Otimização para Navegadores "Hardened" (LibreWolf):** Implementação de uma política de fallback robusta para a animação 3D da página de download. Identificou-se que navegadores com WebGL desativado por segurança ficavam com um ecrã vazio.
-*   **Upgrade do Visual de Fallback:** 
-    *   **SVG Dynamic Pieces:** Em vez de divs genéricas, o sistema agora utiliza peças de puzzle em formato SVG que mimetizam perfeitamente as peças 3D.
-    *   **Animações CSS Modernas:** Implementação de animações `float-complex` que garantem que a experiência visual seja mantida mesmo sem aceleração de hardware 3D.
-*   **Robustez de Detecção:** O check de WebGL foi movido para a inicialização do estado, evitando tentativas de renderização que causavam erros de consola graves nos browsers. A "essência" desta atualização é garantir que elementos que influenciarão a história no futuro sejam acessíveis a 100% dos utilizadores, sem exceção.
+*   **Busca do Erro (Diagnóstico):** Identificou-se que em navegadores com restrições de WebGL (como o LibreWolf), a animação 3D não carregava, deixando a Hero Section com um aspeto vazio e desolado. Embora uma primeira versão de fallback tenha sido tentada, o diagnóstico revelou que as peças eram demasiado transparentes (15% opacidade) e instáveis (saltavam de posição a cada render do React devido ao uso de `Math.random` direto). O log de consola confirmou que o problema estava na renderização, não na deteção.
+*   **Planeamento Estratégico:** 
+    *   **Estabilidade:** Utilização de `useMemo` para fixar as posições e propriedades das peças de puzzle SVG, garantindo uma animação fluida e sem saltos.
+    *   **Visibilidade e Estética:** Aumento drástico da opacidade e adição de filtros de brilho (`drop-shadow` neon) para tornar o fallback visualmente vibrante e "carregado".
+    *   **Lógica de Narrativa:** Implementação do efeito de "convergência" para o centro (`piece-assemble`), simulando a física de montagem do puzzle 3D original que é essencial para o avanço da histórica.
+    *   **Acessibilidade de Rota:** Planeamento da criação de um redirecionamento automático para a rota `/download` (atualmente inexistente no router) para evitar páginas em branco.
+*   **Execução Técnica:** 
+    *   **SVG Fallback Pro:** Substituição de divs genéricas por componentes SVG de peças de puzzle detalhadas com suporte a hover.
+    *   **CSS Keyframes Avançados:** Criação das animações `piece-assemble` e `piece-glow` que operam fora da pipeline de WebGL.
+    *   **Redirecionamento de Router:** Adição de `<Route path="/download" element={<Navigate to="/" replace />} />` no `App.jsx` para lidar com acessos diretos via URL.
+*   **Essência:** Garantir que 100% dos utilizadores, independentemente do browser ou configurações de segurança, tenham acesso aos elementos visuais que ditam o ritmo da narrativa do jogo.

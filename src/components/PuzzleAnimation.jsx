@@ -243,7 +243,20 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
         }
     }, [isWebGLSupported]);
 
-    // Fallback UI if WebGL is disabled - Richer experience to match "essential" requirement
+    // Generate stable piece data only once or when type changes
+    const fallbackPieces = React.useMemo(() => {
+        return Array.from({ length: 16 }).map((_, i) => ({
+            id: i,
+            startX: (Math.random() - 0.5) * 120, // wider spread
+            startY: (Math.random() - 0.5) * 120,
+            size: 60 + Math.random() * 60,
+            duration: 15 + Math.random() * 15,
+            delay: Math.random() * -20,
+            color: ['#81D89E', '#5BC0EB', '#AA9AD8', '#FFD700'][i % 4]
+        }));
+    }, []);
+
+    // Fallback UI if WebGL is disabled
     if (!isWebGLSupported) {
         return (
             <div style={{
@@ -254,7 +267,8 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
                 left: 0,
                 zIndex: 1,
                 pointerEvents: 'none',
-                background: 'radial-gradient(circle at 30% 30%, rgba(30, 40, 60, 0.4) 0%, rgba(10, 10, 20, 1) 100%)',
+                // Subtle gradient to not hide the site's rich background
+                background: 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -262,72 +276,66 @@ const PuzzleAnimation = ({ type = 'assemble' }) => {
             }}>
                 <style>
                     {`
-                        @keyframes float-complex {
-                            0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.3; }
-                            33% { transform: translate(4vw, -6vh) rotate(120deg) scale(1.1); opacity: 0.5; }
-                            66% { transform: translate(-3vw, 3vh) rotate(240deg) scale(0.9); opacity: 0.4; }
-                            100% { transform: translate(0, 0) rotate(360deg) scale(1); opacity: 0.3; }
+                        @keyframes piece-assemble {
+                            0% { transform: translate(var(--sx), var(--sy)) rotate(0deg) scale(0.5); opacity: 0; }
+                            15% { opacity: 0.8; }
+                            50% { transform: translate(calc(var(--sx) * 0.4), calc(var(--sy) * 0.4)) rotate(180deg) scale(1.1); opacity: 0.9; }
+                            100% { transform: translate(calc(var(--sx) * 0.08), calc(var(--sy) * 0.08)) rotate(360deg) scale(1); opacity: 0.7; }
                         }
-                        .fallback-piece {
+                        @keyframes piece-glow {
+                            0%, 100% { filter: drop-shadow(0 0 10px currentColor) brightness(1); }
+                            50% { filter: drop-shadow(0 0 25px currentColor) brightness(1.3); }
+                        }
+                        .fallback-piece-container {
                             position: absolute;
-                            filter: drop-shadow(0 0 15px rgba(139, 181, 214, 0.2));
-                            opacity: 0.3;
-                            transition: opacity 0.5s ease;
+                            opacity: 0;
+                            pointer-events: auto; /* Allow hover if needed */
+                            transition: filter 0.3s ease;
                         }
-                        /* Puzzle piece shape in SVG for fallback */
+                        .fallback-piece-container:hover {
+                            filter: brightness(1.5) drop-shadow(0 0 30px white) !important;
+                            z-index: 10;
+                        }
                     `}
                 </style>
 
-                {/* Array of SVG puzzle pieces to mimic the 3D scene */}
-                {Array.from({ length: 12 }).map((_, i) => (
+                {fallbackPieces.map((p) => (
                     <div 
-                        key={i}
-                        className="fallback-piece"
+                        key={p.id}
+                        className="fallback-piece-container"
                         style={{
-                            top: `${15 + (i * 7.5) % 70}%`,
-                            left: `${10 + (i * 13) % 80}%`,
-                            width: `${60 + (i % 3) * 20}px`,
-                            height: `${60 + (i % 3) * 20}px`,
-                            animation: `float-complex ${20 + (i % 5) * 10}s linear infinite`,
-                            animationDelay: `-${i * 3.5}s`,
-                            color: [
-                                'rgba(129, 216, 158, 0.5)', 
-                                'rgba(91, 192, 235, 0.5)', 
-                                'rgba(170, 154, 216, 0.5)',
-                                'rgba(255, 215, 0, 0.4)'
-                            ][i % 4]
+                            '--sx': `${p.startX}vw`,
+                            '--sy': `${p.startY}vh`,
+                            top: '50%',
+                            left: '50%',
+                            width: `${p.size}px`,
+                            height: `${p.size}px`,
+                            color: p.color,
+                            animation: `piece-assemble ${p.duration}s ease-in-out infinite alternate, piece-glow 4s ease-in-out infinite`,
+                            animationDelay: `${p.delay}s, ${p.delay}s`,
+                            transformOrigin: 'center center'
                         }}
                     >
-                        <svg viewBox="0 0 100 100" fill="currentColor">
+                        <svg viewBox="0 0 100 100" fill="currentColor" style={{ filter: 'drop-shadow(2px 5px 8px rgba(0,0,0,0.5))' }}>
                             <path d="M 20,20 L 80,20 L 80,42.5 A 7.5,7.5 0 1 1 80,57.5 L 80,80 L 57.5,80 A 7.5,7.5 0 1 0 42.5,80 L 20,80 L 20,20 Z" />
                         </svg>
                     </div>
                 ))}
                 
-                {/* Aesthetic flare glow */}
-                <div style={{
-                    position: 'absolute',
-                    width: '100vw',
-                    height: '100vh',
-                    background: 'radial-gradient(circle at center, rgba(139, 181, 214, 0.15) 0%, transparent 70%)',
-                    filter: 'blur(80px)',
-                    zIndex: -1
-                }}></div>
-
-                {/* Floating particles/dots for extra depth */}
-                {Array.from({ length: 15 }).map((_, i) => (
+                {/* Visual depth particles */}
+                {Array.from({ length: 30 }).map((_, i) => (
                     <div 
                         key={`dot-${i}`}
                         style={{
                             position: 'absolute',
-                            width: '4px',
-                            height: '4px',
+                            width: `${2 + (i % 3)}px`,
+                            height: `${2 + (i % 3)}px`,
                             borderRadius: '50%',
                             background: 'white',
-                            opacity: 0.2,
-                            top: `${Math.random() * 100}%`,
-                            left: `${Math.random() * 100}%`,
-                            animation: `float-complex ${15 + Math.random() * 10}s infinite alternate`
+                            opacity: 0.1 + (i % 5) * 0.05,
+                            top: `${(i * 17) % 100}%`,
+                            left: `${(i * 23) % 100}%`,
+                            animation: `piece-glow ${3 + (i % 4)}s infinite alternate`
                         }}
                     />
                 ))}
