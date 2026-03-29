@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { formatBlessingImage } from '../utils/formatUtils'
 import '../../css/profile.css'
 
 function Profile() {
@@ -198,7 +199,7 @@ function Profile() {
                                             >
                                                 <div className="blessing-img-container">
                                                     <img
-                                                        src={`/blessingscardmodels/${b.bl_image}`}
+                                                        src={`/blessingscardmodels/${formatBlessingImage(b.bl_image)}`}
                                                         alt={b.bl_name}
                                                         className="blessing-card-img"
                                                     />

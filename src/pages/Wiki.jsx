@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { getBlessingUrl } from '../utils/formatUtils'
 
 function Wiki() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -55,16 +56,6 @@ function Wiki() {
       return attrRows[0].attribute?.attr_name || ''
     }
     return 'No attribute defined'
-  }
-
-  const formatImageName = (name) => {
-    if (!name || name === 'null' || name === 'undefined') return 'none';
-    let formatted = String(name).replace(/_/g, ' ').trim();
-    // Correct specific capitalizations
-    if (formatted.toLowerCase().includes('object levitation')) {
-      formatted = 'Object Levitation.png';
-    }
-    return `url("${encodeURI(`/blessingscardmodels/${formatted}`)}")`;
   }
 
   const visibleBlessings = useMemo(() => {
@@ -148,7 +139,7 @@ function Wiki() {
                   <div
                     className="wiki-element-avatar"
                     style={{ 
-                      backgroundImage: formatImageName(b.bl_image),
+                      backgroundImage: getBlessingUrl(b.bl_image),
                       minWidth: '80px',
                       height: '80px',
                       borderRadius: '50%',
@@ -207,7 +198,7 @@ function Wiki() {
               <div 
                 className="wiki-modal-avatar"
                 style={{ 
-                  backgroundImage: formatImageName(selectedBlessing.bl_image),
+                  backgroundImage: getBlessingUrl(selectedBlessing.bl_image),
                   backgroundSize: 'cover', 
                   backgroundPosition: 'center' 
                 }}
