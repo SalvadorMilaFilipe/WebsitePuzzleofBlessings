@@ -302,7 +302,7 @@
 }
 
 .guest-hero {
-    margin-top: clamp(12rem, 25vh, 16rem); /* Positioned lower relative to top edge */
+    margin-top: clamp(8rem, 20vh, 11rem); /* Reduced to fit on laptop screens */
     animation: fadeInScale 1s cubic-bezier(0.2, 0.8, 0.2, 1);
     text-align: center;
     max-width: clamp(600px, 80vw, 850px);
@@ -324,7 +324,7 @@
 .hero-tagline {
     font-size: clamp(0.8rem, 1.8vh, 1rem); /* Smaller tagline */
     color: #baaae8;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.8rem;
     letter-spacing: 0.1rem;
 }
 
@@ -333,7 +333,7 @@
     border: 1px solid rgba(186, 170, 232, 0.1);
     padding: clamp(0.8rem, 2vh, 1.5rem); /* Tighter padding */
     border-radius: 20px;
-    margin-bottom: clamp(1rem, 3vh, 2rem); /* Reduced margin */
+    margin-bottom: clamp(1rem, 2vh, 1.5rem); /* Tighter margin */
     backdrop-filter: blur(5px);
 }
 
@@ -348,7 +348,8 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: clamp(1rem, 2vw, 2rem);
-    margin-bottom: clamp(1.5rem, 4vh, 2.5rem); /* Reduced margin */
+    margin-top: clamp(1rem, 3vh, 2rem); /* Add margin since it's now below CTA */
+    margin-bottom: clamp(1rem, 2vh, 1.5rem);
 }
 
 .feature-card {
@@ -386,8 +387,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.6rem; /* Even tighter gap */
-    margin-top: -1.5rem; /* Pulled higher */
+    gap: 0.4rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
 }
 
 .cta-text {

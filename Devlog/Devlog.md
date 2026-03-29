@@ -189,13 +189,16 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 
 ## 29/03/2026 - Devlog #26: Compatibilidade e Acessibilidade de Animações
 *   **Busca do Erro (Diagnóstico):** Identificou-se que em navegadores com restrições de WebGL (como o LibreWolf), a animação 3D não carregava, deixando a Hero Section com um aspeto vazio e desolado. Diagnósticos posteriores revelaram dois problemas críticos: 1) A camada de texto (`hero-content`) estava com `z-index: 2` e sem restrições de eventos, bloqueando qualquer clique de chegar à animação. 2) No estado inicial, as peças estavam demasiado aglomeradas no centro, parecendo um bloco único em vez de peças individuais.
+*   **Otimização de Layout (Guest Dashboard):** Detetou-se que em dispositivos com menor resolução vertical (laptops), o botão de instalação no Dashboard "The Center" ficava parcialmente fora do ecrã.
 *   **Planeamento Estratégico:** 
-    *   **Estabilidade:** Utilização de `useMemo` para fixar as posições e propriedades das peças de puzzle SVG.
-    *   **Visibilidade Máxima:** Aumento da opacidade para 90% e implementação de um sistema de brilho dinâmico (`piece-pulse`) com cores vibrantes e brilho de 50px.
-    *   **Mecânica de Interatividade (Scatter on Click):** Introdução de um estado de "Dispersão". Ao clicar no fundo, as peças devem "fugir" para as extremidades e, após 3 segundos, retornar suavemente ao centro (lógica de atração magnética).
-    *   **Desbloqueio de Camadas:** Implementação de `pointer-events: none` na UI do herói para permitir que cliques no "espaço vazio" atravessem para a animação.
+    *   **Estabilidade de Animação:** Utilização de `useMemo` para fixar as posições e propriedades das peças de puzzle SVG.
+    *   **Visibilidade Máxima:** Aumento da opacidade para 90% e implementação de um sistema de brilho dinâmico (`piece-pulse`) com brilho de 50px.
+    *   **Mecânica de Interatividade (Scatter on Click):** Introdução de um estado de "Dispersão" onde as peças fogem ao clique.
+    *   **Hierarquia Visual (The Center):** Remover o texto roxo secundário (tagline) e mover a Call-to-Action (CTA) para logo abaixo da caixa de texto explicativa, garantindo que o botão de instalação esteja sempre visível sem necessidade de scroll.
 *   **Execução Técnica:** 
-    *   **Interatividade com `useState` e `useEffect`:** Implementação de um toggle de estado que alterna as coordenadas das peças entre `assembleX/Y` (centro alargado para 35 unidades) e `scatterX/Y` (periferia).
+    *   **Interatividade com `useState` e `useEffect`:** Implementação do toggle de dispersão no `PuzzleAnimation.jsx`.
+    *   **Correção de Fluxo de Eventos:** Edição do `Download.jsx` com `pointer-events: none`.
+    *   **Refatoração de Layout:** Modificação do `Centro.jsx` para reposicionar o bloco `guest-cta` e ajuste do `centro.css` para reduzir margens de topo de 25vh para 20vh (max 11rem).
     *   **Correção de Fluxo de Eventos:** Edição do `Download.jsx` para garantir que o texto e botões permanecem interativos (`pointer-events: auto`) enquanto a sua div pai permite a passagem de eventos.
     *   **SVG Glow Hub:** Fortalecimento dos filtros de `drop-shadow` para 50px de raio de brilho.
-*   **Essência:** Transformar o que era apenas um "remendo" de compatibilidade numa funcionalidade interativa completa e visualmente impactante que mantém o jogador envolvido com as "Bênçãos" (peças) mesmo sem WebGL.
+*   **Essência:** Maximizar a acessibilidade e a conversão de novos utilizadores em qualquer ecrã, mantendo a experiência visual rica e funcional.

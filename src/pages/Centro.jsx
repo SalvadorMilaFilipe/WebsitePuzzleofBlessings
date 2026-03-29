@@ -194,12 +194,19 @@ function Centro() {
       <main className="centro-main guest-view">
         <div className="centro-container guest-container">
           <section className="guest-hero">
-             <div className="hero-content">
+              <div className="hero-content">
                 <h3 className="hero-welcome">Welcome, Wanderer</h3>
-                <p className="hero-tagline">"The Center" is the heart of your adventure in <strong>Puzzle of Blessings</strong>.</p>
                 
                 <div className="center-explanation">
                   <p>In this digital sanctuary, you can track your divine journey across the realms. Every level completed, every piece of light gathered, and every blessing earned is recorded here.</p>
+                </div>
+
+                <div className="guest-cta">
+                  <p className="cta-text">Start your legend today.</p>
+                  <button className="install-btn" onClick={() => window.location.href = '/download'}>
+                    Install Puzzle of Blessings
+                  </button>
+                  <p className="cta-sub">Already playing? Please log in to view your dashboard.</p>
                 </div>
 
                 <div className="guest-features">
@@ -218,14 +225,6 @@ function Centro() {
                     <h3>Seek Wisdom</h3>
                     <p>When the path grows dark, find the light with our hint system.</p>
                   </div>
-                </div>
-
-                <div className="guest-cta">
-                  <p className="cta-text">Start your legend today.</p>
-                  <button className="install-btn" onClick={() => window.location.href = '/download'}>
-                    Install Puzzle of Blessings
-                  </button>
-                  <p className="cta-sub">Already playing? Please log in to view your dashboard.</p>
                 </div>
              </div>
           </section>
