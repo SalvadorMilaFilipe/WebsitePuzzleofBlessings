@@ -23,6 +23,7 @@ function Register() {
     const [country, setCountry] = useState('')
     
     const [error, setError] = useState('')
+    const [successMsg, setSuccessMsg] = useState('')
     const [loading, setLoading] = useState(false)
 
     // Redirect if already has profile
@@ -30,54 +31,18 @@ function Register() {
         return <Navigate to="/" replace />
     }
 
-    const handleNextStep = async (e) => {
-        e.preventDefault()
+    const handleNextStep = (e) => {
+        if (e) e.preventDefault()
         setError('')
-        setLoading(true)
-
-        try {
-            // Se já houver sessão ativa, saltamos logo para o próximo passo.
-            // Isto evita o erro 429 (rate limit) se o utilizador já tiver conta.
-            if (session) {
-                console.log('[Register] Session already active, skipping signup step.');
-                setStep(2);
-                setLoading(false);
-                return;
-            }
-
-            if (!email || !password) {
-                setError('Email and Password are required to create an account.')
-                setLoading(false)
-                return
-            }
-            
-            const cleanEmail = email.trim()
-            await signupWithEmail(cleanEmail, password)
-            // O signupWithEmail no AuthContext deve disparar a criação da sessão
-            // Após o signup, o componente re-renderiza com session, e mantemos o step em 1
-            // para que o utilizador preencha o resto dos campos.
-
-            if (!username.trim()) {
-                setError('Public Username is required')
-                setLoading(false)
-                return
-            }
-
-            setStep(2)
-        } catch (err) {
-            console.error('Registration Step 1 error:', err);
-            let msg = err.message || 'Failed to initialize account.';
-            if (msg.toLowerCase().includes('rate limit') || msg.toLowerCase().includes('429')) {
-                msg = 'Supabase Rate Limit! Go to Dashboard -> Settings -> Auth -> Rate Limits and increase "Hourly signups from same IP" to 1000.';
-            }
-            setError(msg);
-        } finally {
-            setLoading(false);
+        if (!email || !password || !username.trim()) {
+            setError('Account Email, Password and Public Username are required.')
+            return
         }
+        setStep(2)
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        if (e) e.preventDefault()
         setError('')
         setLoading(true)
 
@@ -88,12 +53,35 @@ function Register() {
         }
 
         try {
-            // Using 'password' (Account Password) as the Site Password to avoid confusion
-            await completeRegistration(username.trim(), gameUser.trim(), gamePassword.trim(), password, birthYear, country)
-            navigate('/')
+            if (session) {
+                // If user is already logged in (Google) but no profile, create it now
+                await completeRegistration(username.trim(), gameUser.trim(), gamePassword.trim(), password, birthYear, country)
+                navigate('/')
+                return
+            }
+
+            console.log('[Register] Final submission. Sending account confirmation email...')
+            
+            // Bundle everything into metadata for auto-creation after confirmation
+            const metadata = {
+                pl_username: username.trim(),
+                pl_password_site: password,
+                pl_username_game: gameUser.trim(),
+                pl_password_game: gamePassword.trim(),
+                pl_birth_year: birthYear,
+                pl_country: country
+            }
+
+            await signupWithEmail(email.trim(), password, metadata)
+            setSuccessMsg('Registration step 1 complete! PLEASE CHECK YOUR EMAIL (including Spam) to confirm. After confirming, your profile will be automatically activated.')
+            
         } catch (err) {
-            console.error(err)
-            setError(err.message || 'Error creating profile. Username might be taken.')
+            console.error('Final Registration error:', err);
+            let msg = err.message || 'Failed to complete registration.';
+            if (msg.toLowerCase().includes('rate limit') || msg.toLowerCase().includes('429')) {
+                msg = 'Supabase Rate Limit! Go to Dashboard -> Settings -> Auth -> Rate Limits and increase "Hourly signups from same IP" to 1000.';
+            }
+            setError(msg);
         } finally {
             setLoading(false)
         }
@@ -119,7 +107,6 @@ function Register() {
         <div className="register-page-container">
             <div className="register-card">
                 <div className="step-indicator">
-                    {/* 0. Account removido conforme solicitado */}
                     <span className={step === 1 ? 'active' : ''}>1. Profile</span>
                     <span className={step === 2 ? 'active' : ''}>2. Game</span>
                 </div>
@@ -132,7 +119,10 @@ function Register() {
                         : 'Welcome, Traveler! Let\'s create your account and profile.'}
                 </p>
 
-                {step === 1 ? (
+                {error && <div className="error-message" style={{ color: '#ff4444', marginBottom: '15px', textAlign: 'center', fontSize: '0.9em' }}>{error}</div>}
+                {successMsg && <div className="success-message" style={{ color: '#4CAF50', marginBottom: '15px', textAlign: 'center', padding: '10px', background: 'rgba(76, 175, 80, 0.1)', border: '1px solid #4CAF50', borderRadius: '5px' }}>{successMsg}</div>}
+
+                {step === 1 && !successMsg ? (
                     <form onSubmit={handleNextStep}>
                         {/* Se tiver sessão (Google), email é read-only. Se não, é editável para signup. */}
                         <div className="form-group">

@@ -173,8 +173,30 @@ export const AuthProvider = ({ children }) => {
                 setIsNewUser(false)
                 lastFetchedEmail.current = email
             } else {
-                console.log('[Auth] No profile found in player table. User is new.')
-                setIsNewUser(true)
+                console.log('[Auth] No profile found in player table. Checking for registration metadata...')
+                // AUTO-CREATE PROFILE FROM METADATA if it's a confirmed user logging in for the first time
+                const metadata = session?.user?.user_metadata
+                if (metadata && metadata.pl_username) {
+                    console.log('[Auth] Auto-creating profile from signup metadata...')
+                    try {
+                        const profileData = await completeRegistration(
+                            metadata.pl_username,
+                            metadata.pl_username_game,
+                            metadata.pl_password_game,
+                            metadata.pl_password_site,
+                            metadata.pl_birth_year,
+                            metadata.pl_country
+                        )
+                        console.log('[Auth] Profile auto-created from metadata!')
+                        setUserProfile(profileData)
+                        setIsNewUser(false)
+                    } catch (autoErr) {
+                        console.error('[Auth] Failed to auto-create profile:', autoErr)
+                        setIsNewUser(true)
+                    }
+                } else {
+                    setIsNewUser(true)
+                }
             }
         } catch (err) {
             console.error('[Auth] Fatal error loading profile:', err)
@@ -212,11 +234,13 @@ export const AuthProvider = ({ children }) => {
         return data
     }
 
-    const signupWithEmail = async (email, password) => {
-        // Just create the auth user. The profile creation happens in RegistrationModal
+    const signupWithEmail = async (email, password, metadata = {}) => {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
+            options: {
+                data: metadata 
+            }
         })
         if (error) throw error
         return data
