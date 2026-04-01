@@ -156,38 +156,24 @@ export const AuthProvider = ({ children }) => {
         console.log(`[Auth] Fetching profile for: ${email}`)
 
         try {
-            // First try with status join using explicitly named reference
+            console.log('[Auth] Database request started for:', email)
             const { data, error } = await supabase
-                .from('player') // Updated from jogador
-                .select('*, status:fk_player_status(*)') // Updated FK reference
-                .ilike('pl_email', email) // Updated from jo_email
+                .from('player')
+                .select('*')
+                .ilike('pl_email', email)
                 .maybeSingle()
 
             console.log('[Auth] Profile fetch result for email:', email, data ? 'Found' : 'Not found', error ? 'Error: ' + error.message : 'No error')
 
-            if (error) {
-                console.warn('[Auth] Join fetch failed, trying simple fetch:', error.message)
-                // Fallback to simple fetch if join fails (e.g. table schema transition)
-                const { data: simpleData, error: simpleError } = await supabase
-                    .from('player') // Updated from jogador
-                    .select('*')
-                    .ilike('pl_email', email) // Updated from jo_email
-                    .maybeSingle()
+            if (error) throw error
 
-                if (simpleError) throw simpleError
-
-                if (simpleData) {
-                    setUserProfile(simpleData)
-                    setIsNewUser(false)
-                } else {
-                    setIsNewUser(true)
-                }
-            } else if (data) {
+            if (data) {
+                console.log('[Auth] Profile found!')
                 setUserProfile(data)
                 setIsNewUser(false)
                 lastFetchedEmail.current = email
             } else {
-                console.log('[Auth] No profile found in player table.')
+                console.log('[Auth] No profile found in player table. User is new.')
                 setIsNewUser(true)
             }
         } catch (err) {
