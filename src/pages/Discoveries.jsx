@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { getBlessingUrl } from '../utils/formatUtils'
 
-function Wiki() {
+function Discoveries() {
   const [searchTerm, setSearchTerm] = useState('')
   const [activeFilter, setActiveFilter] = useState('blessings')
   const [blessings, setBlessings] = useState([])
@@ -72,9 +72,9 @@ function Wiki() {
   }, [blessings, searchTerm])
 
   return (
-    <main className="wiki-main">
+    <main className="discoveries-main">
       <div className="container">
-        <h1 className="section-title">Wiki</h1>
+        <h1 className="section-title">Discoveries</h1>
 
         {/* Search Bar */}
         <div className="search-section">
@@ -82,7 +82,7 @@ function Wiki() {
             <div className="search-box">
               <input
                 type="text"
-                id="wiki-search"
+                id="discoveries-search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search for Blessings, Rarities, or Categories..."
@@ -128,17 +128,17 @@ function Wiki() {
         ) : blessingsError ? (
           <div className="no-results"><p>{blessingsError}</p></div>
         ) : visibleBlessings.length > 0 ? (
-          <div className="wiki-elements-grid">
+          <div className="discoveries-elements-grid">
             {visibleBlessings.map(b => (
               <article 
                 key={b.bl_id}
-                className="wiki-element-card lowpoly-card"
+                className="discoveries-element-card lowpoly-card"
                 onClick={() => setSelectedBlessing(b)}
                 style={{ borderLeft: `5px solid ${getRarityColor(b.bl_rarity)}` }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
                   <div
-                    className="wiki-element-avatar"
+                    className="discoveries-element-avatar"
                     style={{ 
                       backgroundImage: getBlessingUrl(b.bl_image),
                       minWidth: '80px',
@@ -152,9 +152,9 @@ function Wiki() {
                     }}
                   ></div>
 
-                  <div className="wiki-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                  <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div className="wiki-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: getRarityColor(b.bl_rarity) }}>
+                      <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: getRarityColor(b.bl_rarity) }}>
                         {b.bl_name}
                       </div>
                       <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px', color: '#888' }}>
@@ -162,7 +162,7 @@ function Wiki() {
                       </span>
                     </div>
 
-                    <p className="wiki-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: getRarityColor(b.bl_rarity), fontWeight: 700 }}>
+                    <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: getRarityColor(b.bl_rarity), fontWeight: 700 }}>
                       {b.category?.cat_name || 'Blessing'}
                     </p>
 
@@ -170,9 +170,9 @@ function Wiki() {
                       {b.bl_description}
                     </p>
 
-                    <div className="wiki-blessing-attributes" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
+                    <div className="discoveries-blessing-attributes" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
                       {b.blessing_attribute?.map((attr, idx) => (
-                        <div key={idx} className="wiki-attr-tag" style={{ fontSize: '0.85rem', color: '#ddd', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: `3px solid ${getRarityColor(b.bl_rarity)}` }}>
+                        <div key={idx} className="discoveries-attr-tag" style={{ fontSize: '0.85rem', color: '#ddd', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: `3px solid ${getRarityColor(b.bl_rarity)}` }}>
                            {attr.attribute?.attr_name}
                         </div>
                       ))}
@@ -189,15 +189,15 @@ function Wiki() {
 
       {/* Modal Overlay for Selected Blessing */}
       {selectedBlessing && (
-        <div className="wiki-modal-overlay" onClick={() => setSelectedBlessing(null)}>
-          <div className="wiki-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="wiki-close-btn" onClick={() => setSelectedBlessing(null)}>
+        <div className="discoveries-modal-overlay" onClick={() => setSelectedBlessing(null)}>
+          <div className="discoveries-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="discoveries-close-btn" onClick={() => setSelectedBlessing(null)}>
               &times;
             </button>
             
-            <div className="wiki-modal-header">
+            <div className="discoveries-modal-header">
               <div 
-                className="wiki-modal-avatar"
+                className="discoveries-modal-avatar"
                 style={{ 
                   backgroundImage: getBlessingUrl(selectedBlessing.bl_image),
                   backgroundSize: 'cover', 
@@ -205,27 +205,27 @@ function Wiki() {
                 }}
               ></div>
               <div>
-                <h2 className="wiki-modal-title" style={{ color: getRarityColor(selectedBlessing.bl_rarity), textShadow: `0 0 15px ${getRarityColor(selectedBlessing.bl_rarity)}44` }}>
+                <h2 className="discoveries-modal-title" style={{ color: getRarityColor(selectedBlessing.bl_rarity), textShadow: `0 0 15px ${getRarityColor(selectedBlessing.bl_rarity)}44` }}>
                   {selectedBlessing.bl_name}
                 </h2>
-                <div className="wiki-read-attribute" style={{ marginTop: '0.75rem', marginBottom: 0 }}>
+                <div className="discoveries-read-attribute" style={{ marginTop: '0.75rem', marginBottom: 0 }}>
                   <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), fontWeight: 700 }}>Category:</span> {selectedBlessing.category?.cat_name || 'Unknown'} | <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), fontWeight: 700 }}>Rarity:</span> <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.bl_rarity || 'Unknown'}</span>
                 </div>
               </div>
             </div>
 
-            <div className="wiki-modal-body" style={{ marginTop: '1.5rem' }}>
-              <div className="wiki-blessing-attributes">
+            <div className="discoveries-modal-body" style={{ marginTop: '1.5rem' }}>
+              <div className="discoveries-blessing-attributes">
                 {selectedBlessing.blessing_attribute?.map((attr, idx) => (
                   <div key={idx} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', borderLeft: `4px solid ${getRarityColor(selectedBlessing.bl_rarity)}`, marginBottom: '1rem', fontStyle: 'italic', color: getRarityColor(selectedBlessing.bl_rarity) }}>
                     {attr.attribute?.attr_name}
                   </div>
                 ))}
               </div>
-              <div className="wiki-read-description" style={{marginTop: '1.25rem', marginBottom: '1.5rem', color: '#ccc', fontSize: '1rem', lineHeight: '1.7'}}>
+              <div className="discoveries-read-description" style={{marginTop: '1.25rem', marginBottom: '1.5rem', color: '#ccc', fontSize: '1rem', lineHeight: '1.7'}}>
                 {selectedBlessing.bl_description || '—'}
               </div>
-              <div className="wiki-read-date" style={{fontSize: '0.9rem', color: '#888'}}>
+              <div className="discoveries-read-date" style={{fontSize: '0.9rem', color: '#888'}}>
                 <span style={{color: '#81D89E', fontWeight: 800}}>Date Added:</span> {new Date().toISOString().split('T')[0]}
               </div>
             </div>
@@ -236,4 +236,4 @@ function Wiki() {
   )
 }
 
-export default Wiki
+export default Discoveries

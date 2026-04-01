@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Centro from './pages/Centro'
-import Wiki from './pages/Wiki'
+import Discoveries from './pages/Discoveries'
 import UpdateLog from './pages/UpdateLog'
 import Credits from './pages/Credits'
 import Profile from './pages/Profile'
@@ -31,7 +31,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/centro" element={<Centro />} />
-              <Route path="/wiki" element={<Wiki />} />
+              <Route path="/discoveries" element={<Discoveries />} />
               <Route path="/updatelog" element={<UpdateLog />} />
               <Route path="/credits" element={<Credits />} />
               <Route path="/profile" element={<Profile />} />

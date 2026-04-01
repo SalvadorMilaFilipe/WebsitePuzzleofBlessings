@@ -198,3 +198,11 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
     *   **Correção de Fluxo de Eventos:** Uso de `pointer-events: none` para permitir interatividade com o fundo em navegadores sem WebGL.
     *   **Aura Dinâmica:** No `Wiki.jsx`, o título, categoria, bordas do card e tags de atributos passam a ser tingidos dinamicamente pela cor da raridade, incluindo um `textShadow` dourado para itens Lendários. Os erros de atribuição de raridade (ex: Ephemeral Point) foram corrigidos na interface.
 *   **Essência:** Garantir que 100% dos utilizadores, em qualquer dispositivo, sintam o prestígio e a magia de cada "Bênção" através de um feedback visual preciso e impactante.
+
+---
+
+## 01/04/2026 - Devlog #27: Fundação Narrativa e Planeamento de Progressão
+*   **Fundação de Lore (Ilhas do Entre-Sonho):** Criação do documento `LORE.md` para contextualizar a jornada do protagonista entre fantasmas e coelhos. As "Blessings" deixam de ser apenas mecânicas para serem "Sinais de Confiança" de uma entidade antiga.
+*   **Planeamento Estratégico (Abril 2026):** Definida a meta de transição de **Wiki para Discoveries**. O sistema passará a ser reativo ao nível do jogador (`sa_lv_id`), bloqueando conteúdos que ainda não foram "lembrados" na história.
+*   **Métodos Técnicos:** Criação do `PLANNING.md` com a arquitetura de dados necessária para o Level-Lock (adição de `bl_lv_id` e filtros de query assíncronos no Supabase).
+*   **Essência:** Transformar o website num "Diário de Descobertas" vivo que evolui em sincronia com a jornada narrativa do jogador.

@@ -29,7 +29,7 @@ function Footer() {
                 <Link to="/download">Download & Updates</Link>
               </li>
               <li>
-                <Link to="/wiki">Wiki</Link>
+                <Link to="/discoveries">Discoveries</Link>
               </li>
               <li>
                 <Link to="/centro">The Center</Link>

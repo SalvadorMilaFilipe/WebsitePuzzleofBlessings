@@ -1,8 +1,8 @@
 /* ===========================================
-   WIKI PAGE STYLES
+   DISCOVERIES PAGE STYLES
    =========================================== */
 
-.wiki-main {
+.discoveries-main {
     /* Navbar is fixed; keep content visible */
     padding: 7.5rem 0 2rem;
     min-height: calc(100vh - 200px);
@@ -89,21 +89,21 @@
 /* ===========================================
    ELEMENTS GRID (2 per row like sketch)
    =========================================== */
-.wiki-elements-grid {
+.discoveries-elements-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
 
-.wiki-read-grid {
+.discoveries-read-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
 
-.wiki-read-card {
+.discoveries-read-card {
     position: relative;
     padding: 2.25rem 2rem 2rem;
     background: linear-gradient(135deg,
@@ -119,7 +119,7 @@
     overflow: hidden;
 }
 
-.wiki-read-avatar {
+.discoveries-read-avatar {
     position: absolute;
     top: 1.25rem;
     left: 1.25rem;
@@ -136,32 +136,32 @@
     overflow: hidden;
 }
 
-.wiki-read-avatar-img {
+.discoveries-read-avatar-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
 }
 
-.wiki-read-body {
+.discoveries-read-body {
     padding-left: 104px;
 }
 
-.wiki-read-title {
+.discoveries-read-title {
     font-size: 1.9rem;
     font-weight: 800;
     color: #a9d3ff;
     margin-bottom: 0.5rem;
 }
 
-.wiki-read-attribute {
+.discoveries-read-attribute {
     font-size: 1rem;
     font-weight: 700;
     color: #81D89E;
     margin-bottom: 0.75rem;
 }
 
-.wiki-read-description {
+.discoveries-read-description {
     font-size: 1rem;
     line-height: 1.7;
     color: var(--text-secondary);
@@ -169,18 +169,18 @@
     opacity: 0.95;
 }
 
-.wiki-read-date {
+.discoveries-read-date {
     font-size: 0.9rem;
     color: var(--text-muted);
 }
 
-.wiki-read-date span {
+.discoveries-read-date span {
     color: #81D89E;
     font-weight: 800;
     margin-right: 0.35rem;
 }
 
-.wiki-subsection-title {
+.discoveries-subsection-title {
     margin-top: 2rem;
     color: var(--text-secondary);
     font-size: 1.1rem;
@@ -190,14 +190,14 @@
     opacity: 0.9;
 }
 
-.wiki-section-divider {
+.discoveries-section-divider {
     margin: 2rem 0 0.75rem;
     height: 1px;
     width: 100%;
     background: linear-gradient(90deg, transparent, rgba(107, 203, 119, 0.25), rgba(91, 192, 235, 0.25), transparent);
 }
 
-.wiki-element-card {
+.discoveries-element-card {
     appearance: none;
     width: 100%;
     text-align: left;
@@ -218,7 +218,7 @@
     overflow: hidden;
 }
 
-.wiki-element-card-inner {
+.discoveries-element-card-inner {
     display: flex;
     gap: 1.25rem;
     padding: 2rem;
@@ -226,7 +226,7 @@
     min-height: 180px;
 }
 
-.wiki-element-avatar {
+.discoveries-element-avatar {
     width: 74px;
     height: 74px;
     border-radius: 999px;
@@ -243,24 +243,24 @@
     background-position: center;
 }
 
-.wiki-element-meta {
+.discoveries-element-meta {
     min-width: 0;
 }
 
-.wiki-element-title {
+.discoveries-element-title {
     color: var(--blue-accent);
     font-size: 1.7rem;
     font-weight: 700;
     margin-bottom: 0.35rem;
 }
 
-.wiki-element-subtitle {
+.discoveries-element-subtitle {
     color: var(--text-muted);
     font-size: 0.95rem;
     line-height: 1.6;
 }
 
-.wiki-element-card::before {
+.discoveries-element-card::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -274,11 +274,11 @@
     z-index: 0;
 }
 
-.wiki-element-card:hover::before {
+.discoveries-element-card:hover::before {
     opacity: 1;
 }
 
-.wiki-element-card:focus-visible {
+.discoveries-element-card:focus-visible {
     outline: none;
     border-color: var(--blue-accent);
     box-shadow:
@@ -286,7 +286,7 @@
         0 8px 25px rgba(0, 0, 0, 0.35);
 }
 
-.wiki-element-card:hover {
+.discoveries-element-card:hover {
     transform: translateY(-5px);
     box-shadow:
         0 8px 25px rgba(0, 0, 0, 0.35),
@@ -297,7 +297,7 @@
 /* ===========================================
    MODAL (blur overlay like LoginModal)
    =========================================== */
-.wiki-modal-overlay {
+.discoveries-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -313,7 +313,7 @@
     padding: 1.25rem;
 }
 
-.wiki-modal {
+.discoveries-modal {
     width: min(720px, 100%);
     max-height: 90vh;
     overflow: auto;
@@ -330,7 +330,7 @@
     animation: scaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.wiki-close-btn {
+.discoveries-close-btn {
     position: absolute;
     top: 12px;
     right: 14px;
@@ -342,18 +342,18 @@
     transition: color 0.2s;
 }
 
-.wiki-close-btn:hover {
+.discoveries-close-btn:hover {
     color: #fff;
 }
 
-.wiki-modal-header {
+.discoveries-modal-header {
     display: flex;
     align-items: center;
     gap: 1.25rem;
     margin-bottom: 1.25rem;
 }
 
-.wiki-modal-avatar {
+.discoveries-modal-avatar {
     width: 76px;
     height: 76px;
     border-radius: 999px;
@@ -367,30 +367,30 @@
     flex: 0 0 auto;
 }
 
-.wiki-modal-title {
+.discoveries-modal-title {
     margin: 0;
     font-size: 1.8rem;
     font-weight: 800;
     color: #fff;
 }
 
-.wiki-modal-subtitle {
+.discoveries-modal-subtitle {
     margin: 0.25rem 0 0;
     color: #888;
     font-size: 0.85rem;
 }
 
-.wiki-modal-form {
+.discoveries-modal-form {
     margin-top: 0.75rem;
 }
 
-.wiki-form-grid {
+.discoveries-form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
 }
 
-.wiki-form-group label {
+.discoveries-form-group label {
     display: block;
     font-size: 0.8rem;
     font-weight: 700;
@@ -398,8 +398,8 @@
     color: #ccc;
 }
 
-.wiki-form-group input,
-.wiki-form-group textarea {
+.discoveries-form-group input,
+.discoveries-form-group textarea {
     width: 100%;
     padding: 0.7rem 1rem;
     background: #2A2F2C;
@@ -416,25 +416,25 @@
     resize: vertical;
 }
 
-.wiki-form-group input:focus,
-.wiki-form-group textarea:focus {
+.discoveries-form-group input:focus,
+.discoveries-form-group textarea:focus {
     outline: none;
     background: #343A37;
     box-shadow: inset 0 0 0 1px #81D89E;
 }
 
-.wiki-form-group-full {
+.discoveries-form-group-full {
     grid-column: 1 / -1;
 }
 
-.wiki-modal-actions {
+.discoveries-modal-actions {
     display: flex;
     gap: 1rem;
     margin-top: 1.25rem;
 }
 
-.wiki-btn-secondary,
-.wiki-btn-primary {
+.discoveries-btn-secondary,
+.discoveries-btn-primary {
     flex: 1;
     padding: 0.85rem 1rem;
     font-weight: 800;
@@ -447,29 +447,29 @@
     transition: all 0.2s ease;
 }
 
-.wiki-btn-secondary {
+.discoveries-btn-secondary {
     background: #151B18;
     color: #eee;
     border: 1px solid #333 !important;
 }
 
-.wiki-btn-primary {
+.discoveries-btn-primary {
     background: linear-gradient(135deg, #3CB371, #2BA89C, #4DA6C9);
     color: white;
     box-shadow: 0 4px 15px rgba(60, 179, 113, 0.3);
 }
 
-.wiki-btn-primary:disabled {
+.discoveries-btn-primary:disabled {
     opacity: 0.55;
     cursor: not-allowed;
 }
 
-.wiki-btn-primary:not(:disabled):hover {
+.discoveries-btn-primary:not(:disabled):hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(60, 179, 113, 0.4);
 }
 
-.wiki-item::before {
+.discoveries-item::before {
     content: '';
     position: absolute;
     top: 0;
@@ -488,16 +488,16 @@
     z-index: 0;
 }
 
-.wiki-item:hover::before {
+.discoveries-item:hover::before {
     opacity: 1;
 }
 
-.wiki-item > * {
+.discoveries-item > * {
     position: relative;
     z-index: 1;
 }
 
-.wiki-item:hover {
+.discoveries-item:hover {
     transform: translateY(-5px);
     box-shadow: 
         0 8px 25px rgba(0, 0, 0, 0.35),
@@ -534,7 +534,7 @@
     transition: all 0.3s ease;
 }
 
-.wiki-item:hover .item-image {
+.discoveries-item:hover .item-image {
     transform: scale(1.05);
     border-color: var(--blue-accent);
     box-shadow: 0 6px 18px rgba(123, 163, 196, 0.28);
@@ -628,15 +628,15 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-    .wiki-main {
+    .discoveries-main {
         padding-top: 7rem;
     }
 
-    .wiki-elements-grid {
+    .discoveries-elements-grid {
         grid-template-columns: 1fr;
     }
 
-    .wiki-read-grid {
+    .discoveries-read-grid {
         grid-template-columns: 1fr;
     }
     
@@ -644,16 +644,16 @@
         justify-content: center;
     }
 
-    .wiki-element-card-inner {
+    .discoveries-element-card-inner {
         min-height: 160px;
         padding: 1.5rem;
     }
 
-    .wiki-modal {
+    .discoveries-modal {
         padding: 1.5rem 1.5rem 1.75rem;
     }
 
-    .wiki-form-grid {
+    .discoveries-form-grid {
         grid-template-columns: 1fr;
     }
 }

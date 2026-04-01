@@ -126,8 +126,8 @@ function Navbar() {
                 <Link to="/" className="nav-link" onClick={(e) => handleNavClick(e, '/')}>
                   Download
                 </Link>
-                <Link to="/wiki" className="nav-link" onClick={(e) => handleNavClick(e, '/wiki')}>
-                  Wiki
+                <Link to="/discoveries" className="nav-link" onClick={(e) => handleNavClick(e, '/discoveries')}>
+                  Discoveries
                 </Link>
                 <Link to="/centro" className="nav-centro" onClick={(e) => handleNavClick(e, '/centro')}>
                   <span className="nav-separator">|</span>
@@ -268,8 +268,8 @@ function Navbar() {
           <Link to="/" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/')}>
             Download
           </Link>
-          <Link to="/wiki" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/wiki')}>
-            Wiki
+          <Link to="/discoveries" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/discoveries')}>
+            Discoveries
           </Link>
           <Link to="/centro" className="mobile-nav-link mobile-nav-centro" onClick={(e) => handleNavClick(e, '/centro')}>
             The Center
