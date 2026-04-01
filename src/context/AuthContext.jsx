@@ -18,10 +18,10 @@ export const AuthProvider = ({ children }) => {
         // Safety timeout: Never stay in loading state for more than 10 seconds
         const timeout = setTimeout(() => {
             if (loading) {
-                console.warn('Auth loading safety timeout reached. Forcing loading to false.')
+                console.warn('[AuthContext] Auth loading safety timeout reached. Forcing loading to false.')
                 setLoading(false)
             }
-        }, 10000)
+        }, 5000) // Reduced to 5s for faster feedback
 
         // 1. Get initial session
         supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
@@ -163,6 +163,8 @@ export const AuthProvider = ({ children }) => {
                 .ilike('pl_email', email) // Updated from jo_email
                 .maybeSingle()
 
+            console.log('[Auth] Profile fetch result for email:', email, data ? 'Found' : 'Not found', error ? 'Error: ' + error.message : 'No error')
+
             if (error) {
                 console.warn('[Auth] Join fetch failed, trying simple fetch:', error.message)
                 // Fallback to simple fetch if join fails (e.g. table schema transition)
@@ -278,13 +280,18 @@ export const AuthProvider = ({ children }) => {
             pl_avatar_id: null // Updated from jo_avatar
         }
 
+        console.log('[Auth] Attempting to complete registration for:', username)
         const { data, error } = await supabase
             .from('player') // Updated from jogador
-            .insert([newProfile])
+            .upsert(newProfile, { onConflict: 'pl_email' }) // Added UPSERT logic to allow relinking existing progress if auth user was deleted
             .select()
             .single()
 
-        if (error) throw error
+        if (error) {
+            console.error('[Auth] Error in completeRegistration:', error)
+            throw error
+        }
+        console.log('[Auth] Registration completed successfully in DB')
 
         setUserProfile(data)
         setIsNewUser(false)
