@@ -108,13 +108,13 @@ export const AuthProvider = ({ children }) => {
             if (error) throw error
             currentSiteSessionId.current = data.ss_id
             
-            // UPDATE PLAYER STATUS TO ONLINE (2)
+            // UPDATE PLAYER STATUS TO ONLINE (ON WEBSITE) (3)
             await supabase
                 .from('player')
-                .update({ pl_status_id: 2 })
+                .update({ pl_status_id: 3 })
                 .eq('pl_id', playerId)
 
-            console.log('[Auth] Site session and online status updated.')
+            console.log('[Auth] Site session and online status (ID: 3) updated.')
         } catch (err) {
             console.error('[Auth] Fatal error starting site session:', err.message)
         }
@@ -147,7 +147,7 @@ export const AuthProvider = ({ children }) => {
                     .eq('pl_id', userProfile.pl_id)
             }
 
-            console.log('[Auth] Site session ended and offline status updated.')
+            console.log('[Auth] Site session ended and offline status (ID: 1) updated.')
         } catch (err) {
             console.error('[Auth] Error ending site session:', err.message)
         }
