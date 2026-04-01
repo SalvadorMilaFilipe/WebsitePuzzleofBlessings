@@ -36,18 +36,26 @@ function Register() {
         setLoading(true)
 
         try {
-            // Se não houver sessão, precisamos de criar a conta primeiro
-            if (!session) {
-                const cleanEmail = email.trim()
-                if (!cleanEmail || !password) {
-                    setError('Email and Password are required to create an account.')
-                    setLoading(false)
-                    return
-                }
-                await signupWithEmail(cleanEmail, password)
-                // O signupWithEmail no AuthContext deve disparar a criação da sessão
-                // Após o signup, o componente re-renderiza com session, e mantemos o step em 1
+            // Se já houver sessão ativa, saltamos logo para o próximo passo.
+            // Isto evita o erro 429 (rate limit) se o utilizador já tiver conta.
+            if (session) {
+                console.log('[Register] Session already active, skipping signup step.');
+                setStep(2);
+                setLoading(false);
+                return;
             }
+
+            if (!email || !password) {
+                setError('Email and Password are required to create an account.')
+                setLoading(false)
+                return
+            }
+            
+            const cleanEmail = email.trim()
+            await signupWithEmail(cleanEmail, password)
+            // O signupWithEmail no AuthContext deve disparar a criação da sessão
+            // Após o signup, o componente re-renderiza com session, e mantemos o step em 1
+            // para que o utilizador preencha o resto dos campos.
 
             if (!username.trim()) {
                 setError('Public Username is required')
@@ -57,9 +65,14 @@ function Register() {
 
             setStep(2)
         } catch (err) {
-            setError(err.message || 'Failed to initialize account.')
+            console.error('Registration Step 1 error:', err);
+            let msg = err.message || 'Failed to initialize account.';
+            if (msg.includes('rate limit')) {
+                msg = 'Rate limit exceeded. If your account was already created, PLEASE TRY TO LOG IN instead of registering again.';
+            }
+            setError(msg);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     }
 
