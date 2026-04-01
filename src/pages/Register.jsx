@@ -67,8 +67,8 @@ function Register() {
         } catch (err) {
             console.error('Registration Step 1 error:', err);
             let msg = err.message || 'Failed to initialize account.';
-            if (msg.includes('rate limit')) {
-                msg = 'Rate limit exceeded. If your account was already created, PLEASE TRY TO LOG IN instead of registering again.';
+            if (msg.toLowerCase().includes('rate limit') || msg.toLowerCase().includes('429')) {
+                msg = 'Supabase Rate Limit! Go to Dashboard -> Settings -> Auth -> Rate Limits and increase "Hourly signups from same IP" to 1000.';
             }
             setError(msg);
         } finally {
