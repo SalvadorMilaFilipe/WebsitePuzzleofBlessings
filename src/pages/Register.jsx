@@ -53,16 +53,8 @@ function Register() {
         }
 
         try {
-            if (session) {
-                // If user is already logged in (Google) but no profile, create it now
-                await completeRegistration(username.trim(), gameUser.trim(), gamePassword.trim(), password, birthYear, country)
-                navigate('/')
-                return
-            }
-
-            console.log('[Register] Final submission. Sending account confirmation email...')
+            console.log('[Register] Final submission. Creating account and profile...')
             
-            // Bundle everything into metadata for auto-creation after confirmation
             const metadata = {
                 pl_username: username.trim(),
                 pl_password_site: password,
@@ -72,14 +64,32 @@ function Register() {
                 pl_country: country
             }
 
-            await signupWithEmail(email.trim(), password, metadata)
-            setSuccessMsg('Registration step 1 complete! PLEASE CHECK YOUR EMAIL (including Spam) to confirm. After confirming, your profile will be automatically activated.')
+            // 1. Create Auth account
+            const result = await signupWithEmail(email.trim(), password, metadata)
+            
+            // 2. If confirmation is OFF, we get a session immediately
+            if (result.session) {
+                console.log('[Register] Account created, finalizing database profile...')
+                await completeRegistration(
+                    username.trim(), 
+                    gameUser.trim(), 
+                    gamePassword.trim(), 
+                    password, 
+                    birthYear, 
+                    country, 
+                    result.session
+                )
+                navigate('/')
+            } else {
+                // 3. Fallback for confirmation ON (just in case)
+                setSuccessMsg('Account created! Please check your email to confirm and activate your profile.')
+            }
             
         } catch (err) {
             console.error('Final Registration error:', err);
             let msg = err.message || 'Failed to complete registration.';
             if (msg.toLowerCase().includes('rate limit') || msg.toLowerCase().includes('429')) {
-                msg = 'Supabase Rate Limit! Go to Dashboard -> Settings -> Auth -> Rate Limits and increase "Hourly signups from same IP" to 1000.';
+                msg = 'Supabase Rate Limit! Try again in 1 minute.';
             }
             setError(msg);
         } finally {

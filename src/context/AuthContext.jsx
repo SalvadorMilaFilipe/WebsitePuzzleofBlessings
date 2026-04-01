@@ -191,18 +191,20 @@ export const AuthProvider = ({ children }) => {
                         console.log('[Auth] Profile auto-created from metadata!')
                         setUserProfile(profileData)
                         setIsNewUser(false)
+                        // Trigger a small refresh 
+                        lastFetchedEmail.current = email
                     } catch (autoErr) {
-                        console.error('[Auth] Failed to auto-create profile:', autoErr)
+                        console.error('[Auth] ERROR: FAILED TO AUTO-CREATE PROFILE. Error details:', autoErr.message || autoErr)
+                        // This usually means the username is taken or table schema changed
                         setIsNewUser(true)
                     }
                 } else {
+                    console.log('[Auth] No metadata found for auto-creation.')
                     setIsNewUser(true)
                 }
             }
         } catch (err) {
             console.error('[Auth] Fatal error loading profile:', err)
-            // Even on error, we don't want to show the loading screen forever, 
-            // and we assume a profile might need to be created if fetching failed.
             setIsNewUser(true) 
         } finally {
             setLoading(false)
