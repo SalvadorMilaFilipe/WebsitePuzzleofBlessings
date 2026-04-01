@@ -626,7 +626,135 @@
     font-size: 1.2rem;
 }
 
-/* Responsive */
+/* ===========================================
+   GUEST VIEW STYLES (Placeholder)
+   =========================================== */
+.discoveries-main-guest {
+    padding: 10rem 0 4rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top, rgba(129, 216, 158, 0.05) 0%, transparent 60%);
+}
+
+.discoveries-guest-card {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 3rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(15, 20, 18, 0.95) 0%, rgba(10, 12, 11, 0.98) 100%);
+    border: 1px solid rgba(129, 216, 158, 0.2);
+    overflow: hidden;
+}
+
+.guest-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(129, 216, 158, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    animation: slowRotate 20s linear infinite;
+}
+
+@keyframes slowRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.guest-eyebrow {
+    display: block;
+    font-size: 0.9rem;
+    letter-spacing: 0.3em;
+    color: var(--green-accent);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    font-weight: 800;
+}
+
+.guest-title {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 20px rgba(255,255,255,0.1);
+}
+
+.guest-description {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+}
+
+.progression-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+}
+
+.preview-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(129, 216, 158, 0.1);
+    border: 2px solid var(--green-accent);
+    border-radius: 12px;
+    color: var(--green-accent);
+    font-weight: 900;
+    font-size: 1.2rem;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.preview-step.locked .step-icon {
+    border-color: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.2);
+    background: transparent;
+}
+
+.preview-step span {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.preview-line {
+    flex: 0 0 50px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--green-accent), rgba(255,255,255,0.1));
+}
+
+.guest-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.guest-footer-note {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+}
+
 @media (max-width: 768px) {
     .discoveries-main {
         padding-top: 7rem;
@@ -656,6 +784,10 @@
     .discoveries-form-grid {
         grid-template-columns: 1fr;
     }
+
+    .guest-title { font-size: 2rem; }
+    .progression-preview { gap: 0.5rem; }
+    .preview-line { flex: 0 0 20px; }
 }
 
 /* Animations (local to Wiki) */

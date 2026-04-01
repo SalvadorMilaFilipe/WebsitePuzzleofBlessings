@@ -1,43 +1,72 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { getBlessingUrl } from '../utils/formatUtils'
+import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 function Discoveries() {
+  const { session } = useAuth()
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [activeFilter, setActiveFilter] = useState('blessings')
   const [blessings, setBlessings] = useState([])
   const [blessingsLoading, setBlessingsLoading] = useState(false)
   const [blessingsError, setBlessingsError] = useState('')
   const [selectedBlessing, setSelectedBlessing] = useState(null)
+  const [playerLevel, setPlayerLevel] = useState(0)
 
   useEffect(() => {
+    if (!session?.user?.id) return
+
+    const fetchPlayerProgress = async () => {
+      try {
+        const { data: playerData } = await supabase
+          .from('player')
+          .select('pl_level_id')
+          .eq('pl_email', session.user.email)
+          .single()
+
+        setPlayerLevel(playerData?.pl_level_id || 0)
+      } catch (err) {
+        console.error('Error fetching player level:', err)
+      }
+    }
+
+    fetchPlayerProgress()
+  }, [session])
+
+  useEffect(() => {
+    if (!session) return
+
     const fetchBlessings = async () => {
       try {
         setBlessingsLoading(true)
         setBlessingsError('')
 
+        // Fetching blessings where level is <= playerLevel (inclusive of previous levels)
         const { data, error } = await supabase
-          .from('blessing') // Singular
+          .from('blessing')
           .select(`
-          *,
-          category:category ( cat_name ),
-          blessing_attribute:blessing_attribute!fk_blessing_attr_blessing (
-            attribute:attribute!fk_blessing_attr_attribute ( attr_name )
-          )
-        `)
+            *,
+            category:category ( cat_name ),
+            blessing_attribute:blessing_attribute!fk_blessing_attr_blessing (
+              attribute:attribute!fk_blessing_attr_attribute ( attr_name )
+            )
+          `)
+          .lte('bl_lv_id', playerLevel)
           .order('bl_id', { ascending: true })
 
         if (error) throw error
         setBlessings(data || [])
       } catch (err) {
-        setBlessingsError(err?.message || 'Failed to load blessings')
+        setBlessingsError(err?.message || 'Failed to load discoveries')
       } finally {
         setBlessingsLoading(false)
       }
     }
 
     fetchBlessings()
-  }, [])
+  }, [session, playerLevel])
 
   const getRarityColor = (rarity) => {
     if (!rarity) return '#ccc'
@@ -70,6 +99,51 @@ function Discoveries() {
     }
     return filtered
   }, [blessings, searchTerm])
+
+  if (!session) {
+    return (
+      <main className="discoveries-main-guest">
+        <div className="container">
+          <div className="discoveries-guest-card lowpoly-card">
+            <div className="guest-glow"></div>
+            <div className="guest-content">
+              <span className="guest-eyebrow">Ilhas do Entre-Sonho</span>
+              <h1 className="guest-title">A Journey to Remember</h1>
+              <p className="guest-description">
+                Your memories are locked within the islands. To uncover your discoveries, you must first establish a connection to this world.
+              </p>
+              
+              <div className="progression-preview">
+                <div className="preview-step">
+                  <div className="step-icon">0</div>
+                  <span>Tutorial</span>
+                </div>
+                <div className="preview-line"></div>
+                <div className="preview-step locked">
+                  <div className="step-icon">1</div>
+                  <span>First Soul</span>
+                </div>
+                <div className="preview-line"></div>
+                <div className="preview-step locked">
+                  <div className="step-icon">?</div>
+                  <span>Unknown</span>
+                </div>
+              </div>
+
+              <div className="guest-actions">
+                <button className="btn-primary" onClick={() => navigate('/register')}>Start Your Journey</button>
+                <button className="btn-secondary" onClick={() => navigate('/login')}>Recover Memories</button>
+              </div>
+              
+              <p className="guest-footer-note">
+                Progress through the levels to unlock blessings, collectibles, and the lore of the ghosts that haunt the islands.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="discoveries-main">

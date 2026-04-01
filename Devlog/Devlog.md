@@ -204,5 +204,9 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 ## 01/04/2026 - Devlog #27: Fundação Narrativa e Planeamento de Progressão
 *   **Fundação de Lore (Ilhas do Entre-Sonho):** Criação do documento `LORE.md` para contextualizar a jornada do protagonista entre fantasmas e coelhos. As "Blessings" deixam de ser apenas mecânicas para serem "Sinais de Confiança" de uma entidade antiga.
 *   **Planeamento Estratégico (Abril 2026):** Definida a meta de transição de **Wiki para Discoveries**. O sistema passará a ser reativo ao nível do jogador (`sa_lv_id`), bloqueando conteúdos que ainda não foram "lembrados" na história.
-*   **Métodos Técnicos:** Criação do `PLANNING.md` com a arquitetura de dados necessária para o Level-Lock (adição de `bl_lv_id` e filtros de query assíncronos no Supabase).
+*   **Infraestrutura de Dados (Level-Lock):**
+    *   Implementação de `bl_lv_id` na tabela `blessing`.
+    *   Implementação de `cl_lv_id` na tabela `collectible`.
+    *   Conexão estabelecida entre estas tabelas e a tabela `level` para permitir filtragem dinâmica.
+    *   Confirmação técnica: A tabela `items` já possui `it_lv_id` seguindo o mesmo padrão de integração.
 *   **Essência:** Transformar o website num "Diário de Descobertas" vivo que evolui em sincronia com a jornada narrativa do jogador.

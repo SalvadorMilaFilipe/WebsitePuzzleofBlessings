@@ -45,7 +45,10 @@ CREATE TABLE category (
   cat_name        VARCHAR(100) NOT NULL UNIQUE,
   cat_description TEXT,
   cat_image       TEXT,
-  PRIMARY KEY (cat_id)
+  ct_lv_id       INT,
+  PRIMARY KEY (cat_id),
+  CONSTRAINT fk_category_level FOREIGN KEY (ct_lv_id)
+    REFERENCES level(lv_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- =====================================================================
@@ -64,7 +67,23 @@ CREATE TABLE collectible (
   cl_id          INT NOT NULL AUTO_INCREMENT,
   cl_name        VARCHAR(100) NOT NULL,
   cl_description TEXT,
-  PRIMARY KEY (cl_id)
+  cl_lv_id       INT,
+  PRIMARY KEY (cl_id),
+  CONSTRAINT fk_collectible_level FOREIGN KEY (cl_lv_id)
+    REFERENCES level(lv_id) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+-- =====================================================================
+-- TABLE: items
+-- =====================================================================
+CREATE TABLE items (
+  it_id          INT NOT NULL AUTO_INCREMENT,
+  it_name        VARCHAR(100) NOT NULL,
+  it_description TEXT,
+  it_lv_id       INT,
+  PRIMARY KEY (it_id),
+  CONSTRAINT fk_items_level FOREIGN KEY (it_lv_id)
+    REFERENCES level(lv_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- =====================================================================
@@ -114,9 +133,12 @@ CREATE TABLE blessing (
   bl_rarity      VARCHAR(50),
   bl_category_id INT,
   bl_description TEXT,
+  bl_lv_id       INT,
   PRIMARY KEY (bl_id),
   CONSTRAINT fk_blessing_category FOREIGN KEY (bl_category_id)
-    REFERENCES category(cat_id) ON DELETE SET NULL ON UPDATE CASCADE
+    REFERENCES category(cat_id) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT fk_blessing_level FOREIGN KEY (bl_lv_id)
+    REFERENCES level(lv_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- =====================================================================
