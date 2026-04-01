@@ -20,13 +20,27 @@ function Discoveries() {
 
     const fetchPlayerProgress = async () => {
       try {
-        const { data: playerData } = await supabase
+        // 1. Get player ID and base level
+        const { data: player } = await supabase
           .from('player')
-          .select('pl_level_id')
+          .select('pl_id, pl_level_id')
           .eq('pl_email', session.user.email)
           .single()
 
-        setPlayerLevel(playerData?.pl_level_id || 0)
+        if (!player) return
+
+        // 2. Get latest save level (reacting to sv_level_id as requested)
+        const { data: latestSave } = await supabase
+          .from('save')
+          .select('sv_level_id')
+          .eq('sa_jo_id', player.pl_id)
+          .order('sv_updated_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        // Priority to save table, then player record
+        const currentLevel = latestSave?.sv_level_id ?? player.pl_level_id ?? 0
+        setPlayerLevel(currentLevel)
       } catch (err) {
         console.error('Error fetching player level:', err)
       }
