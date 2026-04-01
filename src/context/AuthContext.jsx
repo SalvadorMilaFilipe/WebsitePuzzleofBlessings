@@ -82,23 +82,22 @@ export const AuthProvider = ({ children }) => {
     // Effect to handle session creation once userProfile is loaded
     useEffect(() => {
         if (userProfile && session && !currentSiteSessionId.current) {
-            startSiteSession(userProfile.pl_id) // Updated to pl_id
+            startSiteSession(userProfile.pl_username, userProfile.pl_id)
         }
     }, [userProfile, session])
 
-    const startSiteSession = async (playerName) => {
-        if (!playerName) return
+    const startSiteSession = async (playerName, playerId = null) => {
+        if (!playerName || !playerId) return
+        const now = new Date()
+        const dateStr = now.toISOString().split('T')[0]
+        const timeStr = now.toTimeString().split(' ')[0]
+
         try {
-            console.log(`[Auth] Attempting to start site session for player: ${playerName}`)
-
-            const now = new Date()
-            const dateStr = now.toISOString().split('T')[0]
-            const timeStr = now.toTimeString().split(' ')[0]
-
+            console.log(`[Auth] Starting site session for: ${playerName} (ID: ${playerId})`)
             const { data, error } = await supabase
                 .from('session') // Updated from sessao
                 .insert([{
-                    ss_player_id: playerName, // Updated from se_jogador
+                    ss_player_id: playerId, // Pass the numeric ID
                     ss_type: 'site', // Updated from se_tipo
                     ss_date_start: dateStr, // Updated from se_dataini
                     ss_time_start: timeStr // Updated from se_horaini
@@ -108,7 +107,14 @@ export const AuthProvider = ({ children }) => {
 
             if (error) throw error
             currentSiteSessionId.current = data.ss_id
-            console.log('[Auth] Site session started successfully:', data.ss_id)
+            
+            // UPDATE PLAYER STATUS TO ONLINE (2)
+            await supabase
+                .from('player')
+                .update({ pl_status_id: 2 })
+                .eq('pl_id', playerId)
+
+            console.log('[Auth] Site session and online status updated.')
         } catch (err) {
             console.error('[Auth] Fatal error starting site session:', err.message)
         }
@@ -133,7 +139,15 @@ export const AuthProvider = ({ children }) => {
                 })
                 .eq('ss_id', sessionId) // Updated from se_cod
 
-            console.log('[Auth] Site session ended successfully')
+            if (userProfile?.pl_id) {
+                // UPDATE PLAYER STATUS TO OFFLINE (1)
+                await supabase
+                    .from('player')
+                    .update({ pl_status_id: 1 })
+                    .eq('pl_id', userProfile.pl_id)
+            }
+
+            console.log('[Auth] Site session ended and offline status updated.')
         } catch (err) {
             console.error('[Auth] Error ending site session:', err.message)
         }
