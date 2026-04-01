@@ -125,6 +125,12 @@
     box-shadow: 0 0 15px rgba(129, 216, 158, 0.1);
 }
 
+.form-group select option {
+    background-color: #0B120E;
+    color: #fff;
+    padding: 10px;
+}
+
 .error-message {
     color: #ff6b6b;
     font-size: 0.75rem;

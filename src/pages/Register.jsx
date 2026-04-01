@@ -151,30 +151,29 @@ function Register() {
                             {session && <small>Account linked via {session?.user?.app_metadata?.provider || 'Auth System'}.</small>}
                         </div>
 
-                        {!session && (
-                            <div className="form-group">
-                                <label htmlFor="reg-password">Account Password</label>
-                                <div className="password-input-container">
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        id="reg-password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        placeholder="Set account password"
-                                        required
-                                        minLength={6}
-                                    />
-                                    <button 
-                                        type="button" 
-                                        className="password-toggle-btn"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        title={showPassword ? "Hide" : "Show"}
-                                    >
-                                        {showPassword ? '👁️‍🗨️' : '👁️'}
-                                    </button>
-                                </div>
+                        <div className="form-group">
+                            <label htmlFor="reg-password">{session ? 'Confirm Portal Password' : 'Portal Password'}</label>
+                            <div className="password-input-container">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    id="reg-password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Password for this website"
+                                    required
+                                    minLength={6}
+                                />
+                                <button 
+                                    type="button" 
+                                    className="password-toggle-btn"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    title={showPassword ? "Hide" : "Show"}
+                                >
+                                    {showPassword ? '👁️‍🗨️' : '👁️'}
+                                </button>
                             </div>
-                        )}
+                            {session && <small>Please enter the password you want to save for your Site Profile.</small>}
+                        </div>
 
                         <div className="form-group">
                             <label htmlFor="username">Public Username</label>
