@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
             console.log('Initial session check:', initialSession ? 'Found' : 'Not found')
             setSession(initialSession)
             if (initialSession) {
-                fetchUserProfile(initialSession.user.email)
+                fetchUserProfile(initialSession.user.email, false, initialSession)
             } else {
                 setLoading(false)
             }
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
             if (currentSession) {
                 if (currentSession.user.email !== lastFetchedEmail.current || !userProfile) {
-                    fetchUserProfile(currentSession.user.email)
+                    fetchUserProfile(currentSession.user.email, false, currentSession)
                 }
             } else {
                 // Clear state on logout
@@ -139,16 +139,16 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const fetchUserProfile = async (email, silent = false) => {
+    const fetchUserProfile = async (email, silent = false, currentSession = null) => {
         if (!email) {
             setLoading(false)
             return
         }
 
-        // If already fetching, don't start another one but ensure loading is handled if not silent
-        if (fetchingProfile.current) {
-            return
-        }
+        // Use passed session OR state
+        const activeSession = currentSession || session
+
+        if (fetchingProfile.current && !silent) return
 
         if (!silent) setLoading(true)
         fetchingProfile.current = true
@@ -175,7 +175,7 @@ export const AuthProvider = ({ children }) => {
             } else {
                 console.log('[Auth] No profile found in player table. Checking for registration metadata...')
                 // AUTO-CREATE PROFILE FROM METADATA if it's a confirmed user logging in for the first time
-                const metadata = session?.user?.user_metadata
+                const metadata = activeSession?.user?.user_metadata
                 if (metadata && metadata.pl_username) {
                     console.log('[Auth] Auto-creating profile from signup metadata...')
                     try {
@@ -185,7 +185,8 @@ export const AuthProvider = ({ children }) => {
                             metadata.pl_password_game,
                             metadata.pl_password_site,
                             metadata.pl_birth_year,
-                            metadata.pl_country
+                            metadata.pl_country,
+                            activeSession
                         )
                         console.log('[Auth] Profile auto-created from metadata!')
                         setUserProfile(profileData)
@@ -266,8 +267,12 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const completeRegistration = async (username, gameUser, gamePassword, sitePassword = null, birthYear, country = null) => {
-        if (!session || !session.user) return
+    const completeRegistration = async (username, gameUser, gamePassword, sitePassword = null, birthYear, country = null, passedSession = null) => {
+        const activeSession = passedSession || session
+        if (!activeSession || !activeSession.user) {
+            console.error('[Auth] Cannot complete registration without an active session.')
+            return
+        }
 
         // Generate a random ID: # followed by 8 characters (letters and numbers)
         const generateJoId = () => {
@@ -282,7 +287,7 @@ export const AuthProvider = ({ children }) => {
         const newProfile = {
             pl_code: generateJoId(), // Updated from jo_id
             pl_username: username, // Updated from jo_user
-            pl_email: session.user.email, // Updated from jo_email
+            pl_email: activeSession.user.email, // Updated from jo_email
             pl_password_site: sitePassword, // Updated from jo_password_site
             pl_password_game: gamePassword, // Updated from jo_password_jogo
             pl_username_game: gameUser,       // Updated from jo_user_jogo
