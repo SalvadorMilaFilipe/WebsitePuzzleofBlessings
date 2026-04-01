@@ -18,10 +18,10 @@ export const AuthProvider = ({ children }) => {
         // Safety timeout: Never stay in loading state for more than 10 seconds
         const timeout = setTimeout(() => {
             if (loading) {
-                console.warn('[AuthContext] Auth loading safety timeout reached. Forcing loading to false.')
+                console.warn('[AuthContext] Auth loading safety timeout reached (20s). Forcing loading to false.')
                 setLoading(false)
             }
-        }, 5000) // Reduced to 5s for faster feedback
+        }, 20000) // Increased to 20s to handle slow DB connections
 
         // 1. Get initial session
         supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
@@ -192,7 +192,9 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (err) {
             console.error('[Auth] Fatal error loading profile:', err)
-            // Even on error, we don't want to show the loading screen forever
+            // Even on error, we don't want to show the loading screen forever, 
+            // and we assume a profile might need to be created if fetching failed.
+            setIsNewUser(true) 
         } finally {
             setLoading(false)
             fetchingProfile.current = false
