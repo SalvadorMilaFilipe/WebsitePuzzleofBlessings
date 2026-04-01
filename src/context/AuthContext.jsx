@@ -114,7 +114,12 @@ export const AuthProvider = ({ children }) => {
                 .update({ pl_status_id: 3 })
                 .eq('pl_id', playerId)
 
-            console.log('[Auth] Site session and online status (ID: 3) updated.')
+            // Update local state so UI reflects it immediately
+            if (userProfile && userProfile.pl_id === playerId) {
+                setUserProfile(prev => ({ ...prev, pl_status_id: 3, status: { st_status: 'online (on website)', st_color: '#F59E0B' } }))
+            }
+
+            console.log('[Auth] Site session and online status (ID: 3) updated locally.')
         } catch (err) {
             console.error('[Auth] Fatal error starting site session:', err.message)
         }
@@ -145,9 +150,12 @@ export const AuthProvider = ({ children }) => {
                     .from('player')
                     .update({ pl_status_id: 1 })
                     .eq('pl_id', userProfile.pl_id)
+
+                // Update local state
+                setUserProfile(prev => prev ? ({ ...prev, pl_status_id: 1, status: { st_status: 'offline', st_color: '#6B7280' } }) : null)
             }
 
-            console.log('[Auth] Site session ended and offline status (ID: 1) updated.')
+            console.log('[Auth] Site session ended and offline status (ID: 1) updated locally.')
         } catch (err) {
             console.error('[Auth] Error ending site session:', err.message)
         }
@@ -173,7 +181,7 @@ export const AuthProvider = ({ children }) => {
             console.log('[Auth] Database request started for:', email)
             const { data, error } = await supabase
                 .from('player')
-                .select('*')
+                .select('*, status:pl_status_id(*)') // Join with status table using current alias
                 .ilike('pl_email', email)
                 .maybeSingle()
 
