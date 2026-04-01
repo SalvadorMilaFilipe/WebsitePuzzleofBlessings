@@ -201,12 +201,14 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 
 ---
 
-## 01/04/2026 - Devlog #27: Fundação Narrativa e Planeamento de Progressão
-*   **Fundação de Lore (Ilhas do Entre-Sonho):** Criação do documento `LORE.md` para contextualizar a jornada do protagonista entre fantasmas e coelhos. As "Blessings" deixam de ser apenas mecânicas para serem "Sinais de Confiança" de uma entidade antiga.
-*   **Planeamento Estratégico (Abril 2026):** Definida a meta de transição de **Wiki para Discoveries**. O sistema passará a ser reativo ao nível do jogador (`sa_lv_id`), bloqueando conteúdos que ainda não foram "lembrados" na história.
-*   **Infraestrutura de Dados (Level-Lock):**
-    *   Implementação de `bl_lv_id` na tabela `blessing`.
-    *   Implementação de `cl_lv_id` na tabela `collectible`.
-    *   Conexão estabelecida entre estas tabelas e a tabela `level` para permitir filtragem dinâmica.
-    *   Confirmação técnica: A tabela `items` já possui `it_lv_id` seguindo o mesmo padrão de integração.
-*   **Essência:** Transformar o website num "Diário de Descobertas" vivo que evolui em sincronia com a jornada narrativa do jogador.
+## 01/04/2026 - Devlog #27: Metamorfose Narrative e Descobertas Blindadas
+*   **Renascimento: De Wiki para "Discoveries":** Rebranding total da enciclopédia do jogo. O sistema deixou de ser um repositório estático para se tornar um "Diário de Memórias" que reage à evolução do jogador.
+*   **Arquitetura Level-Locked (Core Progression):**
+    *   **Evolução DB:** Atualização das tabelas `blessing`, `collectible` e `category` com colunas de bloqueio de nível (`bl_lv_id`, `cl_lv_id`, `ct_lv_id`).
+    *   **Lógica Reativa:** Implementação de filtragem avançada no frontend (`.lte('bl_lv_id', playerLevel)`), garantindo que o jogador apenas visualize conteúdos que o seu "eu" nas ilhas já descobriu.
+    *   **Sincronização de Save:** Refatoração da deteção de nível para ler dinamicamente o `sv_level_id` da tabela `save` (associado via `sa_jo_id`), permitindo que mudanças de nível no jogo Unity sejam refletidas instantaneamente no website sem necessidade de atualização manual do perfil.
+*   **Experiência de Convidado (Bridge to Lore):**
+    *   Criação de um ecrã de placeholder para visitantes não autenticados, apresentando um roadmap visual da progressão (`Tutorial -> First Soul -> Unknown`).
+    *   Tradução e fixação termos de lore: "Ilhas do Entre-Sonho" passou oficialmente a ser **"Islands of Between-Dreams"** para consistência internacional.
+*   **Correção de Sincronização de Dados:** Resolução de um erro crítico onde a página lia o nível estático do utilizador em vez do seu progresso de sessão real, harmonizando a base de dados com as tabelas de itens e colecionáveis.
+*   **Essência:** O website agora não é apenas um portal de informação, mas uma extensão direta da jornada de "lembrança" do protagonista nas Ilhas do Entre-Sonho.

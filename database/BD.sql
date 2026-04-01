@@ -181,11 +181,14 @@ CREATE TABLE save (
   sv_player_pos TEXT,
   sv_session_id INT,
   sv_updated_at TIMESTAMP WITH TIME ZONE,
+  sa_jo_id      INT, -- Direct link to player provided by user test
   PRIMARY KEY (sv_id),
   CONSTRAINT fk_save_level FOREIGN KEY (sv_level_id)
     REFERENCES level(lv_id) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT fk_save_session FOREIGN KEY (sv_session_id)
-    REFERENCES session(ss_id) ON DELETE SET NULL ON UPDATE CASCADE
+    REFERENCES session(ss_id) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT fk_save_player FOREIGN KEY (sa_jo_id)
+    REFERENCES player(pl_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- =====================================================================

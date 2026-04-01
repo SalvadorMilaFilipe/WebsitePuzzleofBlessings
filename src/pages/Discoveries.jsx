@@ -121,8 +121,8 @@ function Discoveries() {
           <div className="discoveries-guest-card lowpoly-card">
             <div className="guest-glow"></div>
             <div className="guest-content">
-              <span className="guest-eyebrow">Ilhas do Entre-Sonho</span>
-              <h1 className="guest-title">A Journey to Remember</h1>
+              <span className="guest-eyebrow">A Journey to Remember</span>
+              <h1 className="guest-title">Islands of Between-Dreams</h1>
               <p className="guest-description">
                 Your memories are locked within the islands. To uncover your discoveries, you must first establish a connection to this world.
               </p>
