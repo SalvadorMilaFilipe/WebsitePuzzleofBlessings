@@ -247,3 +247,32 @@
         flex-direction: column;
     }
 }
+
+/* Password Toggle Styles */
+.password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    user-select: none;
+    z-index: 10;
+}
+
+.password-toggle-btn:hover {
+    color: #81D89E;
+    transform: scale(1.2);
+}

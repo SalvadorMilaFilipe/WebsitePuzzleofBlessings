@@ -211,4 +211,8 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
     *   Criação de um ecrã de placeholder para visitantes não autenticados, apresentando um roadmap visual da progressão (`Tutorial -> First Soul -> Unknown`).
     *   Tradução e fixação termos de lore: "Ilhas do Entre-Sonho" passou oficialmente a ser **"Islands of Between-Dreams"** para consistência internacional.
 *   **Correção de Sincronização de Dados:** Resolução de um erro crítico onde a página lia o nível estático do utilizador em vez do seu progresso de sessão real, harmonizando a base de dados com as tabelas de itens e colecionáveis.
-*   **Essência:** O website agora não é apenas um portal de informação, mas uma extensão direta da jornada de "lembrança" do protagonista nas Ilhas do Entre-Sonho.
+*   **Aprimoramento do Fluxo de Login/Registo (UX Overhaul):**
+    *   **Unificação de Credenciais:** Remoção da redundância entre "Account Password" e "Site Password". Agora, a password da conta é automaticamente sincronizada com o perfil do portal, eliminando a confusão de múltiplas senhas para o mesmo serviço.
+    *   **Visibilidade de Password (Eye Toggle):** Implementação de botões de alternância ("Eye Icon") em todos os campos de password (Login, Registo e In-Game) para evitar erros de dactilografia.
+    *   **Resiliência e Debugging:** Adição de `.trim()` automatizado em campos sensíveis e melhoria nas mensagens de erro (ex: deteção de email não confirmado), resolvendo problemas de "Invalid Credentials" fantasmas.
+*   **Essência:** O portal agora é mais robusto, internacional e pronto para receber viajantes com um sistema de descoberta reativo e seguro.

@@ -14,10 +14,11 @@ function Register() {
     // Form states
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [username, setUsername] = useState('')
-    const [sitePassword, setSitePassword] = useState('')
     const [gameUser, setGameUser] = useState('')
     const [gamePassword, setGamePassword] = useState('')
+    const [showGamePassword, setShowGamePassword] = useState(false)
     const [birthYear, setBirthYear] = useState(new Date().getFullYear())
     const [country, setCountry] = useState('')
     
@@ -37,12 +38,13 @@ function Register() {
         try {
             // Se não houver sessão, precisamos de criar a conta primeiro
             if (!session) {
-                if (!email || !password) {
+                const cleanEmail = email.trim()
+                if (!cleanEmail || !password) {
                     setError('Email and Password are required to create an account.')
                     setLoading(false)
                     return
                 }
-                await signupWithEmail(email, password)
+                await signupWithEmail(cleanEmail, password)
                 // O signupWithEmail no AuthContext deve disparar a criação da sessão
                 // Após o signup, o componente re-renderiza com session, e mantemos o step em 1
             }
@@ -73,7 +75,8 @@ function Register() {
         }
 
         try {
-            await completeRegistration(username, gameUser, gamePassword, sitePassword, birthYear, country)
+            // Using 'password' (Account Password) as the Site Password to avoid confusion
+            await completeRegistration(username.trim(), gameUser.trim(), gamePassword.trim(), password, birthYear, country)
             navigate('/')
         } catch (err) {
             console.error(err)
@@ -138,15 +141,25 @@ function Register() {
                         {!session && (
                             <div className="form-group">
                                 <label htmlFor="reg-password">Account Password</label>
-                                <input
-                                    type="password"
-                                    id="reg-password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Set account password"
-                                    required
-                                    minLength={6}
-                                />
+                                <div className="password-input-container">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        id="reg-password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="Set account password"
+                                        required
+                                        minLength={6}
+                                    />
+                                    <button 
+                                        type="button" 
+                                        className="password-toggle-btn"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        title={showPassword ? "Hide" : "Show"}
+                                    >
+                                        {showPassword ? '👁️‍🗨️' : '👁️'}
+                                    </button>
+                                </div>
                             </div>
                         )}
 
@@ -162,17 +175,7 @@ function Register() {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="sitePassword">Site Password (Portal)</label>
-                            <input
-                                type="password"
-                                id="sitePassword"
-                                value={sitePassword}
-                                onChange={(e) => setSitePassword(e.target.value)}
-                                placeholder="Set password for future logins"
-                                required
-                            />
-                        </div>
+                        {/* Site property removed and merged with Account Password to simplify login */}
 
                         <div className="flex-row">
                             <div className="form-group">
@@ -246,14 +249,24 @@ function Register() {
 
                         <div className="form-group">
                             <label htmlFor="gamePassword">In-Game Password</label>
-                            <input
-                                type="password"
-                                id="gamePassword"
-                                value={gamePassword}
-                                onChange={(e) => setGamePassword(e.target.value)}
-                                placeholder="Exclusive password for Unity engine"
-                                required
-                            />
+                            <div className="password-input-container">
+                                <input
+                                    type={showGamePassword ? "text" : "password"}
+                                    id="gamePassword"
+                                    value={gamePassword}
+                                    onChange={(e) => setGamePassword(e.target.value)}
+                                    placeholder="Exclusive password for Unity engine"
+                                    required
+                                />
+                                <button 
+                                    type="button" 
+                                    className="password-toggle-btn"
+                                    onClick={() => setShowGamePassword(!showGamePassword)}
+                                    title={showGamePassword ? "Hide" : "Show"}
+                                >
+                                    {showGamePassword ? '👁️‍🗨️' : '👁️'}
+                                </button>
+                            </div>
                         </div>
 
                         {error && <p className="error-message">{error}</p>}

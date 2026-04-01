@@ -9,6 +9,7 @@ function Login() {
     
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
@@ -22,16 +23,20 @@ function Login() {
         setError('')
         setLoading(true)
         try {
-            await loginWithEmail(email, password)
+            const trimmedEmail = email.trim()
+            await loginWithEmail(trimmedEmail, password)
             // Não fazemos navigate('/') aqui. Deixamos o AuthRedirect.jsx 
             // ou o guard no topo deste ficheiro tratar do destino correto 
             // após o estado do AuthContext atualizar.
         } catch (err) {
-            setError(err.message || 'Login failed. Please check your credentials.')
+            console.error('Login error:', err)
+            let msg = err.message || 'Login failed. Please check your credentials.'
+            if (msg.includes('Email not confirmed')) {
+                msg = 'Account found, but email is not confirmed. Please check your inbox.'
+            }
+            setError(msg)
             setLoading(false)
         }
-        // Nota: setLoading(false) não é chamado no finally aqui porque se o login 
-        // for bem sucedido, o componente vai desmontar/redirecionar.
     }
 
     const handleGoogleLogin = async () => {
@@ -66,15 +71,25 @@ function Login() {
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input 
-                            type="password" 
-                            id="password"
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)} 
-                            placeholder="••••••••" 
-                            required 
-                            disabled={loading}
-                        />
+                        <div className="password-input-container">
+                            <input 
+                                type={showPassword ? "text" : "password"} 
+                                id="password"
+                                value={password} 
+                                onChange={(e) => setPassword(e.target.value)} 
+                                placeholder="••••••••" 
+                                required 
+                                disabled={loading}
+                            />
+                            <button 
+                                type="button" 
+                                className="password-toggle-btn"
+                                onClick={() => setShowPassword(!showPassword)}
+                                title={showPassword ? "Hide password" : "Show password"}
+                            >
+                                {showPassword ? '👁️‍🗨️' : '👁️'}
+                            </button>
+                        </div>
                     </div>
                     {error && <p className="error-message">{error}</p>}
                     <button type="submit" className="btn-primary full-width" disabled={loading}>
