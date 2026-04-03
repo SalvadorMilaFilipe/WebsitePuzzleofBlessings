@@ -216,3 +216,12 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
     *   **Visibilidade de Password (Eye Toggle):** Implementação de botões de alternância ("Eye Icon") em todos os campos de password (Login, Registo e In-Game) para evitar erros de dactilografia.
     *   **Resiliência e Debugging:** Adição de `.trim()` automatizado em campos sensíveis e melhoria nas mensagens de erro (ex: deteção de email não confirmado), resolvendo problemas de "Invalid Credentials" fantasmas.
 *   **Essência:** O portal agora é mais robusto, internacional e pronto para receber viajantes com um sistema de descoberta reativo e seguro.
+
+---
+
+## 01/04/2026 - Devlog #28: Reengenharia de Registo e Sincronização de Status
+*   **Arquitetura de Registo Diferido (Metadata Logic):** Reengenharia completa do fluxo de inscrição. Implementação de uma **Estratégia de Metadados de Utilizador** no Supabase Auth. Agora, os dados do perfil (username, passwords de jogo, país) são capturados no momento do `signUp` e armazenados nos metadados da conta, permitindo que a criação na tabela `player` aconteça de forma automática e segura apenas após a validação da sessão (confirmada ou instantânea).
+*   **Sincronização de Status em Tempo Real:** Correção profunda do sistema de presença. O mapeamento do `pl_status_id` foi ajustado para alinhar com a tabela de status da base de dados, introduzindo o estado **"Online (on website)" (ID 3)**. O sistema agora atualiza automaticamente o status para Online ao entrar e Offline (ID 1) ao sair, tanto na base de dados como no estado local do React.
+*   **Resiliência a Limites de Infraestrutura:** Implementação de mensagens de erro amigáveis para lidar com os limites de envio de email e rate limits (429) do Supabase, facilitando a depuração e o onboarding contínuo.
+*   **Polimento de UI no Perfil:** Atualização do componente `Profile.jsx` para suportar dinamicamente as cores e etiquetas vindas da tabela de status, garantindo que o feedback visual (bolinha de status) corresponde exatamente ao estado real do jogador no Website (🟠 Laranja).
+*   **Essência:** O sistema de registo agora é à prova de falhas, garantindo a integridade dos dados entre os utilizadores autenticados e o perfil na base de dados com feedback de status em tempo real.
