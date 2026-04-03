@@ -86,8 +86,8 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
         }
     });
 
-    // Deeper thematic color for completion (Sacred Emerald) for better text contrast
-    const displayColor = completed ? '#4CA771' : color;
+    // Dramatic shift to Deep Amethyst for absolute contrast and lower emissive to prevent white-out
+    const displayColor = completed ? '#6A0DAD' : color;
 
     return (
         <mesh ref={meshRef} rotation={rotation} castShadow visible={!completed || targetGridPos[2] === 0}>
@@ -97,7 +97,7 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
                 roughness={0.15} 
                 metalness={0.8} 
                 emissive={displayColor}
-                emissiveIntensity={(isLoggedIn && clickCount >= 5) ? 5 : clickCount * 0.35} 
+                emissiveIntensity={(isLoggedIn && clickCount >= 5) ? 2 : clickCount * 0.35} 
             />
         </mesh>
     );
