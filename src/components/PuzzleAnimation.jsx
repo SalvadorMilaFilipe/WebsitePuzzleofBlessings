@@ -86,8 +86,8 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
         }
     });
 
-    // Special color for completion
-    const displayColor = completed ? '#ffffff' : color;
+    // Special thematic color for completion (Divine Mint) instead of pure white
+    const displayColor = completed ? '#A1E8B9' : color;
 
     return (
         <mesh ref={meshRef} rotation={rotation} castShadow visible={!completed || targetGridPos[2] === 0}>
