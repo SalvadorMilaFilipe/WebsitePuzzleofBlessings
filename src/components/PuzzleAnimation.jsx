@@ -10,22 +10,6 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
     const currentPos = useRef(new THREE.Vector3(...initialPos));
     const velocity = useRef(new THREE.Vector3(0, 0, 0));
     
-    // Shape logic (standard puzzle piece)
-    const shape = useMemo(() => {
-        const s = new THREE.Shape();
-        const size = 0.45;
-        const r = 0.12;
-        s.moveTo(-size, -size);
-        s.lineTo(size, -size);
-        s.lineTo(size, -r);
-        s.absarc(size, 0, r, -Math.PI / 2, Math.PI / 2, false);
-        s.lineTo(size, size);
-        s.lineTo(tabRadius, size); // Wait, tabRadius was from previous code, let's use 0 manually
-        s.absarc(0, size, r, 0, Math.PI, true);
-        s.lineTo(-size, size);
-        s.lineTo(-size, -size);
-        return s;
-    }, []);
 
     // Simplified shape for robustness
     const simpleShape = useMemo(() => {
