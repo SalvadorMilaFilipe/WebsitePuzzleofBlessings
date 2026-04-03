@@ -184,6 +184,17 @@ const PuzzleAnimation = () => {
     
     const [clickCount, setClickCount] = useState(0);
     const [completed, setCompleted] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    // Scroll lock logic
+    useEffect(() => {
+        if (isExpanded) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [isExpanded]);
 
     const handleContainerClick = () => {
         if (completed && isLoggedIn) return;
@@ -192,6 +203,7 @@ const PuzzleAnimation = () => {
             const next = prev + 1;
             if (isLoggedIn && next === 5) {
                 setCompleted(true);
+                setIsExpanded(true); // Trigger immersion
             }
             if (!isLoggedIn && next > 5) return 0;
             return next;
@@ -215,16 +227,20 @@ const PuzzleAnimation = () => {
             onClick={handleContainerClick}
             style={{
                 width: '100%',
-                height: '100%',
-                position: 'absolute',
+                height: isExpanded ? '100vh' : '100%',
+                position: isExpanded ? 'fixed' : 'absolute',
                 inset: 0,
-                zIndex: 1,
+                zIndex: isExpanded ? 9999 : 1,
                 pointerEvents: 'auto',
-                transition: 'background 1.5s ease-in-out',
-                background: completed 
-                    ? 'rgba(0, 0, 0, 0.95)' 
-                    : 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
-                cursor: completed ? 'default' : 'pointer'
+                transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                background: isExpanded 
+                    ? 'rgba(0, 0, 0, 0.98)' 
+                    : completed ? 'rgba(0, 0, 0, 0.85)' : 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
+                cursor: completed && isLoggedIn ? 'default' : 'pointer',
+                display: 'flex',
+                direction: 'column',
+                alignItems: 'center',
+                justifyContent: 'center'
             }}
         >
             <Canvas shadows gl={{ antialias: true }} dpr={[1, 2]}>
@@ -236,17 +252,19 @@ const PuzzleAnimation = () => {
             {completed && (
                 <div style={{
                     position: 'absolute',
-                    top: '25%',
+                    top: isExpanded ? '30%' : '25%',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     color: '#ffffff',
-                    fontSize: '1.4rem',
+                    fontSize: isExpanded ? '1.8rem' : '1.4rem',
                     fontWeight: 'bold',
                     textTransform: 'uppercase',
-                    letterSpacing: '6px',
+                    letterSpacing: isExpanded ? '10px' : '6px',
                     pointerEvents: 'none',
                     textAlign: 'center',
-                    animation: 'fade-in-glow-white 1.5s ease-out forwards'
+                    transition: 'all 0.8s ease',
+                    animation: 'fade-in-glow-white 1.5s ease-out forwards',
+                    zIndex: 10
                 }}>
                     <style>{`
                         @keyframes fade-in-glow-white {
@@ -256,6 +274,43 @@ const PuzzleAnimation = () => {
                     `}</style>
                     Blessing Fragment Restored
                 </div>
+            )}
+
+            {isExpanded && (
+                <button 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsExpanded(false);
+                    }}
+                    style={{
+                        position: 'absolute',
+                        bottom: '15%',
+                        padding: '15px 40px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: 'white',
+                        borderRadius: '30px',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        letterSpacing: '2px',
+                        textTransform: 'uppercase',
+                        transition: 'all 0.3s ease',
+                        backdropFilter: 'blur(10px)',
+                        zIndex: 20
+                    }}
+                    onMouseEnter={(e) => {
+                        e.target.style.background = 'rgba(255, 255, 255, 0.15)';
+                        e.target.style.borderColor = 'white';
+                        e.target.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.2)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.target.style.background = 'rgba(255, 255, 255, 0.05)';
+                        e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                        e.target.style.boxShadow = 'none';
+                    }}
+                >
+                    Continue Exploration
+                </button>
             )}
         </div>
     );
