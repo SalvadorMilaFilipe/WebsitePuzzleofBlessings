@@ -4,29 +4,47 @@ import { Environment, PerspectiveCamera, ContactShadows } from '@react-three/dre
 import * as THREE from 'three';
 import { useAuth } from '../context/AuthContext';
 
+// Helper to create unique puzzle piece shapes with specific tabs
+// tabs: [top, right, bottom, left], where 0=flat, 1=out, -1=in
+const createPuzzleShape = (tabs) => {
+    const s = new THREE.Shape();
+    const size = 0.45;
+    const h = 0.16; // hole/tab radius
+
+    // Start Top-Left
+    s.moveTo(-size, size);
+
+    // Top Side
+    if (tabs[0] === 1) { s.lineTo(-h, size); s.absarc(0, size, h, Math.PI, 0, false); }
+    else if (tabs[0] === -1) { s.lineTo(-h, size); s.absarc(0, size, h, Math.PI, 0, true); }
+    s.lineTo(size, size);
+
+    // Right Side
+    if (tabs[1] === 1) { s.lineTo(size, h); s.absarc(size, 0, h, Math.PI / 2, -Math.PI / 2, true); }
+    else if (tabs[1] === -1) { s.lineTo(size, h); s.absarc(size, 0, h, Math.PI / 2, -Math.PI / 2, false); }
+    s.lineTo(size, -size);
+
+    // Bottom Side
+    if (tabs[2] === 1) { s.lineTo(h, -size); s.absarc(0, -size, h, 0, Math.PI, false); }
+    else if (tabs[2] === -1) { s.lineTo(h, -size); s.absarc(0, -size, h, 0, Math.PI, true); }
+    s.lineTo(-size, -size);
+
+    // Left Side
+    if (tabs[3] === 1) { s.lineTo(-size, -h); s.absarc(-size, 0, h, -Math.PI / 2, Math.PI / 2, true); }
+    else if (tabs[3] === -1) { s.lineTo(-size, -h); s.absarc(-size, 0, h, -Math.PI / 2, Math.PI / 2, false); }
+    s.lineTo(-size, size);
+
+    return s;
+};
+
 // New internal component for handled movement logic
-const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, offset, clickCount, isLoggedIn }) => {
+const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, offset, clickCount, isLoggedIn, tabs }) => {
     const meshRef = useRef();
     const currentPos = useRef(new THREE.Vector3(...initialPos));
     const velocity = useRef(new THREE.Vector3(0, 0, 0));
     
-
-    // Simplified shape for robustness
-    const simpleShape = useMemo(() => {
-        const s = new THREE.Shape();
-        const size = 0.45;
-        const hole = 0.15;
-        s.moveTo(-size, -size);
-        s.lineTo(size, -size);
-        s.lineTo(size, -hole);
-        s.absarc(size, 0, hole, -Math.PI / 2, Math.PI / 2, false);
-        s.lineTo(size, size);
-        s.lineTo(hole, size);
-        s.absarc(0, size, hole, 0, Math.PI, true);
-        s.lineTo(-size, size);
-        s.lineTo(-size, -size);
-        return s;
-    }, []);
+    // Shape logic unique to each piece
+    const shape = useMemo(() => createPuzzleShape(tabs || [0,0,0,0]), [tabs]);
 
     useFrame((state) => {
         const t = state.clock.getElapsedTime();
@@ -34,21 +52,17 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
 
         const effectiveClickCount = isLoggedIn ? clickCount : Math.min(clickCount, 4);
         
-        // Determine target based on click count and login status
         let target;
         if (isLoggedIn && clickCount >= 5) {
-            // Final fusion: move to precise grid position
             target = new THREE.Vector3(...targetGridPos);
         } else {
-            // Loose cloud configuration
-            const focus = 4.5 / (effectiveClickCount + 1);
+            const focus = 5 / (effectiveClickCount + 1);
             target = new THREE.Vector3(
-                Math.sin(t * 0.5 + offset) * focus,
-                Math.cos(t * 0.4 + offset) * focus,
+                Math.sin(t * 0.4 + offset) * focus,
+                Math.cos(t * 0.35 + offset) * focus,
                 Math.sin(t * 0.3 + offset) * 1.5
             );
 
-            // Jitter for guests on 5th click
             if (!isLoggedIn && clickCount >= 5) {
                 target.x += (Math.random() - 0.5) * 1.5;
                 target.y += (Math.random() - 0.5) * 1.5;
@@ -56,19 +70,17 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
         }
 
         const force = new THREE.Vector3().subVectors(target, currentPos.current);
-        const strength = (isLoggedIn && clickCount >= 5) ? 0.1 : 0.015 * speed * (clickCount + 1);
+        const strength = (isLoggedIn && clickCount >= 5) ? 0.12 : 0.015 * speed * (clickCount + 1);
         force.multiplyScalar(strength);
         velocity.current.add(force);
 
-        velocity.current.multiplyScalar((isLoggedIn && clickCount >= 5) ? 0.82 : 0.94);
+        velocity.current.multiplyScalar((isLoggedIn && clickCount >= 5) ? 0.8 : 0.94);
 
         currentPos.current.add(velocity.current);
         meshRef.current.position.copy(currentPos.current);
 
         if (isLoggedIn && clickCount >= 5) {
-            meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, 0, 0.1);
-            meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, 0, 0.1);
-            meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, 0, 0.1);
+            meshRef.current.rotation.set(0, 0, 0); // Perfect rotation snap
         } else {
             meshRef.current.rotation.x += 0.005 + (velocity.current.length() * 0.06);
             meshRef.current.rotation.y += 0.005 + (velocity.current.length() * 0.06);
@@ -77,13 +89,13 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
 
     return (
         <mesh ref={meshRef} rotation={rotation} castShadow>
-            <extrudeGeometry args={[simpleShape, { depth: 0.2, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04 }]} />
+            <extrudeGeometry args={[shape, { depth: 0.15, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04 }]} />
             <meshStandardMaterial 
                 color={color} 
-                roughness={0.1} 
+                roughness={0.15} 
                 metalness={0.8} 
                 emissive={color}
-                emissiveIntensity={(isLoggedIn && clickCount >= 5) ? 4 : clickCount * 0.4} 
+                emissiveIntensity={(isLoggedIn && clickCount >= 5) ? 4 : clickCount * 0.35} 
             />
         </mesh>
     );
@@ -94,7 +106,7 @@ const SuccessOrb = ({ visible }) => {
     useFrame((state) => {
         if (!visible || !meshRef.current) return;
         const t = state.clock.getElapsedTime();
-        meshRef.current.scale.setScalar(1 + Math.sin(t * 4) * 0.15);
+        meshRef.current.scale.setScalar(1 + Math.sin(t * 3) * 0.1);
     });
 
     if (!visible) return null;
@@ -102,46 +114,51 @@ const SuccessOrb = ({ visible }) => {
     return (
         <group>
             <mesh ref={meshRef}>
-                <sphereGeometry args={[1.7, 32, 23]} />
+                <sphereGeometry args={[1.8, 48, 32]} />
                 <meshStandardMaterial 
-                    color="#81D89E" 
+                    color="#ffffff" 
                     emissive="#81D89E" 
-                    emissiveIntensity={3} 
+                    emissiveIntensity={2} 
                     transparent 
-                    opacity={0.25} 
+                    opacity={0.15} 
                 />
             </mesh>
-            <pointLight intensity={15} color="#81D89E" distance={10} />
+            <pointLight intensity={18} color="#81D89E" distance={15} />
         </group>
     );
 };
 
 const PuzzleScene = ({ clickCount, isLoggedIn }) => {
     const piecesData = useMemo(() => {
+        // Specific 2x2 interlocking logic
+        // tabs: [top, right, bottom, left], 1=out, -1=in
         return [
-            { id: 0, grid: [-0.47, 0.47, 0], color: '#81D89E' },
-            { id: 1, grid: [0.47, 0.47, 0], color: '#5BC0EB' },
-            { id: 2, grid: [-0.47, -0.47, 0], color: '#AA9AD8' },
-            { id: 3, grid: [0.47, -0.47, 0], color: '#FFD700' },
-            ...Array.from({ length: 15 }).map((_, i) => ({
+            { id: 0, grid: [-0.435, 0.435, 0], color: '#81D89E', tabs: [0, 1, 1, 0] },     // TL: Out Right, Out Bottom
+            { id: 1, grid: [0.435, 0.435, 0], color: '#5BC0EB', tabs: [0, 0, 1, -1] },    // TR: In Left, Out Bottom
+            { id: 2, grid: [-0.435, -0.435, 0], color: '#AA9AD8', tabs: [-1, 1, 0, 0] },   // BL: In Top, Out Right
+            { id: 3, grid: [0.435, -0.435, 0], color: '#FFD700', tabs: [-1, 0, 0, -1] },   // BR: In Top, In Left
+            
+            // Background filler pieces (reduced to 7)
+            ...Array.from({ length: 7 }).map((_, i) => ({
                 id: i + 4,
-                grid: [(Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 5],
-                color: new THREE.Color().setHSL(Math.random(), 0.7, 0.5)
+                grid: [(Math.random() - 0.5) * 12, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 4],
+                color: new THREE.Color().setHSL(Math.random(), 0.6, 0.5),
+                tabs: [0, Math.random() > 0.5 ? 1 : -1, 0, Math.random() > 0.5 ? 1 : -1] 
             }))
         ].map(p => ({
             ...p,
-            initialPos: [(Math.random() - 0.5) * 20, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 8],
+            initialPos: [(Math.random() - 0.5) * 20, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 10],
             rotation: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI],
-            speed: 0.4 + Math.random() * 0.8,
-            offset: Math.random() * 25
+            speed: 0.5 + Math.random() * 0.7,
+            offset: Math.random() * 50
         }));
     }, []);
 
     return (
         <>
-            <PerspectiveCamera makeDefault position={[0, 0, 9]} fov={50} />
-            <ambientLight intensity={0.5} />
-            <pointLight position={[5, 10, 10]} intensity={1.5} />
+            <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={45} />
+            <ambientLight intensity={0.6} />
+            <pointLight position={[5, 10, 8]} intensity={2} />
             
             {piecesData.map((p) => (
                 <InteractivePiece 
@@ -155,7 +172,7 @@ const PuzzleScene = ({ clickCount, isLoggedIn }) => {
 
             <SuccessOrb visible={isLoggedIn && clickCount >= 5} />
             <Environment preset="city" />
-            <ContactShadows position={[0, -4.5, 0]} opacity={0.4} scale={20} blur={2} far={5} />
+            <ContactShadows position={[0, -5, 0]} opacity={0.4} scale={20} blur={2} far={6} />
         </>
     );
 };
