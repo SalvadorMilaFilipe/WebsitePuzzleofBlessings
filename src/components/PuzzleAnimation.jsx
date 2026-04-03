@@ -249,17 +249,17 @@ const PuzzleAnimation = () => {
                 </Suspense>
             </Canvas>
             
-            {completed && (
+            {isExpanded && (
                 <div style={{
                     position: 'absolute',
-                    top: isExpanded ? '30%' : '25%',
+                    top: '15%', // Higher position to avoid overlapping with the puzzle
                     left: '50%',
                     transform: 'translateX(-50%)',
                     color: '#ffffff',
-                    fontSize: isExpanded ? '1.8rem' : '1.4rem',
+                    fontSize: '1.8rem',
                     fontWeight: 'bold',
                     textTransform: 'uppercase',
-                    letterSpacing: isExpanded ? '10px' : '6px',
+                    letterSpacing: '10px',
                     pointerEvents: 'none',
                     textAlign: 'center',
                     transition: 'all 0.8s ease',
