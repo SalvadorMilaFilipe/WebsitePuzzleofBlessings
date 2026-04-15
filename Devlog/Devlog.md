@@ -225,3 +225,20 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 *   **Resiliência a Limites de Infraestrutura:** Implementação de mensagens de erro amigáveis para lidar com os limites de envio de email e rate limits (429) do Supabase, facilitando a depuração e o onboarding contínuo.
 *   **Polimento de UI no Perfil:** Atualização do componente `Profile.jsx` para suportar dinamicamente as cores e etiquetas vindas da tabela de status, garantindo que o feedback visual (bolinha de status) corresponde exatamente ao estado real do jogador no Website (🟠 Laranja).
 *   **Essência:** O sistema de registo agora é à prova de falhas, garantindo a integridade dos dados entre os utilizadores autenticados e o perfil na base de dados com feedback de status em tempo real.
+
+---
+
+## 09/04/2026 - Devlog #29: A Ponte Interativa e o Fragmento de Bênção
+*   **Experiência Interativa (5-Click Bridge):**
+    *   **WebGL Interactive Animation:** Implementação de um puzzle 3D na página de Download usando React Three Fiber. O sistema reage a 5 interações físicas do utilizador antes de desencadear o culminar narrativo.
+    *   **Lógica de Segmentação (Member vs Guest):** Desenvolvimento de uma lógica condicional robusta de sessão. Convidados podem interagir com as peças (agitação física), mas apenas utilizadores autenticados conseguem ativar o brilho místico e a fusão final, incentivando o login.
+*   **Efeito Cinematic "Sacred Focus":**
+    *   **Fullscreen Immersive Overlay:** Criação de uma sobreposição total (fixed z-index 9999) desencadeada na conclusão do puzzle. O sistema escurece o site original e destaca o fragmento restaurado.
+    *   **Scroll Lock & Exit Bridge:** Implementação de bloqueio de scroll do body via `useEffect` e criação de um botão de "Retorno ao Portal" que reverte a imersão mas mantém o puzzle montado no fundo do hero.
+*   **Otimização Visual e Legibilidade:**
+    *   **Contraste de Cor "Ametista":** Transição da cor final do puzzle para um Roxo profundo (#6A0DAD), garantindo que os textos brancos da página são 100% legíveis por cima do objeto.
+    *   **Calibração de Emissividade:** Ajuste fino da intensidade de luz (`emissiveIntensity`) para evitar o "washed-out" branco, mantendo a identidade visual do objeto.
+*   **Sincronização de Progresso na Base de Dados:**
+    *   **Triggers de Nível (PostgreSQL):** Implementação de gatilhos bidirecionais entre as tabelas `player` e `save`. Qualquer atualização no nível do jogador no portal reflete-se nos saves do jogo, e qualquer progresso "in-game" atualiza instantaneamente o perfil no website.
+*   **Resiliência de Sessão:** Adição de um reset de estado automático no Logout, garantindo que fragmentos de bênção restaurados não sejam visíveis por engano para novos convidados ou utilizadores não logados.
+*   **Essência:** O site agora não é apenas informativo, mas uma extensão interativa da experiência do jogo, recompensando o jogador logado com animações exclusivas e progressão de dados sincronizada entre plataforma Web e Game.

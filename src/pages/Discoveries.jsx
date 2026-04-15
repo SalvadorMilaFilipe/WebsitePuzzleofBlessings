@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { getBlessingUrl } from '../utils/formatUtils'
+import BlessingAvatar from '../components/BlessingAvatar'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -225,20 +225,17 @@ function Discoveries() {
                 style={{ borderLeft: `5px solid ${getRarityColor(b.bl_rarity)}` }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
-                  <div
+                  <BlessingAvatar 
+                    blessing={b} 
                     className="discoveries-element-avatar"
                     style={{ 
-                      backgroundImage: getBlessingUrl(b.bl_image),
                       minWidth: '80px',
                       height: '80px',
                       borderRadius: '50%',
-                      backgroundSize: 'contain',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'center',
                       boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
                       marginRight: '1.5rem'
                     }}
-                  ></div>
+                  />
 
                   <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -284,14 +281,13 @@ function Discoveries() {
             </button>
             
             <div className="discoveries-modal-header">
-              <div 
+              <BlessingAvatar 
+                blessing={selectedBlessing} 
                 className="discoveries-modal-avatar"
-                style={{ 
-                  backgroundImage: getBlessingUrl(selectedBlessing.bl_image),
-                  backgroundSize: 'cover', 
-                  backgroundPosition: 'center' 
+                style={{
+                  backgroundSize: 'cover'
                 }}
-              ></div>
+              />
               <div>
                 <h2 className="discoveries-modal-title" style={{ color: getRarityColor(selectedBlessing.bl_rarity), textShadow: `0 0 15px ${getRarityColor(selectedBlessing.bl_rarity)}44` }}>
                   {selectedBlessing.bl_name}

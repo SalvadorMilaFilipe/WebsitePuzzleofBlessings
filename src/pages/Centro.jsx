@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
+import BlessingAvatar from '../components/BlessingAvatar'
 import '../../css/centro.css'
 
 function Centro() {
   const { userProfile, loading: authLoading } = useAuth()
 
   // Data States
-  // Data States
   const [currencyData, setCurrencyData] = useState({ amount: 0, collected_lv: 0, max_per_lv: 10 })
   const [playerLevel, setPlayerLevel] = useState({ id: 0, name: 'Trainee' })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [isShopOpen, setIsShopOpen] = useState(false)
+  const [shopBlessings, setShopBlessings] = useState([])
+  const [shopLoading, setShopLoading] = useState(false)
 
   // Hint Cooldown State (10 minutes = 600,000ms)
   const [hintCooldown, setHintCooldown] = useState(0)
@@ -77,8 +79,6 @@ function Centro() {
         }
 
         // B. Fetch Player Level Info
-        // 1. Search for the latest save where the sv_player_pos contains the player's username
-        // This is a robust way to find saves even if ss_session_id is null
         const { data: latestSave, error: saveError } = await supabase
           .from('save')
           .select(`
@@ -98,8 +98,8 @@ function Centro() {
             name: latestSave.level?.lv_name || (latestSave.sv_level_id === 0 ? 'Tutorial' : 'Genesis Field')
           })
         } else {
-          // 2. Fallback: Try the player table's current level
-          const { data: userData, error: userError } = await supabase
+          // Fallback: Try the player table's current level
+          const { data: userData } = await supabase
             .from('player')
             .select('pl_level_id, level:level(lv_name)')
             .eq('pl_id', userProfile.pl_id)
@@ -125,22 +125,48 @@ function Centro() {
 
     if (!authLoading && userProfile) {
       fetchData()
-      const interval = setInterval(() => fetchData(), 10000) // Slightly longer interval (10s)
+      const interval = setInterval(() => fetchData(), 10000)
       return () => clearInterval(interval)
     }
   }, [userProfile, authLoading])
 
+  // 3. Fetch Shop Blessings
+  useEffect(() => {
+    const fetchShopBlessings = async () => {
+      if (!isShopOpen) return;
+      
+      try {
+        setShopLoading(true);
+        const { data, error } = await supabase
+          .from('blessing')
+          .select(`
+            *,
+            category:category ( cat_name ),
+            blessing_attribute:blessing_attribute!fk_blessing_attr_blessing (
+              attribute:attribute!fk_blessing_attr_attribute ( attr_name )
+            )
+          `)
+          .order('bl_id', { ascending: true });
+
+        if (error) throw error;
+        setShopBlessings(data || []);
+      } catch (err) {
+        console.error("Error fetching shop blessings:", err);
+      } finally {
+        setShopLoading(false);
+      }
+    };
+
+    fetchShopBlessings();
+  }, [isShopOpen]);
+
   // Functional: Hint System
   const handleHintClick = () => {
     if (hintCooldown > 0) return
-
-    // Logic for hint
     alert("Hint: The ancient pillars hold the key to the sequence!")
-
     const now = Date.now()
     localStorage.setItem('last_hint_time', now.toString())
     setHintCooldown(COOLDOWN_TIME)
-
     const timer = setInterval(() => {
       setHintCooldown(prev => {
         if (prev <= 1000) {
@@ -155,11 +181,9 @@ function Centro() {
   // Functional: Buy Blessing
   const buyBlessing = async (blessingId) => {
     if (!userProfile?.pl_id) return;
-
     try {
       const now = new Date();
       const dateStr = now.toISOString().split('T')[0];
-
       const { error: buyErr } = await supabase
         .from('player_blessing')
         .insert([{
@@ -167,10 +191,8 @@ function Centro() {
           bl_id: blessingId,
           date_obtained: dateStr
         }]);
-
       if (buyErr) throw buyErr;
       alert("Blessing obtained successfully!");
-
     } catch (err) {
       console.error("Error buying blessing:", err);
       alert("Purchase failed. Maybe you already have it or lack the currency?");
@@ -188,7 +210,7 @@ function Centro() {
 
   if (authLoading) return <div className="centro-loading-screen">Authenticating...</div>
 
-  // Guest View / Unauthenticated State
+  // Guest View
   if (!userProfile) {
     return (
       <main className="centro-main guest-view">
@@ -196,11 +218,9 @@ function Centro() {
           <section className="guest-hero">
               <div className="hero-content">
                 <h3 className="hero-welcome">Welcome, Wanderer</h3>
-                
                 <div className="center-explanation">
                   <p>In this digital sanctuary, you can track your divine journey across the realms. Every level completed, every piece of light gathered, and every blessing earned is recorded here.</p>
                 </div>
-
                 <div className="guest-cta">
                   <p className="cta-text">Start your legend today.</p>
                   <button className="install-btn" onClick={() => window.location.href = '/download'}>
@@ -208,7 +228,6 @@ function Centro() {
                   </button>
                   <p className="cta-sub">Already playing? Please log in to view your dashboard.</p>
                 </div>
-
                 <div className="guest-features">
                   <div className="feature-card">
                     <div className="feature-icon">📈</div>
@@ -228,7 +247,6 @@ function Centro() {
                 </div>
              </div>
           </section>
-
           <div className="guest-background-effect"></div>
         </div>
       </main>
@@ -250,11 +268,9 @@ function Centro() {
               </div>
             </div>
           </div>
-
           <div className="header-center">
             <h1 className="centro-title">The Center</h1>
           </div>
-
           <div className="header-right">
             <div className="level-badge">
               {playerLevel.id === 0 ? (
@@ -289,9 +305,7 @@ function Centro() {
               <img src="/img/hint_bulb.png" alt="💡" className="btn-icon"
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/702/702797.png" }} />
             </div>
-            <span className="btn-label">
-              {hintCooldown > 0 ? formatTime(hintCooldown) : "Hint"}
-            </span>
+            <span className="btn-label">{hintCooldown > 0 ? formatTime(hintCooldown) : "Hint"}</span>
           </button>
 
           <button className="icon-btn catalogue-btn" title="Catalogue" onClick={() => alert("Catalogue coming soon!")}>
@@ -320,97 +334,38 @@ function Centro() {
 
       </div>
 
-      {/* SHOP OVERLAY PREVIEW */}
+      {/* SHOP OVERLAY */}
       {isShopOpen && (
         <div className="centro-shop-overlay" onClick={() => setIsShopOpen(false)}>
           <div className="centro-shop-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="shop-close-btn" onClick={() => setIsShopOpen(false)}>
-              &times;
-            </button>
-            
+            <button className="shop-close-btn" onClick={() => setIsShopOpen(false)}>&times;</button>
             <div className="shop-modal-header">
               <h2 className="shop-title">The Shop</h2>
               <p className="shop-subtitle">Exchange your light for divine blessings and lost relics.</p>
             </div>
-
             <div className="shop-items-grid">
-              {/* Blessing Placeholder: Pattern Lens */}
-              <div className="shop-item-card">
-                <div className="shop-item-image-wrapper">
-                  <div 
-                    className="shop-item-avatar" 
-                    style={{ backgroundImage: 'url("/blessingscardmodels/Pattern Lens.png")' }}
-                  ></div>
-                </div>
-                <div className="shop-item-info">
-                  <h3 className="shop-item-name">Pattern Lens</h3>
-                  <div className="shop-item-category">Blessing</div>
-                </div>
-                <button className="shop-buy-btn" onClick={() => buyBlessing(1)}>
-                  <span>Buy - 30</span>
-                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
-                </button>
-              </div>
-
-              {/* Collectible 1 */}
-              <div className="shop-item-card">
-                <div className="shop-item-image-wrapper">
-                  <div className="shop-item-avatar placeholder-collectible">🏺</div>
-                </div>
-                <div className="shop-item-info">
-                  <h3 className="shop-item-name">Ancient Chalice</h3>
-                  <div className="shop-item-category">Collectible</div>
-                </div>
-                <button className="shop-buy-btn">
-                  <span>Buy - 15</span>
-                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
-                </button>
-              </div>
-
-              {/* Collectible 2 */}
-              <div className="shop-item-card">
-                <div className="shop-item-image-wrapper">
-                  <div className="shop-item-avatar placeholder-collectible">📜</div>
-                </div>
-                <div className="shop-item-info">
-                  <h3 className="shop-item-name">Forgotten Scroll</h3>
-                  <div className="shop-item-category">Collectible</div>
-                </div>
-                <button className="shop-buy-btn">
-                  <span>Buy - 25</span>
-                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
-                </button>
-              </div>
-
-              {/* Other Item 1 */}
-              <div className="shop-item-card">
-                <div className="shop-item-image-wrapper">
-                  <div className="shop-item-avatar placeholder-item">🧪</div>
-                </div>
-                <div className="shop-item-info">
-                  <h3 className="shop-item-name">Elixir of Insight</h3>
-                  <div className="shop-item-category">Consumable</div>
-                </div>
-                <button className="shop-buy-btn">
-                  <span>Buy - 10</span>
-                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
-                </button>
-              </div>
-
-              {/* Other Item 2 */}
-              <div className="shop-item-card">
-                <div className="shop-item-image-wrapper">
-                  <div className="shop-item-avatar placeholder-item">🔑</div>
-                </div>
-                <div className="shop-item-info">
-                  <h3 className="shop-item-name">Rusted Key</h3>
-                  <div className="shop-item-category">Utility</div>
-                </div>
-                <button className="shop-buy-btn">
-                  <span>Buy - 5</span>
-                  <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
-                </button>
-              </div>
+              {shopLoading ? (
+                <div className="shop-loading">Loading blessings...</div>
+              ) : shopBlessings.length > 0 ? (
+                shopBlessings.map(blessing => (
+                  <div className="shop-item-card" key={blessing.bl_id}>
+                    <div className="shop-item-image-wrapper">
+                      <BlessingAvatar blessing={blessing} className="shop-item-avatar" />
+                    </div>
+                    <div className="shop-item-info">
+                      <h3 className="shop-item-name">{blessing.bl_name}</h3>
+                      <div className="shop-item-category">{blessing.category?.cat_name || 'Blessing'}</div>
+                    </div>
+                    <button className="shop-buy-btn" onClick={() => buyBlessing(blessing.bl_id)}>
+                      <span>Buy - {blessing.bl_cost || 30}</span>
+                      <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="shop-empty">No blessings available.</div>
+              )}
+              {/* Optional: Add other static items here if needed */}
             </div>
           </div>
         </div>
@@ -420,4 +375,3 @@ function Centro() {
 }
 
 export default Centro
-

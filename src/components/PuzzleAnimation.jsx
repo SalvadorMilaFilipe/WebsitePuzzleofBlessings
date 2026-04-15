@@ -97,7 +97,7 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
                 roughness={0.15} 
                 metalness={0.8} 
                 emissive={displayColor}
-                emissiveIntensity={(isLoggedIn && clickCount >= 5) ? 2 : clickCount * 0.35} 
+                emissiveIntensity={isLoggedIn ? ((isLoggedIn && clickCount >= 5) ? 2 : clickCount * 0.35) : 0} 
             />
         </mesh>
     );
@@ -185,6 +185,15 @@ const PuzzleAnimation = () => {
     const [clickCount, setClickCount] = useState(0);
     const [completed, setCompleted] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
+
+    // Reset puzzle if user logs out
+    useEffect(() => {
+        if (!isLoggedIn) {
+            setClickCount(0);
+            setCompleted(false);
+            setIsExpanded(false);
+        }
+    }, [isLoggedIn]);
 
     // Scroll lock logic
     useEffect(() => {
