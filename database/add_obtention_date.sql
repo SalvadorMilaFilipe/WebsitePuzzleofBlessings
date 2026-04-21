@@ -1,0 +1,2 @@
+ALTER TABLE player_collectible 
+ADD COLUMN obtention_date TIMESTAMP WITH TIME ZONE DEFAULT NOW();

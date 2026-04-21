@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import BlessingAvatar from '../components/BlessingAvatar'
+import CollectibleAvatar from '../components/CollectibleAvatar'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,11 +10,19 @@ function Discoveries() {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [activeFilter, setActiveFilter] = useState('blessings')
+  
   const [blessings, setBlessings] = useState([])
   const [blessingsLoading, setBlessingsLoading] = useState(false)
   const [blessingsError, setBlessingsError] = useState('')
   const [selectedBlessing, setSelectedBlessing] = useState(null)
+  
   const [playerLevel, setPlayerLevel] = useState(0)
+  const [playerId, setPlayerId] = useState(null)
+
+  const [collectibles, setCollectibles] = useState([])
+  const [collectiblesLoading, setCollectiblesLoading] = useState(false)
+  const [collectiblesError, setCollectiblesError] = useState('')
+  const [selectedCollectible, setSelectedCollectible] = useState(null)
 
   useEffect(() => {
     if (!session?.user?.id) return
@@ -41,6 +50,7 @@ function Discoveries() {
         // Priority to save table, then player record
         const currentLevel = latestSave?.sv_level_id ?? player.pl_level_id ?? 0
         setPlayerLevel(currentLevel)
+        setPlayerId(player.pl_id)
       } catch (err) {
         console.error('Error fetching player level:', err)
       }
@@ -82,6 +92,39 @@ function Discoveries() {
     fetchBlessings()
   }, [session, playerLevel])
 
+  useEffect(() => {
+    if (!session || !playerId) return
+
+    const fetchCollectibles = async () => {
+      try {
+        setCollectiblesLoading(true)
+        setCollectiblesError('')
+
+        const { data, error } = await supabase
+          .from('player_collectible')
+          .select(`
+            obtention_date,
+            collectible:collectible (
+              cl_id,
+              cl_name,
+              cl_description,
+              cl_lv_id
+            )
+          `)
+          .eq('pl_id', playerId)
+
+        if (error) throw error
+        setCollectibles(data || [])
+      } catch (err) {
+        setCollectiblesError(err?.message || 'Failed to load collectibles')
+      } finally {
+        setCollectiblesLoading(false)
+      }
+    }
+
+    fetchCollectibles()
+  }, [session, playerId])
+
   const getRarityColor = (rarity) => {
     if (!rarity) return '#ccc'
     const r = rarity.toLowerCase()
@@ -113,6 +156,21 @@ function Discoveries() {
     }
     return filtered
   }, [blessings, searchTerm])
+
+  const visibleCollectibles = useMemo(() => {
+    if (!collectibles) return []
+    let filtered = collectibles
+    if (searchTerm) {
+      const q = searchTerm.toLowerCase()
+      filtered = filtered.filter(c => {
+        const col = c.collectible;
+        if (!col) return false;
+        return (col.cl_name || '').toLowerCase().includes(q) || 
+               (col.cl_description || '').toLowerCase().includes(q)
+      })
+    }
+    return filtered
+  }, [collectibles, searchTerm])
 
   if (!session) {
     return (
@@ -185,6 +243,12 @@ function Discoveries() {
                 Blessings
               </button>
               <button
+                className={`filter-tab ${activeFilter === 'collectibles' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('collectibles')}
+              >
+                Collectibles
+              </button>
+              <button
                 className={`filter-tab ${activeFilter === 'categories' ? 'active' : ''}`}
                 onClick={() => setActiveFilter('categories')}
               >
@@ -207,70 +271,171 @@ function Discoveries() {
         </div>
 
         {/* READ-ONLY: start with Blessings */}
-        {activeFilter !== 'blessings' ? (
+        {activeFilter === 'blessings' ? (
+          blessingsLoading ? (
+            <div className="no-results"><p>Loading blessings...</p></div>
+          ) : blessingsError ? (
+            <div className="no-results"><p>{blessingsError}</p></div>
+          ) : visibleBlessings.length > 0 ? (
+            <div className="discoveries-elements-grid">
+              {visibleBlessings.map(b => (
+                <article 
+                  key={b.bl_id}
+                  className="discoveries-element-card lowpoly-card"
+                  onClick={() => setSelectedBlessing(b)}
+                  style={{ borderLeft: `5px solid ${getRarityColor(b.bl_rarity)}` }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                    <BlessingAvatar 
+                      blessing={b} 
+                      className="discoveries-element-avatar"
+                      style={{ 
+                        minWidth: '80px',
+                        height: '80px',
+                        borderRadius: '50%',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+                        marginRight: '1.5rem'
+                      }}
+                    />
+
+                    <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: getRarityColor(b.bl_rarity) }}>
+                          {b.bl_name}
+                        </div>
+                        <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px', color: '#888' }}>
+                          #{b.bl_id}
+                        </span>
+                      </div>
+
+                      <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: getRarityColor(b.bl_rarity), fontWeight: 700 }}>
+                        {b.category?.cat_name || 'Blessing'}
+                      </p>
+
+                      <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '4px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {b.bl_description}
+                      </p>
+
+                      <div className="discoveries-blessing-attributes" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
+                        {b.blessing_attribute?.map((attr, idx) => (
+                          <div key={idx} className="discoveries-attr-tag" style={{ fontSize: '0.85rem', color: '#ddd', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: `3px solid ${getRarityColor(b.bl_rarity)}` }}>
+                             {attr.attribute?.attr_name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="no-results"><p>No results found.</p></div>
+          )
+        ) : activeFilter === 'collectibles' ? (
+          collectiblesLoading ? (
+            <div className="no-results"><p>Loading collectibles...</p></div>
+          ) : collectiblesError ? (
+            <div className="no-results"><p>{collectiblesError}</p></div>
+          ) : visibleCollectibles.length > 0 ? (
+            <div className="discoveries-elements-grid">
+              {visibleCollectibles.map(c => {
+                const col = c.collectible;
+                if (!col) return null;
+                return (
+                  <article 
+                    key={col.cl_id}
+                    className="discoveries-element-card lowpoly-card"
+                    onClick={() => setSelectedCollectible(c)}
+                    style={{ borderLeft: `5px solid #FFD700` }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                      <CollectibleAvatar 
+                        collectibleName={col.cl_name} 
+                        className="discoveries-element-avatar"
+                        style={{ 
+                          minWidth: '80px',
+                          height: '80px',
+                          borderRadius: '8px',
+                          boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+                          marginRight: '1.5rem',
+                          backgroundSize: 'cover'
+                        }}
+                      />
+
+                      <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#FFD700' }}>
+                            {col.cl_name}
+                          </div>
+                          <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px', color: '#888' }}>
+                            #{col.cl_id}
+                          </span>
+                        </div>
+                        
+                        <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: '#FFD700', fontWeight: 700 }}>
+                          Collectible
+                        </p>
+
+                        <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '4px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                          {col.cl_description}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="no-results"><p>No collectibles found.</p></div>
+          )
+        ) : (
           <div className="no-results">
             <p>Coming soon.</p>
           </div>
-        ) : blessingsLoading ? (
-          <div className="no-results"><p>Loading blessings...</p></div>
-        ) : blessingsError ? (
-          <div className="no-results"><p>{blessingsError}</p></div>
-        ) : visibleBlessings.length > 0 ? (
-          <div className="discoveries-elements-grid">
-            {visibleBlessings.map(b => (
-              <article 
-                key={b.bl_id}
-                className="discoveries-element-card lowpoly-card"
-                onClick={() => setSelectedBlessing(b)}
-                style={{ borderLeft: `5px solid ${getRarityColor(b.bl_rarity)}` }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
-                  <BlessingAvatar 
-                    blessing={b} 
-                    className="discoveries-element-avatar"
-                    style={{ 
-                      minWidth: '80px',
-                      height: '80px',
-                      borderRadius: '50%',
-                      boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-                      marginRight: '1.5rem'
-                    }}
-                  />
-
-                  <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: getRarityColor(b.bl_rarity) }}>
-                        {b.bl_name}
-                      </div>
-                      <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px', color: '#888' }}>
-                        #{b.bl_id}
-                      </span>
-                    </div>
-
-                    <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: getRarityColor(b.bl_rarity), fontWeight: 700 }}>
-                      {b.category?.cat_name || 'Blessing'}
-                    </p>
-
-                    <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '4px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                      {b.bl_description}
-                    </p>
-
-                    <div className="discoveries-blessing-attributes" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
-                      {b.blessing_attribute?.map((attr, idx) => (
-                        <div key={idx} className="discoveries-attr-tag" style={{ fontSize: '0.85rem', color: '#ddd', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: `3px solid ${getRarityColor(b.bl_rarity)}` }}>
-                           {attr.attribute?.attr_name}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="no-results"><p>No results found.</p></div>
         )}
       </div>
+
+      {/* Modal Overlay for Selected Collectible */}
+      {selectedCollectible && (
+        <div className="discoveries-modal-overlay" onClick={() => setSelectedCollectible(null)}>
+          <div className="discoveries-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="discoveries-close-btn" onClick={() => setSelectedCollectible(null)}>
+              &times;
+            </button>
+            
+            <div className="discoveries-modal-header">
+              <CollectibleAvatar 
+                collectibleName={selectedCollectible.collectible?.cl_name} 
+                className="discoveries-modal-avatar"
+                style={{
+                  backgroundSize: 'contain',
+                  borderRadius: '12px'
+                }}
+              />
+              <div>
+                <h2 className="discoveries-modal-title" style={{ color: '#FFD700', textShadow: `0 0 15px #FFD70044` }}>
+                  {selectedCollectible.collectible?.cl_name}
+                </h2>
+                <div className="discoveries-read-attribute" style={{ marginTop: '0.75rem', marginBottom: 0 }}>
+                  <span style={{ color: '#FFD700', fontWeight: 700 }}>Type:</span> Collectible
+                </div>
+              </div>
+            </div>
+
+            <div className="discoveries-modal-body" style={{ marginTop: '1.5rem' }}>
+              <div style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', borderLeft: `4px solid #FFD700`, marginBottom: '1rem', fontStyle: 'italic', color: '#FFD700' }}>
+                This collectible can be obtained at level {selectedCollectible.collectible?.cl_lv_id}
+              </div>
+              <div className="discoveries-read-description" style={{marginTop: '1.25rem', marginBottom: '1.5rem', color: '#ccc', fontSize: '1rem', lineHeight: '1.7'}}>
+                {selectedCollectible.collectible?.cl_description || '—'}
+              </div>
+              <div className="discoveries-read-date" style={{fontSize: '0.9rem', color: '#888'}}>
+                <span style={{color: '#81D89E', fontWeight: 800}}>Obtention Date:</span> {selectedCollectible.obtention_date ? new Date(selectedCollectible.obtention_date).toISOString().split('T')[0] : 'Unknown'}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal Overlay for Selected Blessing */}
       {selectedBlessing && (
