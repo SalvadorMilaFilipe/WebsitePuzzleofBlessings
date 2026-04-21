@@ -24,6 +24,9 @@ function Discoveries() {
   const [collectiblesError, setCollectiblesError] = useState('')
   const [selectedCollectible, setSelectedCollectible] = useState(null)
 
+  const [categories, setCategories] = useState([])
+  const [rarities, setRarities] = useState([])
+
   useEffect(() => {
     if (!session?.user?.id) return
 
@@ -67,21 +70,47 @@ function Discoveries() {
         setBlessingsLoading(true)
         setBlessingsError('')
 
-        // Fetching blessings where level is <= playerLevel (inclusive of previous levels)
+        // Fetch blessings ONLY from player_blessing table (events)
         const { data, error } = await supabase
-          .from('blessing')
+          .from('player_blessing')
           .select(`
-            *,
-            category:category ( cat_name ),
-            blessing_attribute:blessing_attribute!fk_blessing_attr_blessing (
-              attribute:attribute!fk_blessing_attr_attribute ( attr_name )
+            date_obtained,
+            blessing:blessing (
+              *,
+              rarity:rarity ( * ),
+              category:category ( * ),
+              blessing_attribute:blessing_attribute!fk_blessing_attr_blessing (
+                attribute:attribute!fk_blessing_attr_attribute ( attr_name )
+              )
             )
           `)
-          .lte('bl_lv_id', playerLevel)
-          .order('bl_id', { ascending: true })
+          .eq('pl_id', playerId)
 
         if (error) throw error
-        setBlessings(data || [])
+        
+        const obtainedBlessings = (data || []).map(row => ({
+          ...row.blessing,
+          date_obtained: row.date_obtained
+        }));
+
+        setBlessings(obtainedBlessings)
+
+        // Derive Unlocked Categories and Rarities
+        const unlockedCats = [];
+        const unlockedRars = [];
+        
+        obtainedBlessings.forEach(b => {
+          if (b.category && !unlockedCats.find(c => c.cat_id === b.category.cat_id)) {
+            unlockedCats.push(b.category);
+          }
+          if (b.rarity && !unlockedRars.find(r => r.rar_id === b.rarity.rar_id)) {
+            unlockedRars.push(b.rarity);
+          }
+        });
+
+        setCategories(unlockedCats.sort((a,b) => a.cat_id - b.cat_id));
+        setRarities(unlockedRars.sort((a,b) => a.rar_id - b.rar_id));
+
       } catch (err) {
         setBlessingsError(err?.message || 'Failed to load discoveries')
       } finally {
@@ -89,8 +118,8 @@ function Discoveries() {
       }
     }
 
-    fetchBlessings()
-  }, [session, playerLevel])
+    if (playerId) fetchBlessings()
+  }, [session, playerId])
 
   useEffect(() => {
     if (!session || !playerId) return
@@ -171,6 +200,26 @@ function Discoveries() {
     }
     return filtered
   }, [collectibles, searchTerm])
+
+  const visibleCategories = useMemo(() => {
+    if (!categories) return []
+    if (!searchTerm) return categories
+    const q = searchTerm.toLowerCase()
+    return categories.filter(c => 
+      (c.cat_name || '').toLowerCase().includes(q) || 
+      (c.cat_description || '').toLowerCase().includes(q)
+    )
+  }, [categories, searchTerm])
+
+  const visibleRarities = useMemo(() => {
+    if (!rarities) return []
+    if (!searchTerm) return rarities
+    const q = searchTerm.toLowerCase()
+    return rarities.filter(r => 
+      (r.rar_name || '').toLowerCase().includes(q) || 
+      (r.rar_description || '').toLowerCase().includes(q)
+    )
+  }, [rarities, searchTerm])
 
   if (!session) {
     return (
@@ -283,7 +332,7 @@ function Discoveries() {
                   key={b.bl_id}
                   className="discoveries-element-card lowpoly-card"
                   onClick={() => setSelectedBlessing(b)}
-                  style={{ borderLeft: `5px solid ${getRarityColor(b.bl_rarity)}` }}
+                  style={{ borderLeft: `5px solid ${getRarityColor(b.rarity?.rar_name)}` }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
                     <BlessingAvatar 
@@ -300,7 +349,7 @@ function Discoveries() {
 
                     <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: getRarityColor(b.bl_rarity) }}>
+                        <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: getRarityColor(b.rarity?.rar_name) }}>
                           {b.bl_name}
                         </div>
                         <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px', color: '#888' }}>
@@ -308,7 +357,7 @@ function Discoveries() {
                         </span>
                       </div>
 
-                      <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: getRarityColor(b.bl_rarity), fontWeight: 700 }}>
+                      <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: getRarityColor(b.rarity?.rar_name), fontWeight: 700 }}>
                         {b.category?.cat_name || 'Blessing'}
                       </p>
 
@@ -318,7 +367,7 @@ function Discoveries() {
 
                       <div className="discoveries-blessing-attributes" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
                         {b.blessing_attribute?.map((attr, idx) => (
-                          <div key={idx} className="discoveries-attr-tag" style={{ fontSize: '0.85rem', color: '#ddd', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: `3px solid ${getRarityColor(b.bl_rarity)}` }}>
+                          <div key={idx} className="discoveries-attr-tag" style={{ fontSize: '0.85rem', color: '#ddd', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', borderLeft: `3px solid ${getRarityColor(b.rarity?.rar_name)}` }}>
                              {attr.attribute?.attr_name}
                           </div>
                         ))}
@@ -388,6 +437,62 @@ function Discoveries() {
           ) : (
             <div className="no-results"><p>No collectibles found.</p></div>
           )
+        ) : activeFilter === 'categories' ? (
+          visibleCategories.length > 0 ? (
+            <div className="discoveries-elements-grid">
+              {visibleCategories.map(c => (
+                <article 
+                  key={c.cat_id}
+                  className="discoveries-element-card lowpoly-card"
+                  style={{ borderLeft: `5px solid #81D89E` }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                    <div className="category-img" style={{ 
+                      minWidth: '80px', height: '80px', borderRadius: '12px', marginRight: '1.5rem',
+                      backgroundImage: `url(${c.cat_image || ''})`, backgroundSize: 'cover', backgroundPosition: 'center',
+                      backgroundColor: 'rgba(255,255,255,0.05)', boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                    }} />
+                    <div className="discoveries-element-info">
+                      <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#81D89E' }}>
+                        {c.cat_name}
+                      </div>
+                      <p style={{ fontSize: '0.9rem', color: '#bbb', mt: '4px' }}>{c.cat_description || 'No description available.'}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="no-results"><p>Catch some blessings to unlock categories!</p></div>
+          )
+        ) : activeFilter === 'rarities' ? (
+          visibleRarities.length > 0 ? (
+            <div className="discoveries-elements-grid">
+              {visibleRarities.map(r => (
+                <article 
+                  key={r.rar_id}
+                  className="discoveries-element-card lowpoly-card"
+                  style={{ borderLeft: `5px solid ${getRarityColor(r.rar_name)}` }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                    <div className="rarity-img" style={{ 
+                      minWidth: '80px', height: '80px', borderRadius: '12px', marginRight: '1.5rem',
+                      backgroundImage: `url(${r.rar_card_image || ''})`, backgroundSize: 'cover', backgroundPosition: 'center',
+                      backgroundColor: 'rgba(255,255,255,0.05)', boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                    }} />
+                    <div className="discoveries-element-info">
+                      <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: getRarityColor(r.rar_name) }}>
+                        {r.rar_name}
+                      </div>
+                      <p style={{ fontSize: '0.9rem', color: '#bbb', mt: '4px' }}>{r.rar_description || 'No description available.'}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="no-results"><p>Catch some blessings to unlock rarities!</p></div>
+          )
         ) : (
           <div className="no-results">
             <p>Coming soon.</p>
@@ -454,11 +559,11 @@ function Discoveries() {
                 }}
               />
               <div>
-                <h2 className="discoveries-modal-title" style={{ color: getRarityColor(selectedBlessing.bl_rarity), textShadow: `0 0 15px ${getRarityColor(selectedBlessing.bl_rarity)}44` }}>
+                <h2 className="discoveries-modal-title" style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), textShadow: `0 0 15px ${getRarityColor(selectedBlessing.rarity?.rar_name)}44` }}>
                   {selectedBlessing.bl_name}
                 </h2>
                 <div className="discoveries-read-attribute" style={{ marginTop: '0.75rem', marginBottom: 0 }}>
-                  <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), fontWeight: 700 }}>Category:</span> {selectedBlessing.category?.cat_name || 'Unknown'} | <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), fontWeight: 700 }}>Rarity:</span> <span style={{ color: getRarityColor(selectedBlessing.bl_rarity), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.bl_rarity || 'Unknown'}</span>
+                  <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>Category:</span> {selectedBlessing.category?.cat_name || 'Unknown'} | <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>Rarity:</span> <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.rarity?.rar_name || 'Unknown'}</span>
                 </div>
               </div>
             </div>
@@ -466,7 +571,7 @@ function Discoveries() {
             <div className="discoveries-modal-body" style={{ marginTop: '1.5rem' }}>
               <div className="discoveries-blessing-attributes">
                 {selectedBlessing.blessing_attribute?.map((attr, idx) => (
-                  <div key={idx} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', borderLeft: `4px solid ${getRarityColor(selectedBlessing.bl_rarity)}`, marginBottom: '1rem', fontStyle: 'italic', color: getRarityColor(selectedBlessing.bl_rarity) }}>
+                  <div key={idx} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', borderLeft: `4px solid ${getRarityColor(selectedBlessing.rarity?.rar_name)}`, marginBottom: '1rem', fontStyle: 'italic', color: getRarityColor(selectedBlessing.rarity?.rar_name) }}>
                     {attr.attribute?.attr_name}
                   </div>
                 ))}
@@ -475,7 +580,7 @@ function Discoveries() {
                 {selectedBlessing.bl_description || '—'}
               </div>
               <div className="discoveries-read-date" style={{fontSize: '0.9rem', color: '#888'}}>
-                <span style={{color: '#81D89E', fontWeight: 800}}>Date Added:</span> {new Date().toISOString().split('T')[0]}
+                <span style={{color: '#81D89E', fontWeight: 800}}>Obtained on:</span> {selectedBlessing.date_obtained || 'Unknown'}
               </div>
             </div>
           </div>

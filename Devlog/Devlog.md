@@ -241,4 +241,16 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 *   **Sincronização de Progresso na Base de Dados:**
     *   **Triggers de Nível (PostgreSQL):** Implementação de gatilhos bidirecionais entre as tabelas `player` e `save`. Qualquer atualização no nível do jogador no portal reflete-se nos saves do jogo, e qualquer progresso "in-game" atualiza instantaneamente o perfil no website.
 *   **Resiliência de Sessão:** Adição de um reset de estado automático no Logout, garantindo que fragmentos de bênção restaurados não sejam visíveis por engano para novos convidados ou utilizadores não logados.
-*   **Essência:** O site agora não é apenas informativo, mas uma extensão interativa da experiência do jogo, recompensando o jogador logado com animações exclusivas e progressão de dados sincronizada entre plataforma Web e Game.
+## 21/04/2026 - Devlog #30: O Despertar das Memórias e Colecionáveis
+*   **Sistema de Colecionáveis (Lore Gathering):**
+    *   **Inauguração da Aba de Colecionáveis:** Implementação oficial de colecionáveis na página de Descobertas. Cada item agora exibe o seu nome, descrição, nível de obtenção original e a data exata em que o jogador o encontrou.
+    *   **Componente `CollectibleAvatar`:** Desenvolvimento de um sistema de carregamento de imagens inteligente que mapeia nomes de itens para ficheiros locais (`/public/collectibles/`), com lógica de retry automático para máxima resiliência.
+*   **Pivot: Progressão Baseada em Conquistas (Achievement-Driven Discovery):**
+    *   **Abandono do Filtro por Nível:** Decisão técnica de remover a visibilidade automática por nível. O portal agora funciona como um diário de conquistas real: um item só aparece se existir um registo físico na tabela `player_blessing` ou `player_collectible`.
+    *   **Desbloqueio em Cadeia de Categorias e Rariedades:** Implementação de lógica reativa onde os "quadrados" de Categorias (ex: Psychic) e Rariedades (ex: Legendary) são gerados dinamicamente apenas após a primeira interação do jogador com uma bênção desse tipo no jogo Unity.
+*   **Reengenharia Estrutural da Base de Dados:**
+    *   **Normalização de Rariedades:** Migração crítica do campo `bl_rarity` (texto estático) para `bl_rarity_id` (chave estrangeira). Isto permite que o site puxe dinamicamente as descrições ricas e artes de cartas da tabela `rarity`, garantindo consistência visual.
+    *   **Sincronização de Data de Obtenção:** Adição da coluna `obtention_date` em todas as tabelas de junção, permitindo ao jogador rever a cronologia da sua jornada pelas ilhas.
+*   **Ponte de Desenvolvimento (Unity Connection):**
+    *   Estabelecimento de novos protocolos para a integração com o motor de jogo. O foco mudou para a inserção atómica de dados em tabelas de junção, tratando o website como o espelho fiel e persistente dos eventos em tempo real do jogo.
+*   **Essência:** O portal de descobertas deixou de ser uma enciclopédia passiva para se tornar um sistema vivo e reativo que cresce conforme o jogador explora o mundo, transformando cada "apanhar" de item num momento de progresso visual permanente.
