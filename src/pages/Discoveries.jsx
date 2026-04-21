@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import BlessingAvatar from '../components/BlessingAvatar'
 import CollectibleAvatar from '../components/CollectibleAvatar'
+import RarityAvatar from '../components/RarityAvatar'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -342,11 +343,11 @@ function Discoveries() {
                       blessing={b} 
                       className="discoveries-element-avatar"
                       style={{ 
-                        minWidth: '80px',
-                        height: '80px',
+                        minWidth: '50px',
+                        height: '50px',
                         borderRadius: '50%',
-                        boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-                        marginRight: '1.5rem'
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                        marginRight: '1rem'
                       }}
                     />
 
@@ -405,11 +406,11 @@ function Discoveries() {
                         collectibleName={col.cl_name} 
                         className="discoveries-element-avatar"
                         style={{ 
-                          minWidth: '80px',
-                          height: '80px',
+                          minWidth: '50px',
+                          height: '50px',
                           borderRadius: '8px',
-                          boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-                          marginRight: '1.5rem',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                          marginRight: '1rem',
                           backgroundSize: 'cover'
                         }}
                       />
@@ -451,9 +452,9 @@ function Discoveries() {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
                     <div className="category-img" style={{ 
-                      minWidth: '80px', height: '80px', borderRadius: '12px', marginRight: '1.5rem',
+                      minWidth: '50px', height: '50px', borderRadius: '10px', marginRight: '1rem',
                       backgroundImage: `url(${c.cat_image || ''})`, backgroundSize: 'cover', backgroundPosition: 'center',
-                      backgroundColor: 'rgba(255,255,255,0.05)', boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                      backgroundColor: 'rgba(255,255,255,0.05)', boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
                     }} />
                     <div className="discoveries-element-info">
                       <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#81D89E' }}>
@@ -478,11 +479,14 @@ function Discoveries() {
                   style={{ borderLeft: `5px solid ${getRarityColor(r.rar_name)}` }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
-                    <div className="rarity-img" style={{ 
-                      minWidth: '80px', height: '80px', borderRadius: '12px', marginRight: '1.5rem',
-                      backgroundImage: `url(${r.rar_card_image || ''})`, backgroundSize: 'cover', backgroundPosition: 'center',
-                      backgroundColor: 'rgba(255,255,255,0.05)', boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
-                    }} />
+                    <RarityAvatar 
+                      rarityName={r.rar_name} 
+                      className="rarity-thumbnail"
+                      style={{ 
+                        minWidth: '50px', height: '50px', borderRadius: '10px', marginRight: '1rem',
+                        backgroundColor: 'rgba(255,255,255,0.05)', boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+                      }} 
+                    />
                     <div className="discoveries-element-info">
                       <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: getRarityColor(r.rar_name) }}>
                         {r.rar_name}

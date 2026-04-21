@@ -12,16 +12,16 @@ function BlessingAvatar({ blessing, className, style = {} }) {
 
   useEffect(() => {
     if (!blessing) return
-    
+
     let fileName = formatBlessingImage(blessing.bl_name);
-    
+
     // Manual overrides for specific blessing names
     const lowerName = blessing.bl_name.toLowerCase();
-    
+
     if (lowerName.includes('object levitation')) {
       fileName = 'Object Levitation.png';
     } else if (lowerName.includes('spirit vision')) {
-      fileName = 'Clarifier.png';
+      fileName = 'Spirit Vision.png';
     } else if (lowerName.includes('sequential jump')) {
       fileName = 'Sequential Jump.png';
     } else if (lowerName.includes('duplication')) {
@@ -58,8 +58,8 @@ function BlessingAvatar({ blessing, className, style = {} }) {
   const encodedUrl = imgUrl ? imgUrl.split(' ').map(part => encodeURIComponent(part)).join('%20') : null;
 
   return (
-    <div 
-      className={className} 
+    <div
+      className={className}
       style={{
         backgroundImage: imgUrl ? `url("${imgUrl}")` : 'none', // Browsers are often better at auto-encoding in JS style
         backgroundSize: 'contain',
@@ -70,11 +70,11 @@ function BlessingAvatar({ blessing, className, style = {} }) {
     >
       {/* Hidden image to trigger the retry logic if the path fails */}
       {imgUrl && (
-        <img 
-          src={imgUrl} 
-          alt="" 
-          style={{ display: 'none' }} 
-          onError={handleError} 
+        <img
+          src={imgUrl}
+          alt=""
+          style={{ display: 'none' }}
+          onError={handleError}
         />
       )}
     </div>
