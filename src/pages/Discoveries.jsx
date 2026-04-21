@@ -343,8 +343,8 @@ function Discoveries() {
                       blessing={b} 
                       className="discoveries-element-avatar"
                       style={{ 
-                        minWidth: '50px',
-                        height: '50px',
+                        minWidth: '70px',
+                        height: '100px',
                         marginRight: '1rem'
                       }}
                     />
@@ -404,8 +404,8 @@ function Discoveries() {
                         collectibleName={col.cl_name} 
                         className="discoveries-element-avatar"
                         style={{ 
-                          minWidth: '50px',
-                          height: '50px',
+                          minWidth: '70px',
+                          height: '100px',
                           marginRight: '1rem',
                           backgroundSize: 'cover'
                         }}
@@ -448,8 +448,8 @@ function Discoveries() {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
                     <div className="category-img" style={{ 
-                      minWidth: '50px', height: '50px', marginRight: '1rem',
-                      backgroundImage: `url(${c.cat_image || ''})`, backgroundSize: 'cover', backgroundPosition: 'center'
+                      minWidth: '70px', height: '100px', marginRight: '1rem',
+                      backgroundImage: `url(${c.cat_image || ''})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center'
                     }} />
                     <div className="discoveries-element-info">
                       <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#81D89E' }}>
@@ -478,7 +478,7 @@ function Discoveries() {
                       rarityName={r.rar_name} 
                       className="rarity-thumbnail"
                       style={{ 
-                        minWidth: '50px', height: '50px', marginRight: '1rem'
+                        minWidth: '70px', height: '100px', marginRight: '1rem'
                       }} 
                     />
                     <div className="discoveries-element-info">

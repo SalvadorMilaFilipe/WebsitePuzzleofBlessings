@@ -11,7 +11,21 @@ function RarityAvatar({ rarityName, className, style = {} }) {
   useEffect(() => {
     if (!rarityName) return
     
-    const fileName = `${rarityName}.png`;
+    let fileName = `${rarityName}.png`;
+    const lowerName = rarityName.toLowerCase();
+
+    // Manual overrides for rarity names
+    if (lowerName.includes('common') && !lowerName.includes('uncommon')) {
+      fileName = 'common_rar.png';
+    } else if (lowerName.includes('uncommon')) {
+      fileName = 'uncommon_rar.png';
+    } else if (lowerName.includes('rare')) {
+      fileName = 'rare_rar.png';
+    } else if (lowerName.includes('epic')) {
+      fileName = 'epic_rar.png';
+    } else if (lowerName.includes('legendary')) {
+      fileName = 'legendary_rar.png';
+    }
 
     // Try multiple path patterns to ensure we find the local image
     const paths = [
