@@ -76,7 +76,10 @@ function Discoveries() {
           .select(`
             date_obtained,
             blessing:blessing (
-              *,
+              bl_id,
+              bl_name,
+              bl_description,
+              bl_lv_id,
               rarity:rarity ( * ),
               category:category ( * ),
               blessing_attribute:blessing_attribute!fk_blessing_attr_blessing (

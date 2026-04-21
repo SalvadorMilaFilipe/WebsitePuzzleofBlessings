@@ -15,9 +15,25 @@ function BlessingAvatar({ blessing, className, style = {} }) {
     
     let fileName = formatBlessingImage(blessing.bl_name);
     
-    // Manual override to ensure 'Object Levitation' is exactly right
-    if (blessing.bl_name.toLowerCase().includes('object levitation')) {
+    // Manual overrides for specific blessing names
+    const lowerName = blessing.bl_name.toLowerCase();
+    
+    if (lowerName.includes('object levitation')) {
       fileName = 'Object Levitation.png';
+    } else if (lowerName.includes('spirit vision')) {
+      fileName = 'Clarifier.png';
+    } else if (lowerName.includes('sequential jump')) {
+      fileName = 'Sequential Jump.png';
+    } else if (lowerName.includes('duplication')) {
+      fileName = 'Duplication.png';
+    } else if (lowerName.includes('ephemeral point')) {
+      fileName = 'Ephemeral Point.png';
+    } else if (lowerName.includes('magnetic mold')) {
+      fileName = 'Magnetic Mold.png';
+    } else if (lowerName.includes('rhythm sensor')) {
+      fileName = 'Rhythm Sensor.png';
+    } else if (lowerName.includes('pattern lens')) {
+      fileName = 'Pattern Lens.png';
     }
 
     // Try multiple path patterns if the first one fails via the onError mechanism
