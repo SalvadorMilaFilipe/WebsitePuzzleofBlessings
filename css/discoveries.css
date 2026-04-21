@@ -125,14 +125,6 @@
     left: 1.25rem;
     width: 78px;
     height: 78px;
-    border-radius: 999px;
-    background:
-        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.18), transparent 55%),
-        linear-gradient(135deg, rgba(107, 203, 119, 0.35), rgba(91, 192, 235, 0.28), rgba(154, 138, 200, 0.25));
-    border: 2px solid rgba(123, 163, 196, 0.35);
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.35),
-        0 0 0 6px rgba(255, 255, 255, 0.03) inset;
     overflow: hidden;
 }
 
@@ -229,17 +221,9 @@
 .discoveries-element-avatar {
     width: 74px;
     height: 74px;
-    border-radius: 999px;
     flex: 0 0 auto;
-    background:
-        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.18), transparent 55%),
-        linear-gradient(135deg, rgba(107, 203, 119, 0.35), rgba(91, 192, 235, 0.28), rgba(154, 138, 200, 0.25));
-    border: 2px solid rgba(123, 163, 196, 0.35);
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.35),
-        0 0 0 6px rgba(255, 255, 255, 0.03) inset;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
 }
 
@@ -356,14 +340,6 @@
 .discoveries-modal-avatar {
     width: 76px;
     height: 76px;
-    border-radius: 999px;
-    background:
-        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.18), transparent 55%),
-        linear-gradient(135deg, rgba(107, 203, 119, 0.35), rgba(91, 192, 235, 0.28), rgba(154, 138, 200, 0.25));
-    border: 2px solid rgba(123, 163, 196, 0.35);
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.35),
-        0 0 0 6px rgba(255, 255, 255, 0.03) inset;
     flex: 0 0 auto;
 }
 

@@ -345,8 +345,6 @@ function Discoveries() {
                       style={{ 
                         minWidth: '50px',
                         height: '50px',
-                        borderRadius: '50%',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
                         marginRight: '1rem'
                       }}
                     />
@@ -408,8 +406,6 @@ function Discoveries() {
                         style={{ 
                           minWidth: '50px',
                           height: '50px',
-                          borderRadius: '8px',
-                          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
                           marginRight: '1rem',
                           backgroundSize: 'cover'
                         }}
@@ -452,9 +448,8 @@ function Discoveries() {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
                     <div className="category-img" style={{ 
-                      minWidth: '50px', height: '50px', borderRadius: '10px', marginRight: '1rem',
-                      backgroundImage: `url(${c.cat_image || ''})`, backgroundSize: 'cover', backgroundPosition: 'center',
-                      backgroundColor: 'rgba(255,255,255,0.05)', boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+                      minWidth: '50px', height: '50px', marginRight: '1rem',
+                      backgroundImage: `url(${c.cat_image || ''})`, backgroundSize: 'cover', backgroundPosition: 'center'
                     }} />
                     <div className="discoveries-element-info">
                       <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#81D89E' }}>
@@ -483,8 +478,7 @@ function Discoveries() {
                       rarityName={r.rar_name} 
                       className="rarity-thumbnail"
                       style={{ 
-                        minWidth: '50px', height: '50px', borderRadius: '10px', marginRight: '1rem',
-                        backgroundColor: 'rgba(255,255,255,0.05)', boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+                        minWidth: '50px', height: '50px', marginRight: '1rem'
                       }} 
                     />
                     <div className="discoveries-element-info">
@@ -520,8 +514,7 @@ function Discoveries() {
                 collectibleName={selectedCollectible.collectible?.cl_name} 
                 className="discoveries-modal-avatar"
                 style={{
-                  backgroundSize: 'contain',
-                  borderRadius: '12px'
+                  backgroundSize: 'contain'
                 }}
               />
               <div>
@@ -562,7 +555,7 @@ function Discoveries() {
                 blessing={selectedBlessing} 
                 className="discoveries-modal-avatar"
                 style={{
-                  backgroundSize: 'cover'
+                  backgroundSize: 'contain'
                 }}
               />
               <div>
