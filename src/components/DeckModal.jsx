@@ -16,19 +16,39 @@ export default function DeckModal({ isOpen, onClose, userId }) {
     const fetchData = async () => {
         setLoading(true)
         try {
+            // Updated query: Removed non-existent pb_id. pl_id and bl_id are the composite keys.
+            // Using blessing(*) and category(*) to ensure correct data retrieval.
             const { data, error } = await supabase
                 .from('player_blessing')
-                .select('pb_id, is_in_deck, deck_slot, blessing:bl_id(*, category:cat_id(cat_name))')
+                .select(`
+                    pl_id, 
+                    bl_id, 
+                    is_in_deck, 
+                    deck_slot, 
+                    blessing:bl_id (
+                        *,
+                        category:bl_category_id ( cat_name )
+                    )
+                `)
                 .eq('pl_id', userId)
 
-            if (error) throw error
+            if (error) {
+                console.error("Supabase error:", error)
+                throw error
+            }
 
             const pbData = data || []
-            setAllBlessings(pbData)
+            // Create a unique front-end ID if needed, but bl_id is unique per player
+            const processedData = pbData.map(item => ({
+                ...item,
+                id: `${item.pl_id}-${item.bl_id}` // Composite ID for React keys
+            }))
+            
+            setAllBlessings(processedData)
 
             // Fill slots based on deck_slot (1-4)
             const initialSlots = [null, null, null, null]
-            pbData.forEach(item => {
+            processedData.forEach(item => {
                 if (item.is_in_deck && item.deck_slot >= 1 && item.deck_slot <= 4) {
                     initialSlots[item.deck_slot - 1] = item
                 }
@@ -42,7 +62,7 @@ export default function DeckModal({ isOpen, onClose, userId }) {
     }
 
     const toggleBlessing = (pbItem) => {
-        const slotIndex = deckSlots.findIndex(slot => slot?.pb_id === pbItem.pb_id)
+        const slotIndex = deckSlots.findIndex(slot => slot?.bl_id === pbItem.bl_id)
         
         if (slotIndex !== -1) {
             // Remove from deck
@@ -71,11 +91,11 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                 .update({ is_in_deck: false, deck_slot: null })
                 .eq('pl_id', userId)
 
-            // 2. Update the 4 chosen ones (Sequential updates to ensure correct indexing)
+            // 2. Update the 4 chosen ones (Sequential updates using composite keys)
             const updates = deckSlots
                 .filter(slot => slot !== null)
                 .map((slot, index) => ({
-                    pb_id: slot.pb_id,
+                    bl_id: slot.bl_id,
                     is_in_deck: true,
                     deck_slot: index + 1
                 }))
@@ -84,7 +104,8 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                 await supabase
                     .from('player_blessing')
                     .update({ is_in_deck: true, deck_slot: up.deck_slot })
-                    .eq('pb_id', up.pb_id)
+                    .eq('pl_id', userId)
+                    .eq('bl_id', up.bl_id)
             }
 
             alert("Deck Saved successfully!")
@@ -98,13 +119,13 @@ export default function DeckModal({ isOpen, onClose, userId }) {
 
     if (!isOpen) return null
 
-    const inventory = allBlessings.filter(b => !deckSlots.find(s => s?.pb_id === b.pb_id))
+    const inventory = allBlessings.filter(b => !deckSlots.find(s => s?.bl_id === b.bl_id))
 
     return (
         <div className="deck-overlay" onClick={onClose}>
             <div className="deck-modal" onClick={e => e.stopPropagation()}>
                 <header className="deck-header">
-                    <h2>Battle Deck</h2>
+                    <h2>Blessings Deck</h2>
                     <p>Equip up to 4 blessings for your journey.</p>
                 </header>
 
@@ -131,7 +152,7 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                     <div className="deck-inventory-grid">
                         {loading ? <div className="deck-loading">Loading...</div> : 
                           inventory.length > 0 ? inventory.map(item => (
-                            <div key={item.pb_id} className="inventory-item" onClick={() => toggleBlessing(item)}>
+                            <div key={item.id} className="inventory-item" onClick={() => toggleBlessing(item)}>
                                 <BlessingAvatar blessing={item.blessing} className="inventory-avatar" />
                                 <small>{item.blessing.bl_name}</small>
                             </div>
