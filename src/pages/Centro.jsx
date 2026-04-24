@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import BlessingAvatar from '../components/BlessingAvatar'
+import DeckModal from '../components/DeckModal'
 import '../../css/centro.css'
 
 function Centro() {
@@ -13,6 +14,7 @@ function Centro() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [isShopOpen, setIsShopOpen] = useState(false)
+  const [isDeckOpen, setIsDeckOpen] = useState(false)
   const [shopBlessings, setShopBlessings] = useState([])
   const [shopLoading, setShopLoading] = useState(false)
 
@@ -315,6 +317,14 @@ function Centro() {
             </div>
             <span className="btn-label">Catalog</span>
           </button>
+
+          <button className="icon-btn deck-btn" title="My Deck" onClick={() => setIsDeckOpen(true)}>
+            <div className="btn-icon-wrapper">
+              <img src="/img/deck_icon.png" alt="🃏" className="btn-icon"
+                onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/1070/1070260.png" }} />
+            </div>
+            <span className="btn-label">Deck</span>
+          </button>
         </nav>
 
         {/* MIDDLE AREA */}
@@ -370,6 +380,12 @@ function Centro() {
           </div>
         </div>
       )}
+      {/* DECK MODAL */}
+      <DeckModal 
+        isOpen={isDeckOpen} 
+        onClose={() => setIsDeckOpen(false)} 
+        userId={userProfile?.pl_id} 
+      />
     </main>
   )
 }
