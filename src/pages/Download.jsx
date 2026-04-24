@@ -1,11 +1,39 @@
 import { Link } from 'react-router-dom'
-import { useEffect, lazy, Suspense } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import Footer from '../components/Footer'
+import { supabase } from '../lib/supabase'
 // import PuzzleAnimation from '../components/PuzzleAnimation'
 
 const PuzzleAnimation = lazy(() => import('../components/PuzzleAnimation'))
 
 function Download() {
+  const [latestInfo, setLatestInfo] = useState({
+    version: 'v1.0.0-Beta',
+    size_mb: '120',
+    platform: 'Windows (Tested)',
+    add_date: '2026-04-24'
+  })
+
+  useEffect(() => {
+    async function fetchLatestInfo() {
+      try {
+        const { data, error } = await supabase
+          .from('launchergamedownload')
+          .select('*')
+          .order('id', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        if (data && !error) {
+          setLatestInfo(data)
+        }
+      } catch (err) {
+        console.error('Error fetching game info:', err)
+      }
+    }
+    fetchLatestInfo()
+  }, [])
+
   useEffect(() => {
     // Smooth scroll handler
     const handleSmoothScroll = (e) => {
@@ -46,7 +74,12 @@ function Download() {
               through spatial problem-solving and cooperative interactions
             </p>
             <div className="hero-buttons">
-              <a href="#download" className="btn btn-primary">
+              <a 
+                href="hhttps://www.dropbox.com/scl/fi/u9ba96y3tyb0i6ag0jf2j/LauncherInstaller.exe?rlkey=n7xdawedmyow8us59dzt839ho&st=k6rkzzgf&dl=1"
+                className="btn btn-primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span className="btn-icon">⬇️</span>
                 Download Game
               </a>
@@ -77,17 +110,23 @@ function Download() {
             <div className="download-card lowpoly-card">
               <div className="download-info">
                 <h3>Puzzle of Blessings</h3>
-                <p className="download-version">Latest Version: <span>In Development</span></p>
-                <p className="download-size">Size: <span>To be determined</span></p>
-                <p className="download-platforms">Platforms: Windows, macOS, Linux (Coming Soon)</p>
+                <p className="download-version">Latest Version: <span>{latestInfo.version}</span></p>
+                <p className="download-size">Size: <span>{latestInfo.size_mb} MB</span></p>
+                <p className="download-platforms">Platforms: {latestInfo.platform}</p>
+                <p className="download-date">Released: <span>{latestInfo.add_date}</span></p>
               </div>
               <div className="download-actions">
-                <button className="btn-download" disabled>
+                <a 
+                  href="https://www.dropbox.com/scl/fi/jeekwc6c7eopmng1odidj/LauncherInstaller.exe?rlkey=iorjtjphrjebkrfvo59ay3krz&st=yeior2g2&dl=1"
+                  className="btn-download"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <span className="download-icon">⬇️</span>
-                  <span className="download-text">Coming Soon</span>
-                </button>
+                  <span className="download-text">Download Game</span>
+                </a>
                 <p className="download-notice">
-                  The game will be available for download soon. Stay tuned for updates!
+                  Official Windows installer. Run to start your journey.
                 </p>
               </div>
             </div>

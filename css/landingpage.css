@@ -966,14 +966,16 @@ section {
 
 .download-version,
 .download-size,
-.download-platforms {
+.download-platforms,
+.download-date {
     color: var(--text-muted);
     font-size: 1.1rem;
     margin: 0.5rem 0;
 }
 
 .download-version span,
-.download-size span {
+.download-size span,
+.download-date span {
     color: var(--text-secondary);
     font-weight: 600;
 }
