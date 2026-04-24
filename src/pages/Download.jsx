@@ -75,7 +75,7 @@ function Download() {
             </p>
             <div className="hero-buttons">
               <a 
-                href="hhttps://www.dropbox.com/scl/fi/u9ba96y3tyb0i6ag0jf2j/LauncherInstaller.exe?rlkey=n7xdawedmyow8us59dzt839ho&st=k6rkzzgf&dl=1"
+                href="https://www.dropbox.com/scl/fi/u9ba96y3tyb0i6ag0jf2j/LauncherInstaller.exe?rlkey=n7xdawedmyow8us59dzt839ho&st=k6rkzzgf&dl=1"
                 className="btn btn-primary"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -116,17 +116,8 @@ function Download() {
                 <p className="download-date">Released: <span>{latestInfo.add_date}</span></p>
               </div>
               <div className="download-actions">
-                <a 
-                  href="https://www.dropbox.com/scl/fi/jeekwc6c7eopmng1odidj/LauncherInstaller.exe?rlkey=iorjtjphrjebkrfvo59ay3krz&st=yeior2g2&dl=1"
-                  className="btn-download"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="download-icon">⬇️</span>
-                  <span className="download-text">Download Game</span>
-                </a>
                 <p className="download-notice">
-                  Official Windows installer. Run to start your journey.
+                  Official Windows installer. Use the main download button at the top of the page.
                 </p>
               </div>
             </div>
