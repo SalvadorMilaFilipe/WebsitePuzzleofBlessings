@@ -64,12 +64,30 @@ function Register() {
                 pl_country: country
             }
 
-            // 1. Create Auth account
-            const result = await signupWithEmail(email.trim(), password, metadata)
-            
-            // 2. If confirmation is OFF, we get a session immediately
-            if (result.session) {
-                console.log('[Register] Account created, finalizing database profile...')
+            // 1. If we DON'T have a session, create Auth account (Normal Signup)
+            if (!session) {
+                const result = await signupWithEmail(email.trim(), password, metadata)
+                
+                // 2. If confirmation is OFF, we get a session immediately
+                if (result.session) {
+                    console.log('[Register] Account created, finalizing database profile...')
+                    await completeRegistration(
+                        username.trim(), 
+                        gameUser.trim(), 
+                        gamePassword.trim(), 
+                        password, 
+                        birthYear, 
+                        country, 
+                        result.session
+                    )
+                    navigate('/')
+                } else {
+                    // 3. Fallback for confirmation ON (just in case)
+                    setSuccessMsg('Account created! Please check your email to confirm and activate your profile.')
+                }
+            } else {
+                // 1. b. If we ALREADY have a session (Google), just complete registration
+                console.log('[Register] Session active (OAuth), updating profile and syncing password...')
                 await completeRegistration(
                     username.trim(), 
                     gameUser.trim(), 
@@ -77,12 +95,9 @@ function Register() {
                     password, 
                     birthYear, 
                     country, 
-                    result.session
+                    session
                 )
                 navigate('/')
-            } else {
-                // 3. Fallback for confirmation ON (just in case)
-                setSuccessMsg('Account created! Please check your email to confirm and activate your profile.')
             }
             
         } catch (err) {

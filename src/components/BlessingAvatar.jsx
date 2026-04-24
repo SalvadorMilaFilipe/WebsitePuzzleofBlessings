@@ -28,10 +28,6 @@ function BlessingAvatar({ blessing, className, style = {} }) {
       fileName = 'Duplication.png';
     } else if (lowerName.includes('ephemeral point')) {
       fileName = 'Ephemeral Point.png';
-    } else if (lowerName.includes('magnetic mold')) {
-      fileName = 'Magnetic Mold.png';
-    } else if (lowerName.includes('rhythm sensor')) {
-      fileName = 'Rhythm Sensor.png';
     } else if (lowerName.includes('pattern lens')) {
       fileName = 'Pattern Lens.png';
     }

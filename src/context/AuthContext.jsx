@@ -322,6 +322,21 @@ export const AuthProvider = ({ children }) => {
         }
 
         console.log('[Auth] Attempting to complete registration for:', username)
+        
+        // If we have a password and an active session (e.g. Google login), 
+        // we must update the Supabase Auth user to have this password so they can login normally later.
+        if (sitePassword && activeSession) {
+            console.log('[Auth] Syncing password with Supabase Auth...')
+            const { error: updateError } = await supabase.auth.updateUser({ password: sitePassword })
+            if (updateError) {
+                console.error('[Auth] Error syncing password to Supabase Auth:', updateError.message)
+                // We continue anyway as the DB profile is critical, 
+                // but the user might not be able to use normal login immediately if this fails.
+            } else {
+                console.log('[Auth] Supabase Auth password updated successfully.')
+            }
+        }
+
         const { data, error } = await supabase
             .from('player') // Updated from jogador
             .upsert(newProfile, { onConflict: 'pl_email' }) // Added UPSERT logic to allow relinking existing progress if auth user was deleted
