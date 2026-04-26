@@ -276,3 +276,11 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 277: *   **Utilidade de Formatação Admin:** Expansão do `formatUtils.js` com a função `getAdminBlessingUrl`, permitindo chamadas dinâmicas e limpas para estas novas entidades.
 278: *   **Controlo de Acesso na Wiki (Discoveries):** Implementação de uma nova aba "Admin" no portal de Descobertas. A aba está configurada com proteção de rota visual, aparecendo apenas para utilizadores com permissões elevadas, garantindo que "Admin NoClip" e outras ferramentas não quebrem a imersão do utilizador comum.
 279: *   **Essência:** O portal agora possui uma camada de "Backstage", permitindo que os desenvolvedores e administradores visualizem e testem mecânicas especiais sem interferir na experiência pública do jogo.
+280: 
+281: ---
+282: 
+283: ## 26/04/2026 - Devlog #33: Refinamento de UX do Deck e Gestão de Versões
+284: *   **Polimento Visual do Deck:** Expansão das cartas no sistema de equipagem. As bênçãos agora preenchem 100% do slot ativo, ocultando a borda tracejada para um aspeto mais "físico" e integrado.
+285: *   **Hierarquia de Informação:** Otimização das legendas das cartas (Slot Name). Aumentei o tamanho da fonte e implementei um fundo semi-transparente na base da carta, garantindo legibilidade total independentemente da arte da benção.
+286: *   **Otimização de Layout:** Ajuste passivo na largura do modal do Deck para evitar desformatações em ecrãs de média resolução, mantendo a proporção ideal entre os slots ativos e a coleção de inventário.
+287: *   **Persistência e Histórico:** Realização de commit global e push para o repositório principal, consolidando as alterações de ordenação inversa de slots e infraestrutura de admin.

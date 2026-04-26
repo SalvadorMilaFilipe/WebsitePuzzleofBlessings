@@ -23,12 +23,12 @@
     background: var(--glass-bg, rgba(25, 25, 40, 0.95));
     border: 1px solid var(--glass-border, rgba(186, 170, 232, 0.3));
     border-radius: 20px;
-    width: clamp(300px, 90%, 800px);
-    padding: 2rem;
+    width: clamp(300px, 85%, 750px);
+    padding: 1.5rem;
     box-shadow: 0 0 40px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.2rem;
 }
 
 .deck-header {
@@ -74,7 +74,13 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    padding: 0;
     overflow: hidden;
+}
+
+.deck-slot:not(.empty) {
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .deck-slot::before {
@@ -102,8 +108,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    padding: 0.5rem;
+    justify-content: flex-start;
+    padding: 0;
     animation: scaleIn 0.3s ease;
 }
 
@@ -114,13 +120,23 @@
 
 .slot-avatar {
     width: 100%;
-    height: 100px;
+    height: 100%;
+    border-radius: 10px;
+    z-index: 1;
 }
 
 .slot-name {
-    font-size: 0.7rem;
-    color: #baaae8;
+    font-size: 0.9rem;
+    color: #fff;
     text-align: center;
+    width: 100%;
+    padding: 8px 4px;
+    background: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    font-weight: 600;
 }
 
 .slot-empty-icon {
