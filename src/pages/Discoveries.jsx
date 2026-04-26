@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import BlessingAvatar from '../components/BlessingAvatar'
 import CollectibleAvatar from '../components/CollectibleAvatar'
 import RarityAvatar from '../components/RarityAvatar'
+import AdminBlessingAvatar from '../components/AdminBlessingAvatar'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -16,6 +17,17 @@ function Discoveries() {
   const [blessingsLoading, setBlessingsLoading] = useState(false)
   const [blessingsError, setBlessingsError] = useState('')
   const [selectedBlessing, setSelectedBlessing] = useState(null)
+
+  const [adminBlessings, setAdminBlessings] = useState([
+    { 
+      bl_id: 'A1', 
+      bl_name: 'Admin NoClip', 
+      bl_description: 'Allows the user to walk through walls and fly through the environment for testing purposes.',
+      category: { cat_name: 'Admin Utility' },
+      rarity: { rar_name: 'Legendary' }, // Give it a legendary look
+      isAdminOnly: true 
+    }
+  ])
   
   const [playerLevel, setPlayerLevel] = useState(0)
   const [playerId, setPlayerId] = useState(null)
@@ -225,6 +237,21 @@ function Discoveries() {
     )
   }, [rarities, searchTerm])
 
+  const visibleAdminBlessings = useMemo(() => {
+    if (!adminBlessings) return []
+    if (!searchTerm) return adminBlessings
+    const q = searchTerm.toLowerCase()
+    return adminBlessings.filter(b => 
+      (b.bl_name || '').toLowerCase().includes(q) || 
+      (b.bl_description || '').toLowerCase().includes(q)
+    )
+  }, [adminBlessings, searchTerm])
+
+  const isAdmin = useMemo(() => {
+    // Current admin identification logic
+    return session?.user?.email === 'sfilipe05@gmail.com' || userProfile?.pl_username === 'Salvador Filipe' || userProfile?.pl_is_admin === true;
+  }, [session, userProfile])
+
   if (!session) {
     return (
       <main className="discoveries-main-guest">
@@ -319,6 +346,15 @@ function Discoveries() {
               >
                 Levels
               </button>
+              {isAdmin && (
+                <button
+                  className={`filter-tab admin-tab ${activeFilter === 'admin' ? 'active' : ''}`}
+                  onClick={() => setActiveFilter('admin')}
+                  style={{ borderLeft: '2px solid #FFD700', color: '#FFD700' }}
+                >
+                  Admin
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -494,6 +530,52 @@ function Discoveries() {
           ) : (
             <div className="no-results"><p>Catch some blessings to unlock rarities!</p></div>
           )
+        ) : activeFilter === 'admin' && isAdmin ? (
+          visibleAdminBlessings.length > 0 ? (
+            <div className="discoveries-elements-grid">
+              {visibleAdminBlessings.map(b => (
+                <article 
+                  key={b.bl_id}
+                  className="discoveries-element-card lowpoly-card admin-card"
+                  onClick={() => setSelectedBlessing(b)}
+                  style={{ borderLeft: `5px solid #FFD700`, background: 'rgba(255, 215, 0, 0.05)' }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                    <AdminBlessingAvatar 
+                      blessing={b} 
+                      className="discoveries-element-avatar"
+                      style={{ 
+                        minWidth: '70px',
+                        height: '100px',
+                        marginRight: '1rem'
+                      }}
+                    />
+
+                    <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#FFD700' }}>
+                          {b.bl_name}
+                        </div>
+                        <span style={{ fontSize: '0.8rem', background: 'rgba(255,215,0,0.2)', padding: '2px 8px', borderRadius: '4px', color: '#FFD700', fontWeight: 'bold' }}>
+                          ADMIN
+                        </span>
+                      </div>
+
+                      <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: '#FFD700', fontWeight: 700 }}>
+                        {b.category?.cat_name || 'Admin Utility'}
+                      </p>
+
+                      <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '4px 0' }}>
+                        {b.bl_description}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="no-results"><p>No admin tools found.</p></div>
+          )
         ) : (
           <div className="no-results">
             <p>Coming soon.</p>
@@ -551,19 +633,29 @@ function Discoveries() {
             </button>
             
             <div className="discoveries-modal-header">
-              <BlessingAvatar 
-                blessing={selectedBlessing} 
-                className="discoveries-modal-avatar"
-                style={{
-                  backgroundSize: 'contain'
-                }}
-              />
+              {selectedBlessing.isAdminOnly ? (
+                <AdminBlessingAvatar 
+                  blessing={selectedBlessing} 
+                  className="discoveries-modal-avatar"
+                  style={{
+                    backgroundSize: 'contain'
+                  }}
+                />
+              ) : (
+                <BlessingAvatar 
+                  blessing={selectedBlessing} 
+                  className="discoveries-modal-avatar"
+                  style={{
+                    backgroundSize: 'contain'
+                  }}
+                />
+              )}
               <div>
                 <h2 className="discoveries-modal-title" style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), textShadow: `0 0 15px ${getRarityColor(selectedBlessing.rarity?.rar_name)}44` }}>
                   {selectedBlessing.bl_name}
                 </h2>
                 <div className="discoveries-read-attribute" style={{ marginTop: '0.75rem', marginBottom: 0 }}>
-                  <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>Category:</span> {selectedBlessing.category?.cat_name || 'Unknown'} | <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>Rarity:</span> <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.rarity?.rar_name || 'Unknown'}</span>
+                  <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>{selectedBlessing.isAdminOnly ? 'Type:' : 'Category:'}</span> {selectedBlessing.category?.cat_name || 'Unknown'} | <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>Rarity:</span> <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.rarity?.rar_name || 'Unknown'}</span>
                 </div>
               </div>
             </div>
@@ -579,9 +671,16 @@ function Discoveries() {
               <div className="discoveries-read-description" style={{marginTop: '1.25rem', marginBottom: '1.5rem', color: '#ccc', fontSize: '1rem', lineHeight: '1.7'}}>
                 {selectedBlessing.bl_description || '—'}
               </div>
-              <div className="discoveries-read-date" style={{fontSize: '0.9rem', color: '#888'}}>
-                <span style={{color: '#81D89E', fontWeight: 800}}>Obtained on:</span> {selectedBlessing.date_obtained || 'Unknown'}
-              </div>
+              {!selectedBlessing.isAdminOnly && (
+                <div className="discoveries-read-date" style={{fontSize: '0.9rem', color: '#888'}}>
+                  <span style={{color: '#81D89E', fontWeight: 800}}>Obtained on:</span> {selectedBlessing.date_obtained || 'Unknown'}
+                </div>
+              )}
+              {selectedBlessing.isAdminOnly && (
+                <div className="discoveries-read-date" style={{fontSize: '0.8rem', color: '#FFD700', opacity: 0.8}}>
+                  * This is an administrative tool. Use with caution.
+                </div>
+              )}
             </div>
           </div>
         </div>

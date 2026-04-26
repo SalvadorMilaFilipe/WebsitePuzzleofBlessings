@@ -2,6 +2,42 @@ import { useState } from 'react'
 
 const UPDATES = [
   {
+    version: '1.0.0-Beta',
+    date: 'April 24, 2026',
+    description: 'Major infrastructure update including dynamic systems and deck management.',
+    sections: [
+      {
+        title: '💎 New Features',
+        items: [
+          'Implemented the Battle Deck system - Configure up to 4 blessings for gameplay.',
+          'Added dynamic version tracking for game downloads directly from database.',
+          'Synchronized Google OAuth authentication with standard login credentials.'
+        ]
+      },
+      {
+        title: '🔧 Improvements & Fixes',
+        subsections: [
+          {
+            title: 'Website & Database:',
+            items: [
+              'Enabled automatic Dropbox installer downloads via direct links.',
+              'Added release date tracking for new game versions.',
+              'Fixed player_blessing schema issues for multi-device sync.'
+            ]
+          },
+          {
+            title: 'User Experience:',
+            items: [
+              'New translucent "Glassmorphism" UI for the Deck interface.',
+              'Optimized "The Center" dashboard for better high-resolution scaling.',
+              'Improved login resilience for users using hybrid authentication methods.'
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     version: '0.9.0',
     date: 'December 20, 2023',
     description: 'Beta release with core mechanics and initial content.',

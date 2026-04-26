@@ -254,3 +254,25 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 *   **Ponte de Desenvolvimento (Unity Connection):**
     *   Estabelecimento de novos protocolos para a integração com o motor de jogo. O foco mudou para a inserção atómica de dados em tabelas de junção, tratando o website como o espelho fiel e persistente dos eventos em tempo real do jogo.
 *   **Essência:** O portal de descobertas deixou de ser uma enciclopédia passiva para se tornar um sistema vivo e reativo que cresce conforme o jogador explora o mundo, transformando cada "apanhar" de item num momento de progresso visual permanente.
+
+---
+
+## 24/04/2026 - Devlog #31: Hibridização de Contas e Gestão Dinâmica de Deck
+*   **Sincronização de Autenticação Híbrida:** Resolução de um problema crítico onde utilizadores registados via Google OAuth não conseguiam utilizar o login tradicional. Implementação de lógica de atualização automática de password no Supabase Auth, garantindo que uma única credencial funcione em todas as plataformas (Site e Jogo).
+*   **Sistema de Download Dinâmico (V1):** Transformação da página de download num sistema orientado a dados.
+    *   Integração da tabela `launchergamedownload` para carregar automaticamente a versão mais recente, tamanho e plataforma.
+    *   Automatização de links de instalador Dropbox com parâmetros de download direto (`dl=1`).
+*   **Lançamento do Gestor de Deck (Battle Prep):**
+    *   **Arquitetura de 4 Slots:** Desenvolvimento de uma interface que permite ao jogador equipar até 4 bênçãos ativas para utilizar no jogo.
+    *   **Sincronização de Slots Persistente:** Introdução da coluna `deck_slot` na base de dados para garantir que a ordem das habilidades escolhida no site é mantida fielmente dentro do motor de jogo.
+    *   **Visual Discovery (The Vault):** Interface de inventário reativa que separa claramente o que está equipado do que está guardado na coleção, com suporte a trocas rápidas.
+*   **Essência:** O ecossistema "Puzzle of Blessings" agora é tecnicamente unificado, permitindo que a gestão de habilidades e a atualização do jogo aconteçam de forma fluida e dinâmica, eliminando barreiras entre o navegador e o executável.
+271: 
+272: ---
+273: 
+274: ## 26/04/2026 - Devlog #32: Infraestrutura Admin e Bençãos de Depuração
+275: *   **Expansão do Diretório de Assets:** Criação da pasta `/public/blessingcardmodels/` (singular), dedicada exclusivamente a bençãos de uso administrativo e ferramentas de depuração (Debug Tools).
+276: *   **Módulo de Visualização Admin:** Desenvolvimento do componente `AdminBlessingAvatar`. Segue a mesma lógica de resiliência e multi-path do componente padrão, mas aponta para o novo repositório de assets restrito.
+277: *   **Utilidade de Formatação Admin:** Expansão do `formatUtils.js` com a função `getAdminBlessingUrl`, permitindo chamadas dinâmicas e limpas para estas novas entidades.
+278: *   **Controlo de Acesso na Wiki (Discoveries):** Implementação de uma nova aba "Admin" no portal de Descobertas. A aba está configurada com proteção de rota visual, aparecendo apenas para utilizadores com permissões elevadas, garantindo que "Admin NoClip" e outras ferramentas não quebrem a imersão do utilizador comum.
+279: *   **Essência:** O portal agora possui uma camada de "Backstage", permitindo que os desenvolvedores e administradores visualizem e testem mecânicas especiais sem interferir na experiência pública do jogo.

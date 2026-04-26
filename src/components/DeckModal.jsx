@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import BlessingAvatar from './BlessingAvatar'
+import AdminBlessingAvatar from './AdminBlessingAvatar'
 import '../css/deck.css'
 
 export default function DeckModal({ isOpen, onClose, userId }) {
@@ -41,16 +42,21 @@ export default function DeckModal({ isOpen, onClose, userId }) {
             // Create a unique front-end ID if needed, but bl_id is unique per player
             const processedData = pbData.map(item => ({
                 ...item,
-                id: `${item.pl_id}-${item.bl_id}` // Composite ID for React keys
+                id: `${item.pl_id}-${item.bl_id}`, // Composite ID for React keys
+                blessing: {
+                    ...item.blessing,
+                   isAdminOnly: item.blessing?.bl_name?.toLowerCase().includes('admin') || item.blessing?.isAdminOnly
+                }
             }))
             
             setAllBlessings(processedData)
 
-            // Fill slots based on deck_slot (1-4)
+            // Fill slots based on reversed deck_slot: 
+            // Slot 4 -> index 0, Slot 3 -> index 1, Slot 2 -> index 2, Slot 1 -> index 3
             const initialSlots = [null, null, null, null]
             processedData.forEach(item => {
                 if (item.is_in_deck && item.deck_slot >= 1 && item.deck_slot <= 4) {
-                    initialSlots[item.deck_slot - 1] = item
+                    initialSlots[4 - item.deck_slot] = item
                 }
             })
             setDeckSlots(initialSlots)
@@ -97,7 +103,7 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                 .map((slot, index) => ({
                     bl_id: slot.bl_id,
                     is_in_deck: true,
-                    deck_slot: index + 1
+                    deck_slot: 4 - index
                 }))
 
             for (const up of updates) {
@@ -133,10 +139,19 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                     <h3>Active Slots</h3>
                     <div className="deck-slots-grid">
                         {deckSlots.map((slot, i) => (
-                            <div key={i} className={`deck-slot ${!slot ? 'empty' : ''}`} onClick={() => slot && toggleBlessing(slot)}>
+                            <div 
+                                key={i} 
+                                className={`deck-slot ${!slot ? 'empty' : ''}`} 
+                                onClick={() => slot && toggleBlessing(slot)}
+                                data-slot={4 - i}
+                            >
                                 {slot ? (
                                     <div className="slot-filled">
-                                        <BlessingAvatar blessing={slot.blessing} className="slot-avatar" />
+                                        {slot.blessing?.isAdminOnly ? (
+                                            <AdminBlessingAvatar blessing={slot.blessing} className="slot-avatar" />
+                                        ) : (
+                                            <BlessingAvatar blessing={slot.blessing} className="slot-avatar" />
+                                        )}
                                         <span className="slot-name">{slot.blessing.bl_name}</span>
                                     </div>
                                 ) : (
@@ -153,7 +168,11 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                         {loading ? <div className="deck-loading">Loading...</div> : 
                           inventory.length > 0 ? inventory.map(item => (
                             <div key={item.id} className="inventory-item" onClick={() => toggleBlessing(item)}>
-                                <BlessingAvatar blessing={item.blessing} className="inventory-avatar" />
+                                {item.blessing?.isAdminOnly ? (
+                                    <AdminBlessingAvatar blessing={item.blessing} className="inventory-avatar" />
+                                ) : (
+                                    <BlessingAvatar blessing={item.blessing} className="inventory-avatar" />
+                                )}
                                 <small>{item.blessing.bl_name}</small>
                             </div>
                         )) : <div className="deck-empty">No unequipped blessings.</div>}
