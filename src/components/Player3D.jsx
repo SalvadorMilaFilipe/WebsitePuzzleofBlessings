@@ -46,13 +46,15 @@ function FBXModel({ url, onError }) {
     }, [loadedFbx])
 
     return (
-      <Center top>
-        <primitive 
-          object={loadedFbx} 
-          scale={0.02} // Increased scale
-          dispose={null} 
-        />
-      </Center>
+      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
+        <Center top>
+          <primitive 
+            object={loadedFbx} 
+            scale={0.015} 
+            dispose={null} 
+          />
+        </Center>
+      </Float>
     )
   } catch (err) {
     console.error("FBX Load Error:", err)
@@ -77,14 +79,11 @@ const Player3D = () => {
 
   return (
     <div style={{ 
-      width: '600px', 
+      width: '100%', 
       height: '450px', 
       cursor: 'grab', 
       position: 'relative',
-      zIndex: 100,
-      background: 'rgba(255,0,0,0.1)', // Temporary red tint to see the canvas area
-      borderRadius: '20px',
-      margin: '0 auto'
+      zIndex: 1
     }}>
       <Canvas shadows gl={{ antialias: true, alpha: true }} dpr={[1, 2]}>
         <Suspense fallback={<FallbackBox />}>
@@ -101,20 +100,23 @@ const Player3D = () => {
             )}
           </group>
 
-          <mesh position={[0, 0, 0]}>
-            <sphereGeometry args={[0.5]} />
-            <meshBasicMaterial color="lime" />
-          </mesh>
-          <gridHelper args={[20, 20]} />
-          
           <OrbitControls 
             enablePan={false} 
             enableZoom={true} 
-            minDistance={2} 
+            minDistance={4} 
             maxDistance={15}
+            minPolarAngle={0}
+            maxPolarAngle={Math.PI / 1.75}
           />
           
           <Environment preset="city" />
+          <ContactShadows 
+            position={[0, -3.5, 0]} 
+            opacity={0.4} 
+            scale={10} 
+            blur={2.5} 
+            far={4} 
+          />
         </Suspense>
       </Canvas>
     </div>
