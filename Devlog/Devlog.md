@@ -7,7 +7,7 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 **Outubro de 2025 - Fase de Concepção**
 *   **Ideia Base:** Criação do conceito central do projeto: um ecossistema onde um Website e um Jogo (Unity) coexistem e partilham progresso.
 *   **Planeamento de Lore:** Definição das "Bênçãos" como mecânica central e os "Puzzles" como forma de interação e progressão.
-*   **Design de Sistema:** Esboço inicial da arquitetura de base de dados para suportar a sincronização em tempo real.
+*   **Design de System:** Esboço inicial da arquitetura de base de dados para suportar a sincronização em tempo real.
 
 ---
 
@@ -107,7 +107,7 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 ## 03/03/2026 - Devlog #15: Imersão 3D no Navegador
 *   **Integração do React Three Fiber (R3F):** Instalação e configuração de uma pipeline de renderização WebGL. Foi necessário configurar o terminal e as dependências do Vite para suportar sombras e shaders complexos em tempo real.
 *   **Animação "Assemble" de Puzzles:** Criação de uma cena 3D interativa para a página de download. As peças de puzzle flutuam e "montam-se" dinamicamente usando física lerp (Linear Interpolation). Isto serve como uma demonstração tecnológica do que o jogador encontrará no motor principal.
-*   **Refinement de UX nos Status:** Expansão visual das badges de status no perfil, agora com cores dinâmicas e ícones que indicam exatamente onde o utilizador está ativo no ecossistema "Puzzle of Blessings".
+*   **Refinement de UX nos Status:** Expansão visuais das badges de status no perfil, agora com cores dinâmicas e ícones que indicam exatamente onde o utilizador está ativo no ecossistema "Puzzle of Blessings".
 
 ---
 
@@ -241,6 +241,9 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 *   **Sincronização de Progresso na Base de Dados:**
     *   **Triggers de Nível (PostgreSQL):** Implementação de gatilhos bidirecionais entre as tabelas `player` e `save`. Qualquer atualização no nível do jogador no portal reflete-se nos saves do jogo, e qualquer progresso "in-game" atualiza instantaneamente o perfil no website.
 *   **Resiliência de Sessão:** Adição de um reset de estado automático no Logout, garantindo que fragmentos de bênção restaurados não sejam visíveis por engano para novos convidados ou utilizadores não logados.
+
+---
+
 ## 21/04/2026 - Devlog #30: O Despertar das Memórias e Colecionáveis
 *   **Sistema de Colecionáveis (Lore Gathering):**
     *   **Inauguração da Aba de Colecionáveis:** Implementação oficial de colecionáveis na página de Descobertas. Cada item agora exibe o seu nome, descrição, nível de obtenção original e a data exata em que o jogador o encontrou.
@@ -267,20 +270,28 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
     *   **Sincronização de Slots Persistente:** Introdução da coluna `deck_slot` na base de dados para garantir que a ordem das habilidades escolhida no site é mantida fielmente dentro do motor de jogo.
     *   **Visual Discovery (The Vault):** Interface de inventário reativa que separa claramente o que está equipado do que está guardado na coleção, com suporte a trocas rápidas.
 *   **Essência:** O ecossistema "Puzzle of Blessings" agora é tecnicamente unificado, permitindo que a gestão de habilidades e a atualização do jogo aconteçam de forma fluida e dinâmica, eliminando barreiras entre o navegador e o executável.
-271: 
-272: ---
-273: 
-274: ## 26/04/2026 - Devlog #32: Infraestrutura Admin e Bençãos de Depuração
-275: *   **Expansão do Diretório de Assets:** Criação da pasta `/public/blessingcardmodels/` (singular), dedicada exclusivamente a bençãos de uso administrativo e ferramentas de depuração (Debug Tools).
-276: *   **Módulo de Visualização Admin:** Desenvolvimento do componente `AdminBlessingAvatar`. Segue a mesma lógica de resiliência e multi-path do componente padrão, mas aponta para o novo repositório de assets restrito.
-277: *   **Utilidade de Formatação Admin:** Expansão do `formatUtils.js` com a função `getAdminBlessingUrl`, permitindo chamadas dinâmicas e limpas para estas novas entidades.
-278: *   **Controlo de Acesso na Wiki (Discoveries):** Implementação de uma nova aba "Admin" no portal de Descobertas. A aba está configurada com proteção de rota visual, aparecendo apenas para utilizadores com permissões elevadas, garantindo que "Admin NoClip" e outras ferramentas não quebrem a imersão do utilizador comum.
-279: *   **Essência:** O portal agora possui uma camada de "Backstage", permitindo que os desenvolvedores e administradores visualizem e testem mecânicas especiais sem interferir na experiência pública do jogo.
-280: 
-281: ---
-282: 
-283: ## 26/04/2026 - Devlog #33: Refinamento de UX do Deck e Gestão de Versões
-284: *   **Polimento Visual do Deck:** Expansão das cartas no sistema de equipagem. As bênçãos agora preenchem 100% do slot ativo, ocultando a borda tracejada para um aspeto mais "físico" e integrado.
-285: *   **Hierarquia de Informação:** Otimização das legendas das cartas (Slot Name). Aumentei o tamanho da fonte e implementei um fundo semi-transparente na base da carta, garantindo legibilidade total independentemente da arte da benção.
-286: *   **Otimização de Layout:** Ajuste passivo na largura do modal do Deck para evitar desformatações em ecrãs de média resolução, mantendo a proporção ideal entre os slots ativos e a coleção de inventário.
-287: *   **Persistência e Histórico:** Realização de commit global e push para o repositório principal, consolidando as alterações de ordenação inversa de slots e infraestrutura de admin.
+
+---
+
+## 26/04/2026 - Devlog #32: Infraestrutura Admin e Bençãos de Depuração
+*   **Expansão do Diretório de Assets:** Criação da pasta `/public/blessingcardmodels/` (singular), dedicada exclusivamente a bençãos de uso administrativo e ferramentas de depuração (Debug Tools).
+*   **Módulo de Visualização Admin:** Desenvolvimento do componente `AdminBlessingAvatar`. Segue a mesma lógica de resiliência e multi-path do componente padrão, mas aponta para o novo repositório de assets restrito.
+*   **Utilidade de Formatação Admin:** Expansão do `formatUtils.js` com a função `getAdminBlessingUrl`, permitindo chamadas dinâmicas e limpas para estas novas entidades.
+*   **Controlo de Acesso na Wiki (Discoveries):** Implementação de uma nova aba "Admin" no portal de Descobertas. A aba está configurada com proteção de rota visual, aparecendo apenas para utilizadores com permissões elevadas, garantindo que "Admin NoClip" e outras ferramentas não quebrem a imersão do utilizador comum.
+*   **Essência:** O portal agora possui uma camada de "Backstage", permitindo que os desenvolvedores e administradores visualizem e testem mecânicas especiais sem interferir na experiência pública do jogo.
+
+---
+
+## 26/04/2026 - Devlog #33: Refinamento de UX do Deck e Gestão de Inventário
+*   **Visualização de Coleção (Doodles):** Substituição de nomes em texto por miniaturas das cartas no inventário do Deck. Aumentei a escala das miniaturas para `100px` e adicionei suporte ao novo componente de cards administrativos, permitindo gerir o deck com feedback visual imediato.
+*   **Lógica de Slots Invertida:** Implementação de um mapeamento de slots 4-3-2-1 (da esquerda para a direita). O primeiro espaço físico no ecrã agora mapeia corretamente para o `deck_slot = 4` na base de dados, seguindo o design de UX solicitado.
+*   **Polimento Visual dos Slots:** As bênçãos equipadas agora preenchem 100% da área do slot, eliminando bordas tracejadas e utilizando legendas flutuantes com fundo semi-transparente para máxima legibilidade.
+*   **Sincronização de Estado:** Ajuste dos algoritmos de `fetch` e `save` para processar a inversão dos ids dos slots sem perda de integridade nos dados persistidos no Supabase.
+
+---
+
+## 26/04/2026 - Devlog #34: Integração de Modelos 3D Interativos (The Center)
+*   **Renderização 3D de Personagem:** Substituição do placeholder estático (ícone de interrogação) no painel central por um modelo 3D dinâmico do jogador utilizando **React Three Fiber (R3F)**.
+*   **Pipeline de Ativos (FBX):** Implementação do carregamento de modelos binários com suporte a descompressão via biblioteca `fflate` carregada assincronamente, garantindo compatibilidade com modelos exportados de ferramentas DCC.
+*   **Iluminação e Pós-processamento:** Configuração de um ambiente de iluminação "Studio" com `ContactShadows` (sombras de contacto) e `Environment` (mapas de reflexão), elevando a fidelidade visual do personagem no dashboard.
+*   **Interatividade de Visualização:** Adição de `OrbitControls` para rotação e zoom manual, e efeito de `Float` para animações subtis de respiração/levitação idle.
