@@ -7,10 +7,11 @@ import '../../css/profile.css'
 function Profile() {
     const { session, userProfile, loading, supabase } = useAuth()
     const navigate = useNavigate()
-    const [copySuccess, setCopySuccess] = useState(false)
+
     const [allBlessings, setAllBlessings] = useState([])
     const [unlockedIds, setUnlockedIds] = useState(new Set())
     const [blessingsLoading, setBlessingsLoading] = useState(true)
+    const [collectibles, setCollectibles] = useState([])
 
     useEffect(() => {
         if (!loading && !session) {
@@ -18,30 +19,30 @@ function Profile() {
         }
         if (userProfile?.pl_id) {
             fetchBlessingsData()
+            fetchCollectiblesData()
         }
     }, [session, loading, navigate, userProfile])
 
     const fetchBlessingsData = async () => {
         try {
             setBlessingsLoading(true)
-            if (!supabase) {
-                console.error('Supabase client not available in AuthContext');
-                return;
-            }
-            // 1. Fetch EVERYTHING from blessing table
+            if (!supabase) return;
+
             const { data: allB, error: bError } = await supabase
-                .from('blessing') // Singular
-                .select('*, category:category(cat_name)') // Singular with alias
+                .from('blessing')
+                .select('*, category:category(cat_name)')
                 .order('bl_id')
 
             if (bError) throw bError
-            setAllBlessings(allB || [])
+            
+            // Filter out Admin NoClip for normal count/view
+            const filteredBlessings = (allB || []).filter(b => b.bl_name !== 'Admin NoClip');
+            setAllBlessings(filteredBlessings)
 
-            // 2. Fetch unlocked ones for this player
             const { data: unlocked, error: uError } = await supabase
-                .from('player_blessing') // Updated to singular
+                .from('player_blessing')
                 .select('bl_id')
-                .eq('pl_id', userProfile.pl_id) // Updated from jo_cod
+                .eq('pl_id', userProfile.pl_id)
 
             if (uError) throw uError
             const unlockedSet = new Set(unlocked.map(u => u.bl_id))
@@ -54,13 +55,21 @@ function Profile() {
         }
     }
 
-    const handleCopyId = () => {
-        if (userProfile?.pl_code) {
-            navigator.clipboard.writeText(userProfile.pl_code)
-            setCopySuccess(true)
-            setTimeout(() => setCopySuccess(false), 2000)
+    const fetchCollectiblesData = async () => {
+        try {
+            if (!supabase || !userProfile?.pl_id) return;
+            const { data, error } = await supabase
+                .from('player_collectible')
+                .select('cl_id, collectible:collectible(cl_name)')
+                .eq('pl_id', userProfile.pl_id)
+            if (error) throw error
+            setCollectibles(data || [])
+        } catch (err) {
+            console.error('Error fetching collectibles:', err.message)
         }
     }
+
+
 
     if (loading) {
         return (
@@ -123,15 +132,7 @@ function Profile() {
                                             {userProfile.status?.st_status || 'offline'}
                                         </span>
                                     </span>
-                                    <span
-                                        className="profile-userid"
-                                        onClick={handleCopyId}
-                                        title="Click to copy"
-                                        style={{ fontSize: '0.8rem', padding: '2px 8px' }}
-                                    >
-                                        {userProfile.pl_code || '#00000000'}
-                                        {copySuccess && <span style={{ fontSize: '0.6rem', marginLeft: '5px', color: '#9dc0ab' }}>Copied!</span>}
-                                    </span>
+
                                 </div>
                             </div>
 
@@ -183,7 +184,7 @@ function Profile() {
 
                         {/* Blessings Section */}
                         <section className="profile-section">
-                            <h3>Blessings ({unlockedIds.size} / {allBlessings.length})</h3>
+                            <h3>Blessings ({allBlessings.filter(b => unlockedIds.has(b.bl_id)).length} / {allBlessings.length})</h3>
                             <p className="stat-card-total">Colored for obtained, gray for locked.</p>
                             <div className="profile-stats-grid">
                                 {blessingsLoading ? (
@@ -199,7 +200,7 @@ function Profile() {
                                             >
                                                 <div className="blessing-img-container">
                                                     <img
-                                                        src={`/blessingscardmodels/${formatBlessingImage(b.bl_image)}`}
+                                                        src={`/blessingcardmodels/${formatBlessingImage(b.bl_image)}`}
                                                         alt={b.bl_name}
                                                         className="blessing-card-img"
                                                     />
@@ -220,21 +221,19 @@ function Profile() {
                         </section>
 
                         {/* Collectibles Section */}
-                        <section className="profile-section">
-                            <h3>Collectibles (0 / ??)</h3>
-                            <div className="profile-stats-grid">
-                                <div className="item-card unobtained">
-                                    <span className="item-card-icon">🏺</span>
-                                    <span className="item-card-name">Locked</span>
+                        {collectibles.length > 0 && (
+                            <section className="profile-section">
+                                <h3>Collectibles ({collectibles.length})</h3>
+                                <div className="profile-stats-grid">
+                                    {collectibles.map((c, idx) => (
+                                        <div key={idx} className="item-card obtained">
+                                            <span className="item-card-icon">🏺</span>
+                                            <span className="item-card-name">{c.collectible?.cl_name || `Collectible #${c.cl_id}`}</span>
+                                        </div>
+                                    ))}
                                 </div>
-                            </div>
-                        </section>
-
-                        {/* Special Items Section */}
-                        <section className="profile-section">
-                            <h3>Special Items</h3>
-                            <p className="stat-card-total">No special items found.</p>
-                        </section>
+                            </section>
+                        )}
                     </div>
                 </div>
             </div>

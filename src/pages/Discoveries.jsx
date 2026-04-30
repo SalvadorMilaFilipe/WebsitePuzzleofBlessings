@@ -322,12 +322,14 @@ function Discoveries() {
               >
                 Blessings
               </button>
-              <button
-                className={`filter-tab ${activeFilter === 'collectibles' ? 'active' : ''}`}
-                onClick={() => setActiveFilter('collectibles')}
-              >
-                Collectibles
-              </button>
+              {collectibles.length > 0 && (
+                <button
+                  className={`filter-tab ${activeFilter === 'collectibles' ? 'active' : ''}`}
+                  onClick={() => setActiveFilter('collectibles')}
+                >
+                  Collectibles
+                </button>
+              )}
               <button
                 className={`filter-tab ${activeFilter === 'categories' ? 'active' : ''}`}
                 onClick={() => setActiveFilter('categories')}

@@ -37,7 +37,7 @@ export const formatBlessingImage = (imageName) => {
 };
 
 /**
- * Specifically for admin blessings located in /blessingcardmodels/ (singular)
+ * Specifically for blessings located in /blessingcardmodels/
  */
 export const getAdminBlessingUrl = (imageName) => {
     const fileName = formatBlessingImage(imageName);
@@ -48,5 +48,5 @@ export const getAdminBlessingUrl = (imageName) => {
 export const getBlessingUrl = (imageName) => {
     const fileName = formatBlessingImage(imageName);
     if (fileName === 'none') return 'none';
-    return `url("${encodeURI(`/blessingscardmodels/${fileName}`)}")`;
+    return `url("${encodeURI(`/blessingcardmodels/${fileName}`)}")`;
 };

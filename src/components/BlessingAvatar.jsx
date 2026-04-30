@@ -34,10 +34,10 @@ function BlessingAvatar({ blessing, className, style = {} }) {
 
     // Try multiple path patterns if the first one fails via the onError mechanism
     const paths = [
-      `/blessingscardmodels/${fileName}`,
-      `./blessingscardmodels/${fileName}`,
-      `blessingscardmodels/${fileName}`,
-      `/public/blessingscardmodels/${fileName}` // Some dev setups need this
+      `/blessingcardmodels/${fileName}`,
+      `./blessingcardmodels/${fileName}`,
+      `blessingcardmodels/${fileName}`,
+      `/public/blessingcardmodels/${fileName}` // Some dev setups need this
     ];
 
     setImgUrl(paths[Math.min(retry, paths.length - 1)]);

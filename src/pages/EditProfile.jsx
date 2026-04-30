@@ -171,10 +171,7 @@ function EditProfile() {
                                 Account Information (Fixed)
                             </h3>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', background: 'rgba(0,0,0,0.1)', padding: '1rem', borderRadius: '8px' }}>
-                                <div>
-                                    <small style={{ color: '#888' }}>Unique ID</small>
-                                    <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_code}</p>
-                                </div>
+
                                 <div>
                                     <small style={{ color: '#888' }}>Registered Email</small>
                                     <p style={{ color: '#fff', margin: '4px 0' }}>{userProfile.pl_email}</p>
