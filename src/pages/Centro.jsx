@@ -262,6 +262,15 @@ function Centro() {
 
         {/* HEADER AREA */}
         <header className="centro-header">
+          <div className="header-left">
+            <div className="currency-display">
+              <img src="/img/puzzle_piece.png" alt="🧩" className="currency-icon"
+                onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
+              <div className="currency-amount">
+                <span className="amount-value">{currencyData.amount.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
 
           <div className="header-center">
             <h1 className="centro-title">The Center</h1>
@@ -282,13 +291,7 @@ function Centro() {
 
         {/* SIDE ACTIONS */}
         <nav className="centro-sidebar-actions">
-          <div className="currency-display sidebar-currency">
-            <img src="/img/puzzle_piece.png" alt="🧩" className="currency-icon"
-              onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
-            <div className="currency-amount">
-              <span className="amount-value">{currencyData.amount.toLocaleString()}</span>
-            </div>
-          </div>
+
 
           <button className="icon-btn shop-btn" title="Shop" onClick={() => setIsShopOpen(true)}>
             <div className="btn-icon-wrapper">
