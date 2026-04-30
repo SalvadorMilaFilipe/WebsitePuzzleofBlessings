@@ -200,7 +200,7 @@ function Profile() {
                                             >
                                                 <div className="blessing-img-container">
                                                     <img
-                                                        src={`/blessingcardmodels/${formatBlessingImage(b.bl_image)}`}
+                                                        src={`/blessingcardmodels/${formatBlessingImage(b.bl_image || b.bl_name)}`}
                                                         alt={b.bl_name}
                                                         className="blessing-card-img"
                                                     />

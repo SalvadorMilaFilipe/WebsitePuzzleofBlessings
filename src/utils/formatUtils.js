@@ -15,7 +15,11 @@ export const formatBlessingImage = (imageName) => {
         'pattern lens': 'Pattern Lens.png',
         'sequential jump': 'Sequential Jump.png',
         'magnetic mold': 'Magnetic Mold.png',
-        'double jump': 'Sequential Jump.png' // Redirect old name to new file
+        'double jump': 'Sequential Jump.png',
+        'duplication': 'Duplication.png',
+        'spirit vision': 'Spirit Vision.png',
+        'ephemeral point': 'Ephemeral Point.png',
+        'admin noclip': 'Admin_NoClip.png'
     };
 
     const lowerName = formatted.toLowerCase();
