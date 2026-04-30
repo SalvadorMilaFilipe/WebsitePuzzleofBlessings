@@ -262,6 +262,9 @@ function Centro() {
 
         {/* HEADER AREA */}
         <header className="centro-header">
+          <div className="header-left">
+            {/* Empty space to balance the centered title */}
+          </div>
 
 
           <div className="header-center">
