@@ -201,6 +201,13 @@
 }
 
 
+.sidebar-pill {
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    width: fit-content;
+    padding: 0.4rem 1.2rem 0.4rem 0.5rem;
+}
+
 .green-icon {
     filter: sepia(100%) hue-rotate(90deg) saturate(500%) brightness(1.2);
 }
