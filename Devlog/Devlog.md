@@ -314,3 +314,17 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
     *   **Reorganização Espacial:** Movimentação do contador de peças para a barra lateral esquerda, alinhando-o verticalmente com os botões de ação e o cabeçalho.
     *   **Simplificação de UX:** Remoção do botão de "Catalog" e atualização cromática do ícone da "Shop" para verde esmeralda.
     *   **Sincronização de Grelha:** Ajuste fino do grid do cabeçalho para garantir que o título e o nível do jogador permaneçam centralizados e equilibrados.
+
+---
+
+## 04/05/2026 - Devlog #37: Responsividade Inteligente e Interação Fluida
+*   **Reformulação da Navbar Responsiva:** Centralização e unificação dos estilos da barra de navegação no `shared.css`. Foi implementado um novo ponto de transição (**1000px**) e ajustes intermédios (1100px) para evitar a sobreposição de menus em janelas parcialmente minimizadas, garantindo que o logo e os links mantêm proporções equilibradas.
+*   **Navegação Lateral Evoluída (Mobile Sidebar):**
+    *   **Ocultação de Scrollbars:** Remoção visual das barras de deslocamento nativas em todos os browsers para um aspeto mais "clean" e imersivo.
+    *   **Sistema Drag-to-Scroll:** Implementação de funcionalidade "clicar e arrastar" para navegação na barra lateral, permitindo que utilizadores de desktop naveguem na lista de forma fluida como num dispositivo móvel.
+    *   **Navegação Inteligente por Setas:** Desenvolvimento de uma lógica que deteta a altura vertical do cursor do rato para sincronizar a navegação por teclado ($\uparrow$ e $\downarrow$), permitindo que a seleção salte para a aba seguinte a partir da posição atual do mouse. Adicionado suporte à tecla **Enter** para navegar instantaneamente para a página selecionada.
+*   **Polimento de UX e Estabilidade:**
+    *   **Prevenção de Arrastamento de Ativos (Anti-Grab):** Desativação do comportamento padrão do browser de "agarrar" links e imagens (ghost image), garantindo que o gesto de puxar resulte apenas em scroll suave.
+    *   **Seleção Dinâmica Visual:** Implementação de um indicador de estado "Active" (barra verde lateral) que reage tanto ao hover do rato como à navegação por teclado, com foco automático ao abrir o menu.
+    *   **Controlo de Interface:** Bloqueio de seleção de texto (`user-select: none`) durante a navegação no menu para evitar interferências visuais durante o movimento.
+*   **Essência:** Otimização profunda da experiência de utilizador em janelas de qualquer tamanho, transformando a navegação lateral num sistema interativo, fluido e inteligente que une o input físico do rato com a precisão do teclado.

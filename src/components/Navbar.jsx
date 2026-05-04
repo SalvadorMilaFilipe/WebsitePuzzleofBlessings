@@ -259,6 +259,12 @@ function Navbar() {
             if (selectedLink) {
               selectedLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
             }
+          } else if (e.key === 'Enter') {
+            if (activeMobileIndex >= 0 && activeMobileIndex < navItems.length) {
+              const item = navItems[activeMobileIndex]
+              handleNavClick(e, item.path)
+              navigate(item.path)
+            }
           }
         }}
         onMouseDown={(e) => {
