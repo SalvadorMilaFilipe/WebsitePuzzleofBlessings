@@ -44,7 +44,7 @@
 }
 
 .deck-header h2 {
-    color: #baaae8;
+    color: #81D89E; /* Green theme */
     margin: 0;
     font-size: 1.8rem;
 }
@@ -184,7 +184,7 @@
 
 .inventory-item small {
     font-size: 0.75rem;
-    color: #baaae8;
+    color: #5BC0EB; /* Blue theme */
     text-align: center;
     font-weight: 600;
 }

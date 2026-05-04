@@ -296,7 +296,7 @@ function Centro() {
             <button className="shop-close-btn" onClick={() => setIsShopOpen(false)}>&times;</button>
             <div className="shop-modal-header centered">
               <h2 className="shop-title">The Shop</h2>
-              <p className="shop-subtitle">For x currency you can get a random object or item that can help you in your journey</p>
+              <p className="shop-subtitle">For 10 coins you can get a random object or item that can help you in your journey</p>
             </div>
             
             <div className="simple-shop-content">
@@ -305,7 +305,7 @@ function Centro() {
               </div>
               
               <button className="btn-primary shop-random-btn">
-                 x amount to get a random item
+                 10 amount to get a random item
               </button>
             </div>
           </div>
