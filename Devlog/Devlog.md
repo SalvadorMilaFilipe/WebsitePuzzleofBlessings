@@ -328,3 +328,21 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
     *   **Seleção Dinâmica Visual:** Implementação de um indicador de estado "Active" (barra verde lateral) que reage tanto ao hover do rato como à navegação por teclado, com foco automático ao abrir o menu.
     *   **Controlo de Interface:** Bloqueio de seleção de texto (`user-select: none`) durante a navegação no menu para evitar interferências visuais durante o movimento.
 *   **Essência:** Otimização profunda da experiência de utilizador em janelas de qualquer tamanho, transformando a navegação lateral num sistema interativo, fluido e inteligente que une o input físico do rato com a precisão do teclado.
+
+---
+
+## 04/05/2026 - Devlog #38: Refinamento de Dashboard e Nova Identidade Visual
+*   **Vibe Shift: Transição Cromática (Verde & Azul):**
+    *   **Nova Paleta de Cores:** Substituição do tema Púrpura/Lavanda por uma estética baseada em **Verde Esmeralda** (esquerda) e **Azul Celeste** (direita).
+    *   **Títulos Iluminados:** Atualização dos logótipos de "The Center" e "The Shop" com novos gradientes e adição de barras laterais brilhantes para um aspeto mais "premium" e equilibrado.
+    *   **Harmonização de Vidro:** Sincronização de todas as bordas (`--glass-border`) e brilhos (`--accent-glow`) para o novo esquema de cores em toda a dashboard.
+*   **Simplificação Estratégica da Loja:**
+    *   **Abordagem Minimalista:** Remoção do catálogo complexo em favor de um ecrã de "Preview/Gacha" mais limpo e focado.
+    *   **Reintrodução de Ativos:** Utilização do ponto de interrogação "sketch" como elemento central animado, simbolizando o mistério das recompensas aleatórias.
+    *   **CTA Otimizado:** Implementação de um botão proeminente de compra aleatória com design poligonal.
+*   **Refinamento da Modal de Deck:**
+    *   **Otimização de Espaço:** Redução das dimensões da modal (`width` e `padding`) para um aspeto mais compacto que se integra melhor no centro do ecrã.
+    *   **Revisão do Botão Cancel:** Expansão e centralização do botão de cancelamento, com atualização da tipografia para **Inter 800**, garantindo consistência total com o botão de "Save".
+*   **Acessibilidade de Navegação:**
+    *   **Enter para Navegar:** Adição de suporte à tecla **Enter** na barra lateral móvel, permitindo uma navegação 100% por teclado após a seleção de abas.
+*   **Essência:** Uma evolução estética e funcional que torna o dashboard mais coeso, rápido e visualmente deslumbrante, alinhando a experiência da web com a atmosfera mística do jogo.
