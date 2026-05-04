@@ -775,10 +775,13 @@ section {
     border-left: 4px solid transparent;
     position: relative;
     line-height: 1.5;
+    user-select: none; /* Prevent text selection during drag */
+    -webkit-user-drag: none; /* Prevent image/link dragging */
 }
 
 .mobile-nav-link:hover,
-.mobile-nav-link:active {
+.mobile-nav-link:active,
+.mobile-nav-link.active {
     background: rgba(60, 179, 113, 0.1);
     color: var(--green-accent);
     border-left-color: var(--green-accent);
@@ -796,7 +799,8 @@ section {
     padding: 1.4rem 2rem;
 }
 
-.mobile-nav-centro:hover {
+.mobile-nav-centro:hover,
+.mobile-nav-centro.active {
     border-left-color: var(--green-accent);
     background: linear-gradient(135deg, #6BCB77 0%, #5BC0EB 40%, #7B68EE 80%, #9B8FFF 100%);
     -webkit-background-clip: text;

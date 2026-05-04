@@ -5,10 +5,24 @@ import { useAuth } from '../context/AuthContext'
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [activeMobileIndex, setActiveMobileIndex] = useState(-1)
   const { session, userProfile, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const sidebarRef = useRef(null)
+  const mobileLinksRef = useRef([])
+
+  const navItems = [
+    { label: 'Download', path: '/' },
+    { label: 'Discoveries', path: '/discoveries' },
+    { label: 'The Center', path: '/centro', isCentro: true },
+    { label: 'Update Log', path: '/updatelog' },
+    { label: 'Credits', path: '/credits' }
+  ]
+
+  if (session) {
+    navItems.push({ label: 'My Profile', path: '/profile', isProfile: true })
+  }
 
   const touchStartX = useRef(0)
   const touchEndX = useRef(0)
@@ -27,7 +41,10 @@ function Navbar() {
   // Close sidebar when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false)
+    setActiveMobileIndex(-1)
   }, [location])
+
+  // ... (rest of useEffects)
 
   // Click outside to close sidebar
   useEffect(() => {
@@ -215,13 +232,40 @@ function Navbar() {
         className={`mobile-sidebar ${isMobileMenuOpen ? 'open' : ''}`}
         tabIndex="0" // Make it focusable for arrow keys
         onKeyDown={(e) => {
-          if (e.key === 'ArrowUp') {
-            sidebarRef.current.scrollTop -= 40
-          } else if (e.key === 'ArrowDown') {
-            sidebarRef.current.scrollTop += 40
+          if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            e.preventDefault()
+            let nextIndex = activeMobileIndex
+
+            // If no active index, find the one closest to current mouse position
+            if (nextIndex === -1) {
+              const mouseY = window.lastMouseY || 0
+              nextIndex = mobileLinksRef.current.findIndex(link => {
+                if (!link) return false
+                const rect = link.getBoundingClientRect()
+                return mouseY >= rect.top && mouseY <= rect.bottom
+              })
+            }
+
+            if (e.key === 'ArrowUp') {
+              nextIndex = nextIndex <= 0 ? navItems.length - 1 : nextIndex - 1
+            } else {
+              nextIndex = nextIndex >= navItems.length - 1 ? 0 : nextIndex + 1
+            }
+
+            setActiveMobileIndex(nextIndex)
+
+            // Auto-scroll to selected item
+            const selectedLink = mobileLinksRef.current[nextIndex]
+            if (selectedLink) {
+              selectedLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+            }
           }
         }}
         onMouseDown={(e) => {
+          // Prevent text/image selection/dragging when starting a scroll drag
+          if (e.target.tagName === 'A' || e.target.tagName === 'IMG' || e.target.tagName === 'SPAN') {
+            // We allow mouse down but we'll prevent default on drag
+          }
           const sidebar = sidebarRef.current
           sidebar.isDragging = true
           sidebar.startY = e.pageY - sidebar.offsetTop
@@ -239,6 +283,9 @@ function Navbar() {
           sidebar.style.cursor = 'grab'
         }}
         onMouseMove={(e) => {
+          // Track mouse Y globally for arrow keys
+          window.lastMouseY = e.clientY
+
           const sidebar = sidebarRef.current
           if (!sidebar.isDragging) return
           e.preventDefault()
@@ -264,7 +311,7 @@ function Navbar() {
             setIsMobileMenuOpen(false)
           }
         }}
-        style={{ cursor: 'grab' }}
+        style={{ cursor: 'grab', userSelect: 'none' }}
       >
         <div className="mobile-sidebar-header">
           <Link to="/" className="logo mobile-logo" onClick={closeMobileMenu}>
@@ -274,26 +321,20 @@ function Navbar() {
         </div>
 
         <div className="mobile-sidebar-content">
-          <Link to="/" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/')}>
-            Download
-          </Link>
-          <Link to="/discoveries" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/discoveries')}>
-            Discoveries
-          </Link>
-          <Link to="/centro" className="mobile-nav-link mobile-nav-centro" onClick={(e) => handleNavClick(e, '/centro')}>
-            The Center
-          </Link>
-          <Link to="/updatelog" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/updatelog')}>
-            Update Log
-          </Link>
-          <Link to="/credits" className="mobile-nav-link" onClick={(e) => handleNavClick(e, '/credits')}>
-            Credits
-          </Link>
-          {session && (
-            <Link to="/profile" className="mobile-nav-link" style={{ color: '#81D89E' }} onClick={(e) => handleNavClick(e, '/profile')}>
-              My Profile
+          {navItems.map((item, index) => (
+            <Link
+              key={item.path}
+              ref={el => mobileLinksRef.current[index] = el}
+              to={item.path}
+              className={`mobile-nav-link ${item.isCentro ? 'mobile-nav-centro' : ''} ${activeMobileIndex === index ? 'active' : ''}`}
+              onClick={(e) => handleNavClick(e, item.path)}
+              draggable="false"
+              onDragStart={(e) => e.preventDefault()}
+              onMouseEnter={() => setActiveMobileIndex(index)}
+            >
+              {item.label}
             </Link>
-          )}
+          ))}
 
           <div className="mobile-sidebar-footer">
             {session ? (
