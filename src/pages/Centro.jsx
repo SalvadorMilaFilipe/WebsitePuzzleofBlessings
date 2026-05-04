@@ -16,8 +16,6 @@ function Centro() {
   const [error, setError] = useState(null)
   const [isShopOpen, setIsShopOpen] = useState(false)
   const [isDeckOpen, setIsDeckOpen] = useState(false)
-  const [shopBlessings, setShopBlessings] = useState([])
-  const [shopLoading, setShopLoading] = useState(false)
 
   // Hint Cooldown State (10 minutes = 600,000ms)
   const [hintCooldown, setHintCooldown] = useState(0)
@@ -133,36 +131,6 @@ function Centro() {
     }
   }, [userProfile, authLoading])
 
-  // 3. Fetch Shop Blessings
-  useEffect(() => {
-    const fetchShopBlessings = async () => {
-      if (!isShopOpen) return;
-      
-      try {
-        setShopLoading(true);
-        const { data, error } = await supabase
-          .from('blessing')
-          .select(`
-            *,
-            category:category ( cat_name ),
-            blessing_attribute:blessing_attribute!fk_blessing_attr_blessing (
-              attribute:attribute!fk_blessing_attr_attribute ( attr_name )
-            )
-          `)
-          .order('bl_id', { ascending: true });
-
-        if (error) throw error;
-        setShopBlessings(data || []);
-      } catch (err) {
-        console.error("Error fetching shop blessings:", err);
-      } finally {
-        setShopLoading(false);
-      }
-    };
-
-    fetchShopBlessings();
-  }, [isShopOpen]);
-
   // Functional: Hint System
   const handleHintClick = () => {
     if (hintCooldown > 0) return
@@ -179,27 +147,6 @@ function Centro() {
         return prev - 1000
       })
     }, 1000)
-  }
-
-  // Functional: Buy Blessing
-  const buyBlessing = async (blessingId) => {
-    if (!userProfile?.pl_id) return;
-    try {
-      const now = new Date();
-      const dateStr = now.toISOString().split('T')[0];
-      const { error: buyErr } = await supabase
-        .from('player_blessing')
-        .insert([{
-          pl_id: userProfile.pl_id,
-          bl_id: blessingId,
-          date_obtained: dateStr
-        }]);
-      if (buyErr) throw buyErr;
-      alert("Blessing obtained successfully!");
-    } catch (err) {
-      console.error("Error buying blessing:", err);
-      alert("Purchase failed. Maybe you already have it or lack the currency?");
-    }
   }
 
   const formatTime = (ms) => {
@@ -345,35 +292,21 @@ function Centro() {
       {/* SHOP OVERLAY */}
       {isShopOpen && (
         <div className="centro-shop-overlay" onClick={() => setIsShopOpen(false)}>
-          <div className="centro-shop-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="centro-shop-modal simple-shop" onClick={(e) => e.stopPropagation()}>
             <button className="shop-close-btn" onClick={() => setIsShopOpen(false)}>&times;</button>
-            <div className="shop-modal-header">
+            <div className="shop-modal-header centered">
               <h2 className="shop-title">The Shop</h2>
-              <p className="shop-subtitle">Exchange your light for divine blessings and lost relics.</p>
+              <p className="shop-subtitle">For x currency you can get a random object or item that can help you in your journey</p>
             </div>
-            <div className="shop-items-grid">
-              {shopLoading ? (
-                <div className="shop-loading">Loading blessings...</div>
-              ) : shopBlessings.length > 0 ? (
-                shopBlessings.map(blessing => (
-                  <div className="shop-item-card" key={blessing.bl_id}>
-                    <div className="shop-item-image-wrapper">
-                      <BlessingAvatar blessing={blessing} className="shop-item-avatar" />
-                    </div>
-                    <div className="shop-item-info">
-                      <h3 className="shop-item-name">{blessing.bl_name}</h3>
-                      <div className="shop-item-category">{blessing.category?.cat_name || 'Blessing'}</div>
-                    </div>
-                    <button className="shop-buy-btn" onClick={() => buyBlessing(blessing.bl_id)}>
-                      <span>Buy - {blessing.bl_cost || 30}</span>
-                      <img src="/img/puzzle_piece.png" alt="🧩" className="buy-currency-icon" onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3204/3204000.png" }} />
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <div className="shop-empty">No blessings available.</div>
-              )}
-              {/* Optional: Add other static items here if needed */}
+            
+            <div className="simple-shop-content">
+              <div className="sketch-question-wrapper">
+                 <img src="/img/Player_without_image.png" alt="?" className="sketch-question" />
+              </div>
+              
+              <button className="btn-primary shop-random-btn">
+                 x amount to get a random item
+              </button>
             </div>
           </div>
         </div>
