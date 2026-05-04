@@ -122,7 +122,7 @@ function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="nav-menu-desktop">
-              <div className="nav-links-group" style={{ display: 'flex', gap: 'clamp(0.5rem, 1.5vw, 2rem)', flex: 1, justifyContent: 'center' }}>
+              <div className="nav-links-group">
                 <Link to="/" className="nav-link" onClick={(e) => handleNavClick(e, '/')}>
                   Download
                 </Link>
@@ -143,25 +143,13 @@ function Navbar() {
               </div>
 
               {session ? (
-                <div className="nav-user-info" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px' }}>
+                <div className="nav-user-info">
                   <Link
                     to="/profile"
                     className="nav-link nav-username-steam"
                     onClick={(e) => handleNavClick(e, '/profile')}
-                    style={{
-                      color: '#81D89E',
-                      fontWeight: 700,
-                      letterSpacing: '1px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: 0
-                    }}
                   >
-                    <div style={{
-                      width: '6px',
-                      height: '6px',
-                      borderRadius: '50%',
+                    <div className="user-status-dot" style={{
                       backgroundColor: userProfile?.status?.st_color || '#6B7280',
                       boxShadow: `0 0 5px ${userProfile?.status?.st_color || '#6B7280'}`
                     }}></div>
@@ -183,33 +171,16 @@ function Navbar() {
                       }
                     }}
                     title="Click once: Profile | Double click: Copy ID"
-                    style={{
-                      borderRadius: '50%',
-                      border: '2px solid #3CB371',
-                      width: '40px',
-                      height: '40px',
-                      filter: 'brightness(0) invert(1)',
-                      cursor: 'pointer'
-                    }}
                   />
                   <span
+                    className="nav-logout-btn"
                     onClick={handleLogout}
-                    style={{
-                      color: 'var(--text-muted)',
-                      textDecoration: 'underline',
-                      fontSize: '0.7rem',
-                      cursor: 'pointer',
-                      opacity: 0.7,
-                      transition: 'opacity 0.2s'
-                    }}
-                    onMouseOver={(e) => e.target.style.opacity = 1}
-                    onMouseOut={(e) => e.target.style.opacity = 0.7}
                   >
                     Logout
                   </span>
                 </div>
               ) : (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="nav-auth-buttons">
                   <button className="btn-login" onClick={handleLogin}>
                     Log In
                   </button>

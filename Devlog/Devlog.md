@@ -295,3 +295,22 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 *   **Pipeline de Ativos (FBX):** Implementação do carregamento de modelos binários com suporte a descompressão via biblioteca `fflate` carregada assincronamente, garantindo compatibilidade com modelos exportados de ferramentas DCC.
 *   **Iluminação e Pós-processamento:** Configuração de um ambiente de iluminação "Studio" com `ContactShadows` (sombras de contacto) e `Environment` (mapas de reflexão), elevando a fidelidade visual do personagem no dashboard.
 *   **Interatividade de Visualização:** Adição de `OrbitControls` para rotação e zoom manual, e efeito de `Float` para animações subtis de respiração/levitação idle.
+
+---
+
+## 29/04/2026 - Devlog #35: Refinamento de Fluxos de Lógica do Sistema de Festival
+*   **Diagramação de Lógica Interativa:** Finalização das árvores de decisão em `Solucao.jsx` para os processos de Compra, Validação, Sincronização Offline e Reembolsos, garantindo estados finais claros.
+*   **Upgrade da Interface "Engine SQL":** Integração do esquema completo da base de dados e consultas analíticas complexas para gestão de crises numa interface inspirada em terminais profissionais.
+*   **Matriz de Métodos de Pagamento:** Implementação de uma matriz dinâmica para fornecer referência rápida sobre tipos de confirmação e impactos no fluxo do sistema.
+
+---
+
+## 30/04/2026 - Devlog #36: Otimização do Perfil e Refinação de UI no Dashboard
+*   **Limpeza de Interface de Utilizador:** Remoção de campos obsoletos como o "Código de Amizade" / "ID Único" nas páginas de Perfil e Edição de Perfil para simplificar o onboarding.
+*   **Filtragem Inteligente de Ativos:** Implementação de lógica para excluir a bênção "Admin NoClip" da contagem e visualização de utilizadores comuns, mantendo a integridade da progressão narrativa.
+*   **Mapeamento Relacional de Colecionáveis:** Estabelecimento de uma relação direta entre as tabelas `player_collectible` e `collectible`, permitindo a exibição de nomes reais de itens em vez de IDs técnicos.
+*   **Padronização de Caminhos de Imagem:** Centralização de todos os assets de bênçãos na pasta `/blessingcardmodels/` e implementação de lógica de fallback (uso do nome da bênção caso o campo da imagem esteja vazio na DB).
+*   **Revamp Visual do "The Center":**
+    *   **Reorganização Espacial:** Movimentação do contador de peças para a barra lateral esquerda, alinhando-o verticalmente com os botões de ação e o cabeçalho.
+    *   **Simplificação de UX:** Remoção do botão de "Catalog" e atualização cromática do ícone da "Shop" para verde esmeralda.
+    *   **Sincronização de Grelha:** Ajuste fino do grid do cabeçalho para garantir que o título e o nível do jogador permaneçam centralizados e equilibrados.
