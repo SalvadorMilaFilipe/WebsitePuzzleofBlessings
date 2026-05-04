@@ -39,6 +39,10 @@ function Navbar() {
 
     if (isMobileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside)
+      // Focus sidebar to enable arrow keys immediately
+      setTimeout(() => {
+        sidebarRef.current?.focus()
+      }, 100)
     }
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isMobileMenuOpen])
@@ -209,6 +213,39 @@ function Navbar() {
       <div
         ref={sidebarRef}
         className={`mobile-sidebar ${isMobileMenuOpen ? 'open' : ''}`}
+        tabIndex="0" // Make it focusable for arrow keys
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowUp') {
+            sidebarRef.current.scrollTop -= 40
+          } else if (e.key === 'ArrowDown') {
+            sidebarRef.current.scrollTop += 40
+          }
+        }}
+        onMouseDown={(e) => {
+          const sidebar = sidebarRef.current
+          sidebar.isDragging = true
+          sidebar.startY = e.pageY - sidebar.offsetTop
+          sidebar.initialScrollTop = sidebar.scrollTop
+          sidebar.style.cursor = 'grabbing'
+        }}
+        onMouseLeave={() => {
+          const sidebar = sidebarRef.current
+          sidebar.isDragging = false
+          sidebar.style.cursor = 'grab'
+        }}
+        onMouseUp={() => {
+          const sidebar = sidebarRef.current
+          sidebar.isDragging = false
+          sidebar.style.cursor = 'grab'
+        }}
+        onMouseMove={(e) => {
+          const sidebar = sidebarRef.current
+          if (!sidebar.isDragging) return
+          e.preventDefault()
+          const y = e.pageY - sidebar.offsetTop
+          const walk = (y - sidebar.startY) * 2 // Scroll speed multiplier
+          sidebar.scrollTop = sidebar.initialScrollTop - walk
+        }}
         onTouchStart={(e) => {
           touchStartX.current = e.touches[0].clientX
           touchStartY.current = e.touches[0].clientY
@@ -227,6 +264,7 @@ function Navbar() {
             setIsMobileMenuOpen(false)
           }
         }}
+        style={{ cursor: 'grab' }}
       >
         <div className="mobile-sidebar-header">
           <Link to="/" className="logo mobile-logo" onClick={closeMobileMenu}>

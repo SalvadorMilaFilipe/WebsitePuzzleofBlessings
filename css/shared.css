@@ -705,6 +705,15 @@ section {
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
+
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    outline: none; /* Hide focus outline */
+}
+
+.mobile-sidebar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
 
 .mobile-sidebar.open {
