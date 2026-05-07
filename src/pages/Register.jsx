@@ -199,6 +199,7 @@ function Register() {
                                 onChange={(e) => setUsername(e.target.value)}
                                 placeholder="How you will be seen on the site"
                                 required
+                                maxLength="12"
                             />
                         </div>
 
@@ -271,6 +272,7 @@ function Register() {
                                 onChange={(e) => setGameUser(e.target.value)}
                                 placeholder="Your name inside the game world"
                                 required
+                                maxLength="12"
                             />
                         </div>
 

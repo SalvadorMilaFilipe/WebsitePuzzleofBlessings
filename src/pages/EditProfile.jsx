@@ -102,6 +102,7 @@ function EditProfile() {
                                     onChange={handleChange}
                                     style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '6px', color: '#fff' }}
                                     required
+                                    maxLength="12"
                                 />
                             </div>
 
@@ -133,6 +134,7 @@ function EditProfile() {
                                     onChange={handleChange}
                                     style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '6px', color: '#fff' }}
                                     required
+                                    maxLength="12"
                                 />
                             </div>
 
