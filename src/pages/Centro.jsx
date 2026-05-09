@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import BlessingAvatar from '../components/BlessingAvatar'
 import DeckModal from '../components/DeckModal'
-import Player3D from '../components/Player3D'
+// import Player3D from '../components/Player3D'
 import '../../css/centro.css'
 
 function Centro() {
@@ -274,9 +274,17 @@ function Centro() {
 
         {/* MIDDLE AREA */}
         <div className="player-model-container">
-          <div className="model-placeholder">
-            <Player3D />
-            <p className="model-hint" style={{ marginTop: '-40px', position: 'relative', zIndex: 10 }}>Click & Drag to rotate player model</p>
+          <div className="model-placeholder" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <img 
+              src="/playermodel/Playermodel.png" 
+              alt="Player Model" 
+              style={{ 
+                maxHeight: '450px', 
+                width: 'auto', 
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 0 20px rgba(129, 216, 158, 0.2))'
+              }} 
+            />
           </div>
         </div>
 
