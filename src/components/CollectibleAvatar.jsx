@@ -15,6 +15,10 @@ function CollectibleAvatar({ collectibleName, className, style = {} }) {
 
     if (collectibleName.toLowerCase() === 'vhs tape') {
       fileName = 'VHS Tape.png';
+    } else if (collectibleName.toLowerCase() === 'dream pillows' || collectibleName.toLowerCase() === 'dreams pillow') {
+      fileName = 'Dreams Pillow.png';
+    } else if (collectibleName.toLowerCase() === 'climbing trophy') {
+      fileName = 'Climbing Trophy.png';
     }
 
     // Try multiple path patterns to ensure we find the local image
