@@ -11,14 +11,15 @@ function Download() {
     version: 'v1.0.0-Beta',
     size_mb: '120',
     platform: 'Windows (Tested)',
-    add_date: '2026-04-24'
+    add_date: '2026-04-24',
+    url_download: 'https://www.dropbox.com/scl/fi/u9ba96y3tyb0i6ag0jf2j/LauncherInstaller.exe?rlkey=n7xdawedmyow8us59dzt839ho&st=k6rkzzgf&dl=1'
   })
 
   useEffect(() => {
     async function fetchLatestInfo() {
       try {
         const { data, error } = await supabase
-          .from('launchergamedownload')
+          .from('gamelauncherversion')
           .select('*')
           .order('id', { ascending: false })
           .limit(1)
@@ -75,7 +76,7 @@ function Download() {
             </p>
             <div className="hero-buttons">
               <a 
-                href="https://www.dropbox.com/scl/fi/u9ba96y3tyb0i6ag0jf2j/LauncherInstaller.exe?rlkey=n7xdawedmyow8us59dzt839ho&st=k6rkzzgf&dl=1"
+                href={latestInfo.url_download || '#'}
                 className="btn btn-primary"
                 target="_blank"
                 rel="noopener noreferrer"
