@@ -274,15 +274,23 @@ function Centro() {
 
         {/* MIDDLE AREA */}
         <div className="player-model-container">
-          <div className="model-placeholder" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <div className="model-placeholder" style={{ 
+            display: 'flex', 
+            flexDirection: 'column',
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            height: '100%',
+            paddingTop: '6rem' // Optimized padding to avoid header
+          }}>
             <img 
               src="/playermodel/Playermodel.png" 
               alt="Player Model" 
               style={{ 
-                maxHeight: '450px', 
+                maxHeight: '45vh', // Slightly smaller for better fit
                 width: 'auto', 
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 0 20px rgba(129, 216, 158, 0.2))'
+                filter: 'drop-shadow(0 0 30px rgba(129, 216, 158, 0.4))',
+                marginTop: '2rem'
               }} 
             />
           </div>
