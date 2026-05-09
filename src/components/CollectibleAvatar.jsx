@@ -38,7 +38,7 @@ function CollectibleAvatar({ collectibleName, className, style = {} }) {
       className={className} 
       style={{
         backgroundImage: imgUrl ? `url("${imgUrl}")` : 'none',
-        backgroundSize: 'contain',
+        backgroundSize: '85%',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         ...style
