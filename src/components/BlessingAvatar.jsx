@@ -57,15 +57,21 @@ function BlessingAvatar({ blessing, className, style = {} }) {
     <div
       className={className}
       style={{
-        backgroundImage: imgUrl ? `url("${imgUrl}")` : 'none', // Browsers are often better at auto-encoding in JS style
+        backgroundImage: blessing?.emoji ? 'none' : (imgUrl ? `url("${imgUrl}")` : 'none'),
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: blessing?.emoji ? '3rem' : 'inherit',
         ...style
       }}
     >
+      {blessing?.emoji && <span>{blessing.emoji}</span>}
+      
       {/* Hidden image to trigger the retry logic if the path fails */}
-      {imgUrl && (
+      {!blessing?.emoji && imgUrl && (
         <img
           src={imgUrl}
           alt=""
