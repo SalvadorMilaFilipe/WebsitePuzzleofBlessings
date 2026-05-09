@@ -273,23 +273,25 @@ function Centro() {
         </nav>
 
         {/* MIDDLE AREA */}
-        <div className="player-model-container">
+        <div className="player-model-container" style={{ pointerEvents: 'none' }}>
           <div className="model-placeholder" style={{ 
-            display: 'flex', 
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            top: '22vh', // Precisely below the title area
+            display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center', 
-            alignItems: 'center', 
-            height: '100%',
-            paddingTop: '12vh' // Aligns better with the header's clamp position
+            alignItems: 'center',
+            pointerEvents: 'auto'
           }}>
             <img 
               src="/playermodel/Playermodel.png" 
               alt="Player Model" 
               style={{ 
-                maxHeight: '50vh',
+                maxHeight: '52vh',
                 width: 'auto', 
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 0 35px rgba(129, 216, 158, 0.35))'
+                filter: 'drop-shadow(0 0 40px rgba(129, 216, 158, 0.4))'
               }} 
             />
           </div>
