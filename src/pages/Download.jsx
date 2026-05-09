@@ -19,7 +19,7 @@ function Download() {
     async function fetchLatestInfo() {
       try {
         const { data, error } = await supabase
-          .from('gamelauncherversion')
+          .from('launchergamedownload')
           .select('*')
           .order('id', { ascending: false })
           .limit(1)
