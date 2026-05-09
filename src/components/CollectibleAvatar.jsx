@@ -11,7 +11,11 @@ function CollectibleAvatar({ collectibleName, className, style = {} }) {
   useEffect(() => {
     if (!collectibleName) return
     
-    const fileName = `${collectibleName}.png`;
+    let fileName = `${collectibleName}.png`;
+
+    if (collectibleName.toLowerCase() === 'vhs tape') {
+      fileName = 'VHS Tape.png';
+    }
 
     // Try multiple path patterns to ensure we find the local image
     const paths = [
