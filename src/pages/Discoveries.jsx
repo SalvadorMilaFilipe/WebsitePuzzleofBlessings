@@ -741,7 +741,12 @@ function Discoveries() {
                   {selectedBlessing.bl_name}
                 </h2>
                 <div className="discoveries-read-attribute" style={{ marginTop: '0.75rem', marginBottom: 0 }}>
-                  <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>{selectedBlessing.isAdminOnly ? 'Type:' : 'Category:'}</span> {selectedBlessing.category?.cat_name || 'Unknown'} | <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>Rarity:</span> <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.rarity?.rar_name || 'Unknown'}</span>
+                  <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>{selectedBlessing.isAdminOnly ? 'Type:' : 'Category:'}</span> {selectedBlessing.category?.cat_name || 'Unknown'}
+                  {!selectedBlessing.isTutorial && (
+                    <>
+                      {' '} | <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), fontWeight: 700 }}>Rarity:</span> <span style={{ color: getRarityColor(selectedBlessing.rarity?.rar_name), textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>{selectedBlessing.rarity?.rar_name || 'Unknown'}</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
