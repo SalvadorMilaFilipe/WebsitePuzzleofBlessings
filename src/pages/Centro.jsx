@@ -278,7 +278,7 @@ function Centro() {
           flexDirection: 'column', 
           alignItems: 'center', 
           justifyContent: 'flex-start',
-          paddingTop: '20rem', 
+          paddingTop: '12rem', 
           paddingLeft: '60px', // Nudge to the right to align with the centered title
           pointerEvents: 'none' 
         }}>
