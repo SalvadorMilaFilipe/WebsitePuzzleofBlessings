@@ -208,7 +208,8 @@ function Discoveries() {
       bl_name: 'Boost',
       bl_description: 'Increases speed for 3 seconds. The player automatically moves forward and cannot jump during this time.',
       category: { cat_name: 'Tutorial' },
-      emoji: '💨'
+      emoji: '💨',
+      isTutorial: true
     }] : []
 
     // Map blessings and collectibles to a common format or just concatenate
@@ -756,7 +757,7 @@ function Discoveries() {
               <div className="discoveries-read-description" style={{marginTop: '1.25rem', marginBottom: '1.5rem', color: '#ccc', fontSize: '1rem', lineHeight: '1.7'}}>
                 {selectedBlessing.bl_description || '—'}
               </div>
-              {!selectedBlessing.isAdminOnly && (
+              {!selectedBlessing.isAdminOnly && !selectedBlessing.isTutorial && (
                 <div className="discoveries-read-date" style={{fontSize: '0.9rem', color: '#888'}}>
                   <span style={{color: '#81D89E', fontWeight: 800}}>Obtained on:</span> {selectedBlessing.date_obtained || 'Unknown'}
                 </div>
