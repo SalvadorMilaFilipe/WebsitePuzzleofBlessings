@@ -280,17 +280,16 @@ function Centro() {
             justifyContent: 'center', 
             alignItems: 'center', 
             height: '100%',
-            paddingTop: '6rem' // Optimized padding to avoid header
+            paddingTop: '12vh' // Aligns better with the header's clamp position
           }}>
             <img 
               src="/playermodel/Playermodel.png" 
               alt="Player Model" 
               style={{ 
-                maxHeight: '45vh', // Slightly smaller for better fit
+                maxHeight: '50vh',
                 width: 'auto', 
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 0 30px rgba(129, 216, 158, 0.4))',
-                marginTop: '2rem'
+                filter: 'drop-shadow(0 0 35px rgba(129, 216, 158, 0.35))'
               }} 
             />
           </div>
