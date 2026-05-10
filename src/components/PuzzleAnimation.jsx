@@ -242,7 +242,6 @@ const PuzzleAnimation = () => {
             if (isLoggedIn && next === 5) {
                 setCompleted(true);
                 setIsExpanded(true); // Trigger immersion
-                grantBlessing();
                 
                 // Show the blessing card with a slight delay for dramatic effect
                 setTimeout(() => setShowBlessing(true), 1200);
@@ -346,9 +345,13 @@ const PuzzleAnimation = () => {
 
             {isExpanded && (
                 <button 
-                    onClick={(e) => {
+                    onClick={async (e) => {
                         e.stopPropagation();
+                        // Grant blessing ONLY when they click to continue
+                        await grantBlessing();
                         setIsExpanded(false);
+                        setCompleted(false); // Optional: Reset for next time or keep completed
+                        setClickCount(0);
                     }}
                     style={{
                         position: 'absolute',
