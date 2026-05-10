@@ -210,7 +210,6 @@ const PuzzleAnimation = () => {
 
             if (error) {
                 console.error('Error granting blessing:', error.message);
-                alert('Could not claim blessing. Please try again.');
             } else {
                 // VERIFICATION STEP: Ensure it's actually in the DB
                 const { data: verify, error: vError } = await supabase
@@ -222,17 +221,14 @@ const PuzzleAnimation = () => {
 
                 if (verify && !vError) {
                     console.log('Pattern Lens blessing granted and verified successfully!');
-                    setHasBlessing(true); // This will now permanently hide/disable the animation
+                    setHasBlessing(true); // Trigger permanent removal of animation
                     setCompleted(true);
-                    alert('Success! Pattern Lens blessing has been added to your collection.');
                 } else {
                     console.error('Verification failed:', vError);
-                    alert('Blessing grant could not be verified. Please refresh and check your collection.');
                 }
             }
         } catch (err) {
             console.error('Failed to connect to database for blessing grant:', err);
-            alert('Connection error. Please check your internet.');
         } finally {
             setIsGranting(false);
         }
