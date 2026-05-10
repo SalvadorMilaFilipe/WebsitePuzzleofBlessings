@@ -18,8 +18,8 @@ function BlessingAvatar({ blessing, className, style = {} }) {
     // Manual overrides for specific blessing names
     const lowerName = blessing.bl_name.toLowerCase();
 
-    if (lowerName.includes('object levitation')) {
-      fileName = 'Object Levitation.png';
+    if (lowerName.includes('spirit anchor')) {
+      fileName = 'Spirit Anchor.png';
     } else if (lowerName.includes('spirit vision')) {
       fileName = 'Spirit Vision.png';
     } else if (lowerName.includes('sequential jump')) {
