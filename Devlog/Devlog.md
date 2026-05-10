@@ -331,18 +331,20 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 
 ---
 
-## 04/05/2026 - Devlog #38: Refinamento de Dashboard e Nova Identidade Visual
-*   **Vibe Shift: Transição Cromática (Verde & Azul):**
-    *   **Nova Paleta de Cores:** Substituição do tema Púrpura/Lavanda por uma estética baseada em **Verde Esmeralda** (esquerda) e **Azul Celeste** (direita).
-    *   **Títulos Iluminados:** Atualização dos logótipos de "The Center" e "The Shop" com novos gradientes e adição de barras laterais brilhantes para um aspeto mais "premium" e equilibrado.
-    *   **Harmonização de Vidro:** Sincronização de todas as bordas (`--glass-border`) e brilhos (`--accent-glow`) para o novo esquema de cores em toda a dashboard.
-*   **Simplificação Estratégica da Loja:**
-    *   **Abordagem Minimalista:** Remoção do catálogo complexo em favor de um ecrã de "Preview/Gacha" mais limpo e focado.
-    *   **Reintrodução de Ativos:** Utilização do ponto de interrogação "sketch" como elemento central animado, simbolizando o mistério das recompensas aleatórias.
-    *   **CTA Otimizado:** Implementação de um botão proeminente de compra aleatória com design poligonal.
-*   **Refinamento da Modal de Deck:**
-    *   **Otimização de Espaço:** Redução das dimensões da modal (`width` e `padding`) para um aspeto mais compacto que se integra melhor no centro do ecrã.
-    *   **Revisão do Botão Cancel:** Expansão e centralização do botão de cancelamento, com atualização da tipografia para **Inter 800**, garantindo consistência total com o botão de "Save".
-*   **Acessibilidade de Navegação:**
-    *   **Enter para Navegar:** Adição de suporte à tecla **Enter** na barra lateral móvel, permitindo uma navegação 100% por teclado após a seleção de abas.
-*   **Essência:** Uma evolução estética e funcional que torna o dashboard mais coeso, rápido e visualmente deslumbrante, alinhando a experiência da web com a atmosfera mística do jogo.
+## 09/05/2026 - Devlog #39: Refinamento Estético e Expansão de Colecionáveis
+*   **The Center: Identidade do Jogador:** Substituição do modelo 3D interativo por uma representação estática de alta fidelidade do personagem. Foi implementada uma lógica de posicionamento absoluto e centralização rigorosa abaixo do título principal, garantindo uma composição visual equilibrada e icónica no dashboard.
+*   **Novas Memórias Recuperadas:** Integração de dois novos colecionáveis: **Dream Pillows** e **Climbing Trophy**.
+*   **Robustez de Ativos:** Refatoração do componente `CollectibleAvatar` para suportar mapeamento manual de nomes de itens para ficheiros locais, garantindo que as artes originais sejam carregadas corretamente independentemente das variações de nomenclatura na base de dados.
+
+---
+
+## 10/05/2026 - Devlog #40: Progressão Reativa e Recompensas Interativas
+*   **Evolução da Bênção "Spirit Anchor":** Atualização da antiga "Object Levitation" para a sua identidade final: **Spirit Anchor**. O componente de avatares foi ajustado para refletir esta mudança na base de dados, associando o novo nome à arte final no repositório de assets.
+*   **Infraestrutura de Distribuição Dinâmica:**
+    *   Reengenharia da página de Download para consumir dados da tabela `launcher_versions`.
+    *   Implementação de lógica de "Maior ID" para garantir que o utilizador descarregue sempre a versão mais recente disponível na base de dados.
+    *   **Real-time Synchronization:** Ativação de subscrições via Supabase Channel, permitindo que o link de download se atualize instantaneamente no browser do utilizador caso uma nova versão seja lançada no backend.
+*   **Sistema de Gamificação e Recompensa:**
+    *   Transformação do puzzle de 5 cliques numa mecânica de desbloqueio real.
+    *   Implementação da função `grantBlessing` que insere a bênção **Pattern Lens (ID 5)** diretamente no perfil do jogador ao concluir o desafio.
+    *   **Revelação Cinematic:** Criação de um efeito visual de "Card Reveal" dentro da cena 3D do puzzle, apresentando a bênção conquistada com animações de profundidade e brilho ametista.

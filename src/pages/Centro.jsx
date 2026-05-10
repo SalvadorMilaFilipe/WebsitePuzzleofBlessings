@@ -295,12 +295,7 @@ function Centro() {
           />
         </div>
 
-        {/* FOOTER AREA */}
-        <footer className="centro-footer">
-          <div className={`level-progress ${progressColorClass}`}>
-            {currencyData.collected_lv} / {currencyData.max_per_lv}
-          </div>
-        </footer>
+        {/* FOOTER AREA REMOVED */}
 
       </div>
 

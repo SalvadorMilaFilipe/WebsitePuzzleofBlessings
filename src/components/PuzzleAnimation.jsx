@@ -179,12 +179,31 @@ const PuzzleScene = ({ clickCount, isLoggedIn, completed }) => {
 };
 
 const PuzzleAnimation = () => {
-    const { session } = useAuth();
+    const { session, userProfile } = useAuth();
     const isLoggedIn = !!session;
     
     const [clickCount, setClickCount] = useState(0);
     const [completed, setCompleted] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [showBlessing, setShowBlessing] = useState(false);
+
+    const grantBlessing = async () => {
+        if (!userProfile?.pl_id) return;
+        
+        try {
+            // Pattern Lens ID is 5 based on database state
+            const { error } = await supabase
+                .from('player_blessing')
+                .upsert([
+                    { pl_id: userProfile.pl_id, bl_id: 5, date_obtained: new Date().toISOString().split('T')[0] }
+                ], { onConflict: 'pl_id, bl_id' });
+
+            if (error) console.error('Error granting blessing:', error.message);
+            else console.log('Pattern Lens blessing granted to player!');
+        } catch (err) {
+            console.error('Failed to connect to database for blessing grant:', err);
+        }
+    };
 
     // Reset puzzle if user logs out
     useEffect(() => {
@@ -192,6 +211,7 @@ const PuzzleAnimation = () => {
             setClickCount(0);
             setCompleted(false);
             setIsExpanded(false);
+            setShowBlessing(false);
         }
     }, [isLoggedIn]);
 
@@ -213,6 +233,10 @@ const PuzzleAnimation = () => {
             if (isLoggedIn && next === 5) {
                 setCompleted(true);
                 setIsExpanded(true); // Trigger immersion
+                grantBlessing();
+                
+                // Show the blessing card with a slight delay for dramatic effect
+                setTimeout(() => setShowBlessing(true), 1200);
             }
             if (!isLoggedIn && next > 5) return 0;
             return next;
@@ -247,7 +271,7 @@ const PuzzleAnimation = () => {
                     : completed ? 'rgba(0, 0, 0, 0.85)' : 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
                 cursor: completed && isLoggedIn ? 'default' : 'pointer',
                 display: 'flex',
-                direction: 'column',
+                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center'
             }}
@@ -257,6 +281,32 @@ const PuzzleAnimation = () => {
                     <PuzzleScene clickCount={clickCount} isLoggedIn={isLoggedIn} completed={completed} />
                 </Suspense>
             </Canvas>
+
+            {/* Blessing Card Overlay */}
+            {showBlessing && (
+                <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '300px',
+                    height: '420px',
+                    backgroundImage: 'url("/blessingcardmodels/Pattern Lens.png")',
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    zIndex: 15,
+                    animation: 'card-appear 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+                    filter: 'drop-shadow(0 0 30px rgba(170, 154, 216, 0.6))'
+                }}>
+                    <style>{`
+                        @keyframes card-appear {
+                            0% { opacity: 0; transform: translate(-50%, -30%) scale(0.5) rotateY(90deg); }
+                            100% { opacity: 1; transform: translate(-50%, -55%) scale(1) rotateY(0); }
+                        }
+                    `}</style>
+                </div>
+            )}
             
             {isExpanded && (
                 <div style={{
@@ -281,7 +331,7 @@ const PuzzleAnimation = () => {
                             100% { opacity: 1; transform: translate(-50%, 0); filter: blur(0); text-shadow: 0 0 30px rgba(255, 255, 255, 0.9); }
                         }
                     `}</style>
-                    Blessing Fragment Restored
+                    Blessing Restored
                 </div>
             )}
 
