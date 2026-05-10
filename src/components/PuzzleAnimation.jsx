@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, PerspectiveCamera, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
 
 // Helper to create unique puzzle piece shapes with specific tabs
 // tabs: [top, right, bottom, left], where 0=flat, 1=out, -1=in
