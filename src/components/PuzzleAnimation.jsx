@@ -153,6 +153,32 @@ const PuzzleAnimation = () => {
 
     const [isGranting, setIsGranting] = useState(false);
 
+    const [hasBlessing, setHasBlessing] = useState(false);
+
+    // Check if user already has the blessing on mount
+    useEffect(() => {
+        const checkBlessing = async () => {
+            if (!userProfile?.pl_id) return;
+            try {
+                const { data, error } = await supabase
+                    .from('player_blessing')
+                    .select('bl_id')
+                    .eq('pl_id', userProfile.pl_id)
+                    .eq('bl_id', 5)
+                    .maybeSingle();
+                
+                if (data && !error) {
+                    setHasBlessing(true);
+                    setCompleted(true);
+                    // If they have it, the background should be the subtle green even when not expanded
+                }
+            } catch (err) {
+                console.error('Error checking owned blessings:', err);
+            }
+        };
+        checkBlessing();
+    }, [userProfile]);
+
     const grantBlessing = async () => {
         if (!userProfile?.pl_id) {
             console.error('[Puzzle] No user profile found to grant blessing.');
@@ -163,7 +189,6 @@ const PuzzleAnimation = () => {
         setIsGranting(true);
         try {
             console.log(`[Puzzle] Granting Pattern Lens (ID: 5) to player: ${userProfile.pl_id}`);
-            // Pattern Lens ID is 5 based on database state
             const { error } = await supabase
                 .from('player_blessing')
                 .upsert([
@@ -181,6 +206,7 @@ const PuzzleAnimation = () => {
             } else {
                 console.log('Pattern Lens blessing granted successfully!');
                 alert('Success! Pattern Lens blessing has been added to your collection.');
+                setHasBlessing(true); // Update state locally
             }
         } catch (err) {
             console.error('Failed to connect to database for blessing grant:', err);
@@ -254,8 +280,10 @@ const PuzzleAnimation = () => {
                     ? (showBlessing 
                         ? 'radial-gradient(circle at center, rgba(16, 45, 30, 0.98) 0%, #050a05 100%)' // Deep green for final state
                         : 'rgba(0, 0, 0, 0.98)') 
-                    : completed ? 'rgba(0, 0, 0, 0.85)' : 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
-                cursor: completed && isLoggedIn ? 'default' : 'pointer',
+                    : (completed && hasBlessing) 
+                        ? 'radial-gradient(circle at center, rgba(16, 45, 30, 0.4) 0%, transparent 80%)' // Subtle green if already owned
+                        : completed ? 'rgba(0, 0, 0, 0.85)' : 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
+                cursor: (completed && isLoggedIn) ? 'default' : 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -268,7 +296,7 @@ const PuzzleAnimation = () => {
                         clickCount={clickCount} 
                         isLoggedIn={isLoggedIn} 
                         completed={completed} 
-                        isStatic={showBlessing} // Pass static state
+                        isStatic={showBlessing || hasBlessing} // Stop animation if owned
                     />
                 </Suspense>
             </Canvas>
