@@ -238,6 +238,7 @@ const PuzzleAnimation = () => {
 
     const handleContainerClick = () => {
         if (completed && isLoggedIn) return;
+        if (hasBlessing) return; // Prevent clicking if already owned
         
         setClickCount(prev => {
             const next = prev + 1;
@@ -283,7 +284,7 @@ const PuzzleAnimation = () => {
                     : (completed && hasBlessing) 
                         ? 'radial-gradient(circle at center, rgba(16, 45, 30, 0.4) 0%, transparent 80%)' // Subtle green if already owned
                         : completed ? 'rgba(0, 0, 0, 0.85)' : 'radial-gradient(circle at center, rgba(139, 181, 214, 0.05) 0%, transparent 80%)',
-                cursor: (completed && isLoggedIn) ? 'default' : 'pointer',
+                cursor: (completed && isLoggedIn) || hasBlessing ? 'default' : 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -296,7 +297,7 @@ const PuzzleAnimation = () => {
                         clickCount={clickCount} 
                         isLoggedIn={isLoggedIn} 
                         completed={completed} 
-                        isStatic={showBlessing || hasBlessing} // Stop animation if owned
+                        isStatic={showBlessing} // ONLY freeze when the card is actually being shown
                     />
                 </Suspense>
             </Canvas>
