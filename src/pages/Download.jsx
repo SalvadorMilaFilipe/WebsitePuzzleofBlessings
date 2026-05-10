@@ -131,7 +131,7 @@ function Download() {
                 <p className="download-version">Latest Version: <span>{latestInfo.version}</span></p>
                 <p className="download-size">Size: <span>{latestInfo.size_mb} MB</span></p>
                 <p className="download-platforms">Platforms: {latestInfo.platform}</p>
-                <p className="download-date">Released: <span>{latestInfo.add_date}</span></p>
+                <p className="download-date">Released: <span>{latestInfo.add_date?.split('T')[0]}</span></p>
               </div>
               <div className="download-actions">
                 <p className="download-notice">

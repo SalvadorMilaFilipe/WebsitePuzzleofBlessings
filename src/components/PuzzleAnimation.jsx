@@ -187,12 +187,16 @@ const PuzzleAnimation = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showBlessing, setShowBlessing] = useState(false);
 
+    const [isGranting, setIsGranting] = useState(false);
+
     const grantBlessing = async () => {
         if (!userProfile?.pl_id) {
             console.error('[Puzzle] No user profile found to grant blessing.');
+            alert('Error: You must be logged in to claim this blessing.');
             return;
         }
         
+        setIsGranting(true);
         try {
             console.log(`[Puzzle] Granting Pattern Lens (ID: 5) to player: ${userProfile.pl_id}`);
             // Pattern Lens ID is 5 based on database state
@@ -207,10 +211,18 @@ const PuzzleAnimation = () => {
                     }
                 ], { onConflict: 'pl_id, bl_id' });
 
-            if (error) console.error('Error granting blessing:', error.message);
-            else console.log('Pattern Lens blessing granted successfully!');
+            if (error) {
+                console.error('Error granting blessing:', error.message);
+                alert('Could not claim blessing. Please try again.');
+            } else {
+                console.log('Pattern Lens blessing granted successfully!');
+                alert('Success! Pattern Lens blessing has been added to your collection.');
+            }
         } catch (err) {
             console.error('Failed to connect to database for blessing grant:', err);
+            alert('Connection error. Please check your internet.');
+        } finally {
+            setIsGranting(false);
         }
     };
 
@@ -347,21 +359,24 @@ const PuzzleAnimation = () => {
                 <button 
                     onClick={async (e) => {
                         e.stopPropagation();
-                        // Grant blessing ONLY when they click to continue
+                        if (isGranting) return;
+                        
                         await grantBlessing();
                         setIsExpanded(false);
                         setCompleted(false); // Optional: Reset for next time or keep completed
                         setClickCount(0);
+                        setShowBlessing(false); // Reset card visibility
                     }}
+                    disabled={isGranting}
                     style={{
                         position: 'absolute',
                         bottom: '15%',
                         padding: '15px 40px',
-                        background: 'rgba(255, 255, 255, 0.05)',
+                        background: isGranting ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.05)',
                         border: '1px solid rgba(255, 255, 255, 0.2)',
                         color: 'white',
                         borderRadius: '30px',
-                        cursor: 'pointer',
+                        cursor: isGranting ? 'wait' : 'pointer',
                         fontSize: '0.9rem',
                         letterSpacing: '2px',
                         textTransform: 'uppercase',
@@ -370,12 +385,14 @@ const PuzzleAnimation = () => {
                         zIndex: 20
                     }}
                     onMouseEnter={(e) => {
-                        e.target.style.background = 'rgba(255, 255, 255, 0.15)';
-                        e.target.style.borderColor = 'white';
-                        e.target.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.2)';
+                        if (!isGranting) {
+                            e.target.style.background = 'rgba(255, 255, 255, 0.15)';
+                            e.target.style.borderColor = 'white';
+                            e.target.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.2)';
+                        }
                     }}
                     onMouseLeave={(e) => {
-                        e.target.style.background = 'rgba(255, 255, 255, 0.05)';
+                        e.target.style.background = isGranting ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.05)';
                         e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                         e.target.style.boxShadow = 'none';
                     }}
