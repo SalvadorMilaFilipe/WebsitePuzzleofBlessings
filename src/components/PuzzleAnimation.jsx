@@ -212,8 +212,23 @@ const PuzzleAnimation = () => {
                 console.error('Error granting blessing:', error.message);
                 alert('Could not claim blessing. Please try again.');
             } else {
-                console.log('Pattern Lens blessing granted successfully!');
-                setHasBlessing(true); // Update state locally
+                // VERIFICATION STEP: Ensure it's actually in the DB
+                const { data: verify, error: vError } = await supabase
+                    .from('player_blessing')
+                    .select('bl_id')
+                    .eq('pl_id', userProfile.pl_id)
+                    .eq('bl_id', 5)
+                    .maybeSingle();
+
+                if (verify && !vError) {
+                    console.log('Pattern Lens blessing granted and verified successfully!');
+                    setHasBlessing(true); // This will now permanently hide/disable the animation
+                    setCompleted(true);
+                    alert('Success! Pattern Lens blessing has been added to your collection.');
+                } else {
+                    console.error('Verification failed:', vError);
+                    alert('Blessing grant could not be verified. Please refresh and check your collection.');
+                }
             }
         } catch (err) {
             console.error('Failed to connect to database for blessing grant:', err);
@@ -302,16 +317,18 @@ const PuzzleAnimation = () => {
                 justifyContent: 'center'
             }}
         >
-            <Canvas shadows gl={{ antialias: true }} dpr={[1, 2]}>
-                <Suspense fallback={null}>
-                    <PuzzleScene 
-                        clickCount={clickCount} 
-                        isLoggedIn={isLoggedIn} 
-                        completed={completed} 
-                        isStatic={showBlessing} // ONLY freeze when the card is actually being shown
-                    />
-                </Suspense>
-            </Canvas>
+            {!hasBlessing && (
+                <Canvas shadows gl={{ antialias: true }} dpr={[1, 2]}>
+                    <Suspense fallback={null}>
+                        <PuzzleScene 
+                            clickCount={clickCount} 
+                            isLoggedIn={isLoggedIn} 
+                            completed={completed} 
+                            isStatic={showBlessing} 
+                        />
+                    </Suspense>
+                </Canvas>
+            )}
 
             {isExpanded && (
                 <div style={{
