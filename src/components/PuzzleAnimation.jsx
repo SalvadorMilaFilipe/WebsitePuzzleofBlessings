@@ -51,7 +51,47 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
 
         const t = state.clock.getElapsedTime();
         if (!meshRef.current) return;
-// ... (lines 52-104)
+
+        const effectiveClickCount = isLoggedIn ? clickCount : Math.min(clickCount, 4);
+        
+        let target;
+        if (isLoggedIn && clickCount >= 5) {
+            target = new THREE.Vector3(...targetGridPos);
+        } else {
+            const focus = 5 / (effectiveClickCount + 1);
+            target = new THREE.Vector3(
+                Math.sin(t * 0.4 + offset) * focus,
+                Math.cos(t * 0.35 + offset) * focus,
+                Math.sin(t * 0.3 + offset) * 1.5
+            );
+
+            if (!isLoggedIn && clickCount >= 5) {
+                target.x += (Math.random() - 0.5) * 1.5;
+                target.y += (Math.random() - 0.5) * 1.5;
+            }
+        }
+
+        const force = new THREE.Vector3().subVectors(target, currentPos.current);
+        const strength = (isLoggedIn && clickCount >= 5) ? 0.12 : 0.015 * speed * (clickCount + 1);
+        force.multiplyScalar(strength);
+        velocity.current.add(force);
+
+        velocity.current.multiplyScalar((isLoggedIn && clickCount >= 5) ? 0.8 : 0.94);
+
+        currentPos.current.add(velocity.current);
+        meshRef.current.position.copy(currentPos.current);
+
+        if (isLoggedIn && clickCount >= 5) {
+            meshRef.current.rotation.set(0, 0, 0);
+        } else {
+            meshRef.current.rotation.x += 0.005 + (velocity.current.length() * 0.06);
+            meshRef.current.rotation.y += 0.005 + (velocity.current.length() * 0.06);
+        }
+    });
+
+    // Dramatic shift to Deep Amethyst for absolute contrast and lower emissive to prevent white-out
+    const displayColor = completed ? '#6A0DAD' : color;
+
     return (
         <mesh ref={meshRef} rotation={rotation} castShadow visible={!completed || targetGridPos[2] === 0}>
             <extrudeGeometry args={[shape, { depth: 0.15, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04 }]} />
@@ -189,8 +229,7 @@ const PuzzleAnimation = () => {
 
     const grantBlessing = async () => {
         if (!userProfile?.pl_id) {
-            console.error('[Puzzle] No user profile found to grant blessing.');
-            alert('Error: You must be logged in to claim this blessing.');
+            console.error('[Puzzle] No user profile found to claim blessing.');
             return;
         }
         
