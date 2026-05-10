@@ -188,18 +188,27 @@ const PuzzleAnimation = () => {
     const [showBlessing, setShowBlessing] = useState(false);
 
     const grantBlessing = async () => {
-        if (!userProfile?.pl_id) return;
+        if (!userProfile?.pl_id) {
+            console.error('[Puzzle] No user profile found to grant blessing.');
+            return;
+        }
         
         try {
+            console.log(`[Puzzle] Granting Pattern Lens (ID: 5) to player: ${userProfile.pl_id}`);
             // Pattern Lens ID is 5 based on database state
             const { error } = await supabase
                 .from('player_blessing')
                 .upsert([
-                    { pl_id: userProfile.pl_id, bl_id: 5, date_obtained: new Date().toISOString().split('T')[0] }
+                    { 
+                        pl_id: userProfile.pl_id, 
+                        bl_id: 5, 
+                        date_obtained: new Date().toISOString().split('T')[0],
+                        is_in_deck: false 
+                    }
                 ], { onConflict: 'pl_id, bl_id' });
 
             if (error) console.error('Error granting blessing:', error.message);
-            else console.log('Pattern Lens blessing granted to player!');
+            else console.log('Pattern Lens blessing granted successfully!');
         } catch (err) {
             console.error('Failed to connect to database for blessing grant:', err);
         }
