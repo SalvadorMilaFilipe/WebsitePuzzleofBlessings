@@ -131,10 +131,16 @@ function Centro() {
     }
   }, [userProfile, authLoading])
 
+  const [showHint, setShowHint] = useState(false)
+
   // Functional: Hint System
   const handleHintClick = () => {
     if (hintCooldown > 0) return
-    alert("Hint: The ancient pillars hold the key to the sequence!")
+    
+    setShowHint(true)
+    // Auto-hide hint after 15 seconds
+    setTimeout(() => setShowHint(false), 15000)
+
     const now = Date.now()
     localStorage.setItem('last_hint_time', now.toString())
     setHintCooldown(COOLDOWN_TIME)
@@ -250,18 +256,27 @@ function Centro() {
             <span className="btn-label">Shop</span>
           </button>
 
-          <button
-            className={`icon-btn hint-btn ${hintCooldown > 0 ? 'cooldown' : ''}`}
-            onClick={handleHintClick}
-            disabled={hintCooldown > 0}
-            title={hintCooldown > 0 ? `Cooldown: ${formatTime(hintCooldown)}` : "Get Hint"}
-          >
-            <div className="btn-icon-wrapper">
-              <img src="/img/hint_bulb.png" alt="💡" className="btn-icon"
-                onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/702/702797.png" }} />
-            </div>
-            <span className="btn-label">{hintCooldown > 0 ? formatTime(hintCooldown) : "Hint"}</span>
-          </button>
+          <div className="hint-wrapper" style={{ position: 'relative' }}>
+            <button
+              className={`icon-btn hint-btn ${hintCooldown > 0 ? 'cooldown' : ''}`}
+              onClick={handleHintClick}
+              disabled={hintCooldown > 0}
+              title={hintCooldown > 0 ? `Cooldown: ${formatTime(hintCooldown)}` : "Get Hint"}
+            >
+              <div className="btn-icon-wrapper">
+                <img src="/img/hint_bulb.png" alt="💡" className="btn-icon"
+                  onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/702/702797.png" }} />
+              </div>
+              <span className="btn-label">{hintCooldown > 0 ? formatTime(hintCooldown) : "Hint"}</span>
+            </button>
+
+            {showHint && (
+              <div className="hint-tooltip">
+                <p>Where it all started, theres a simple sequence.</p>
+                <p>Just five touches for you to see a pattern</p>
+              </div>
+            )}
+          </div>
 
           <button className="icon-btn deck-btn" title="My Deck" onClick={() => setIsDeckOpen(true)}>
             <div className="btn-icon-wrapper">

@@ -345,6 +345,13 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
     *   Implementação de lógica de "Maior ID" para garantir que o utilizador descarregue sempre a versão mais recente disponível na base de dados.
     *   **Real-time Synchronization:** Ativação de subscrições via Supabase Channel, permitindo que o link de download se atualize instantaneamente no browser do utilizador caso uma nova versão seja lançada no backend.
 *   **Sistema de Gamificação e Recompensa:**
-    *   Transformação do puzzle de 5 cliques numa mecânica de desbloqueio real.
-    *   Implementação da função `grantBlessing` que insere a bênção **Pattern Lens (ID 5)** diretamente no perfil do jogador ao concluir o desafio.
-    *   **Revelação Cinematic:** Criação de um efeito visual de "Card Reveal" dentro da cena 3D do puzzle, apresentando a bênção conquistada com animações de profundidade e brilho ametista.
+    *   **Mecânica de Desbloqueio:** Transformação do puzzle de 5 cliques numa mecânica de recompensa real. Implementação da função `grantBlessing` que atribui a **Pattern Lens (ID 5)** ao jogador.
+    *   **Aprovação de Recompensa:** Transição da atribuição automática para um sistema de "claim" manual via botão, garantindo a sincronização perfeita com a base de dados após a visualização da carta.
+    *   **Revelação Cinematic:** Criação de um efeito visual de "Card Reveal" com animações de profundidade e brilho ametista.
+*   **Refinamento da Interface "The Center":**
+    *   **Limpeza Visual:** Remoção do contador de progresso de nível do dashboard para simplificar a UI e focar na estética central do personagem.
+    *   **Hint System 2.0:** Substituição dos alertas nativos do browser por uma tooltip personalizada com estilo *glassmorphism*, fornecendo pistas sobre o segredo da página de download ("Where it all started...", "Just five touches...").
+*   **Ciclo de Recompensa Persistente:**
+    *   **Verificação de Posse:** Implementação de lógica de deteção em tempo real para identificar se o jogador já possui a bênção "Pattern Lens" (ID 5).
+    *   **Otimização e Estado de Mundo:** Remoção permanente das animações 3D de peças flutuantes para utilizadores que já completaram o desafio, refletindo visualmente a restauração da bênção e otimizando a performance da página.
+*   **Polimento de UX:** Correção da formatação de datas de lançamento e ajuste rigoroso do posicionamento do texto "Blessing Restored" para evitar sobreposições com os modelos 3D.
