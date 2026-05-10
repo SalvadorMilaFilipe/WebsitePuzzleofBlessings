@@ -132,14 +132,22 @@ function Centro() {
   }, [userProfile, authLoading])
 
   const [showHint, setShowHint] = useState(false)
+  const [hintIndex, setHintIndex] = useState(0)
+  const hints = [
+    "Where it all started, theres a simple sequence.",
+    "Just five touches for you to see a pattern"
+  ]
 
   // Functional: Hint System
   const handleHintClick = () => {
     if (hintCooldown > 0) return
     
+    // Cycle to next hint before showing
+    setHintIndex(prev => (prev + 1) % hints.length)
     setShowHint(true)
-    // Auto-hide hint after 15 seconds
-    setTimeout(() => setShowHint(false), 15000)
+    
+    // Auto-hide hint after 10 seconds
+    setTimeout(() => setShowHint(false), 10000)
 
     const now = Date.now()
     localStorage.setItem('last_hint_time', now.toString())
@@ -272,8 +280,7 @@ function Centro() {
 
             {showHint && (
               <div className="hint-tooltip">
-                <p>Where it all started, theres a simple sequence.</p>
-                <p>Just five touches for you to see a pattern</p>
+                <p>{hints[hintIndex]}</p>
               </div>
             )}
           </div>
