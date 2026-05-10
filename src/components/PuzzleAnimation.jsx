@@ -155,11 +155,16 @@ const PuzzleAnimation = () => {
 
     const [hasBlessing, setHasBlessing] = useState(false);
 
-    // Check if user already has the blessing on mount
+    // Check if user already has the blessing on mount or when userProfile changes
     useEffect(() => {
         const checkBlessing = async () => {
-            if (!userProfile?.pl_id) return;
+            if (!userProfile?.pl_id) {
+                console.log('[Puzzle] Waiting for user profile to check blessing...');
+                return;
+            }
+            
             try {
+                console.log(`[Puzzle] Checking if player ${userProfile.pl_id} already has blessing 5...`);
                 const { data, error } = await supabase
                     .from('player_blessing')
                     .select('bl_id')
@@ -168,16 +173,19 @@ const PuzzleAnimation = () => {
                     .maybeSingle();
                 
                 if (data && !error) {
+                    console.log('[Puzzle] Player already owns Pattern Lens. Disabling interaction.');
                     setHasBlessing(true);
                     setCompleted(true);
-                    // If they have it, the background should be the subtle green even when not expanded
+                } else {
+                    console.log('[Puzzle] Player does not own blessing 5 yet.');
+                    setHasBlessing(false);
                 }
             } catch (err) {
-                console.error('Error checking owned blessings:', err);
+                console.error('[Puzzle] Error checking owned blessings:', err);
             }
         };
         checkBlessing();
-    }, [userProfile]);
+    }, [userProfile, isLoggedIn]);
 
     const grantBlessing = async () => {
         if (!userProfile?.pl_id) {
@@ -205,7 +213,6 @@ const PuzzleAnimation = () => {
                 alert('Could not claim blessing. Please try again.');
             } else {
                 console.log('Pattern Lens blessing granted successfully!');
-                alert('Success! Pattern Lens blessing has been added to your collection.');
                 setHasBlessing(true); // Update state locally
             }
         } catch (err) {
@@ -237,11 +244,15 @@ const PuzzleAnimation = () => {
     }, [isExpanded]);
 
     const handleContainerClick = () => {
-        if (completed && isLoggedIn) return;
-        if (hasBlessing) return; // Prevent clicking if already owned
+        // Block interaction if already completed OR if they already own the blessing
+        if ((completed && isLoggedIn) || hasBlessing) {
+            console.log('[Puzzle] Interaction blocked: Blessing already owned or puzzle completed.');
+            return;
+        }
         
         setClickCount(prev => {
             const next = prev + 1;
+            console.log(`[Puzzle] Click count: ${next}/5`);
             if (isLoggedIn && next === 5) {
                 setCompleted(true);
                 setIsExpanded(true); // Trigger immersion
