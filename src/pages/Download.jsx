@@ -32,7 +32,24 @@ function Download() {
         console.error('Error fetching game info:', err)
       }
     }
+
     fetchLatestInfo()
+
+    // Real-time subscription to update the link automatically
+    const channel = supabase
+      .channel('launcher-updates')
+      .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'launcher_versions' 
+      }, () => {
+        fetchLatestInfo()
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
   }, [])
 
   useEffect(() => {
