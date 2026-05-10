@@ -282,36 +282,10 @@ const PuzzleAnimation = () => {
                 </Suspense>
             </Canvas>
 
-            {/* Blessing Card Overlay */}
-            {showBlessing && (
-                <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '300px',
-                    height: '420px',
-                    backgroundImage: 'url("/blessingcardmodels/Pattern Lens.png")',
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
-                    zIndex: 15,
-                    animation: 'card-appear 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
-                    filter: 'drop-shadow(0 0 30px rgba(170, 154, 216, 0.6))'
-                }}>
-                    <style>{`
-                        @keyframes card-appear {
-                            0% { opacity: 0; transform: translate(-50%, -30%) scale(0.5) rotateY(90deg); }
-                            100% { opacity: 1; transform: translate(-50%, -55%) scale(1) rotateY(0); }
-                        }
-                    `}</style>
-                </div>
-            )}
-            
             {isExpanded && (
                 <div style={{
                     position: 'absolute',
-                    top: '15%', // Higher position to avoid overlapping with the puzzle
+                    top: '8%', // Moved higher to clear the card
                     left: '50%',
                     transform: 'translateX(-50%)',
                     color: '#ffffff',
@@ -332,6 +306,32 @@ const PuzzleAnimation = () => {
                         }
                     `}</style>
                     Blessing Restored
+                </div>
+            )}
+
+            {/* Blessing Card Overlay */}
+            {showBlessing && (
+                <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '280px', // Slightly smaller
+                    height: '400px',
+                    backgroundImage: 'url("/blessingcardmodels/Pattern Lens.png")',
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    zIndex: 15,
+                    animation: 'card-appear 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+                    filter: 'drop-shadow(0 0 30px rgba(170, 154, 216, 0.6))'
+                }}>
+                    <style>{`
+                        @keyframes card-appear {
+                            0% { opacity: 0; transform: translate(-50%, -30%) scale(0.5) rotateY(90deg); }
+                            100% { opacity: 1; transform: translate(-50%, -48%) scale(1) rotateY(0); } // Adjusted target Y
+                        }
+                    `}</style>
                 </div>
             )}
 
