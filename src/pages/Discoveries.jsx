@@ -679,44 +679,43 @@ function Discoveries() {
             <div className="no-results"><p>No admin tools found.</p></div>
           )
         ) : activeFilter === 'levels' ? (
-          allLevels.length > 0 ? (
+          allLevels.filter(lv => lv.lv_id <= playerLevel).length > 0 ? (
             <div className="discoveries-elements-grid">
-              {allLevels.map(lv => (
+              {allLevels.filter(lv => lv.lv_id <= playerLevel).map(lv => (
                 <article 
                   key={lv.lv_id}
                   className="discoveries-element-card lowpoly-card"
                   style={{ borderLeft: `5px solid #81D89E` }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
-                    <div className="level-img" style={{ 
-                      minWidth: '100px', height: '100px', marginRight: '1rem',
+                  <div style={{ display: 'flex', flexDirection: 'column', padding: '0' }}>
+                    <div className="level-img-header" style={{ 
+                      width: '100%', height: '150px',
                       backgroundImage: `url(${lv.lv_id === 0 ? '/levelimg/DownloadimgTuturial.png' : `/levelimg/level_${lv.lv_id}.png`})`, 
                       backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
-                      borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '12px 12px 0 0', borderBottom: '1px solid rgba(255,255,255,0.1)',
                       backgroundColor: 'rgba(0,0,0,0.3)'
                     }}>
-                      {/* Fallback text if no image exists (like Level 2) */}
                       {!lv.lv_id === 0 && ![`level_0.png`, `level_1.png`, `level_3.png`].includes(`level_${lv.lv_id}.png`) && (
-                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '0.7rem', color: '#666' }}>
-                            No Image
+                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '0.8rem', color: '#666' }}>
+                            Preview Unavailable
                          </div>
                       )}
                     </div>
-                    <div className="discoveries-element-info">
+                    <div className="discoveries-element-info" style={{ padding: '1.2rem' }}>
                       <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#81D89E' }}>
                         {lv.lv_name}
                       </div>
                       <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: '#81D89E', fontWeight: 700 }}>
-                        Level Discovery
+                        Level {lv.lv_id} {lv.lv_id === playerLevel ? '(Current)' : '(Completed)'}
                       </p>
-                      <p style={{ fontSize: '0.9rem', color: '#bbb', mt: '4px' }}>{lv.lv_description || 'Explore the world to uncover more details about this region.'}</p>
+                      <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '8px 0 0' }}>{lv.lv_description || 'Explore the world to uncover more details about this region.'}</p>
                     </div>
                   </div>
                 </article>
               ))}
             </div>
           ) : (
-            <div className="no-results"><p>No levels found.</p></div>
+            <div className="no-results"><p>Continue your journey to unlock more regions.</p></div>
           )
         ) : (
           <div className="no-results"><p>Coming soon.</p></div>
