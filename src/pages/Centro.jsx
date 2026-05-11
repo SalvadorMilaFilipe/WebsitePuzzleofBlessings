@@ -178,7 +178,39 @@ function Centro() {
     setIsBuying(true)
 
     try {
-      // 1. Fetch current coins
+      // 1. Determine current state and reward
+      const { data: ownedBlessings } = await supabase
+        .from('player_blessing')
+        .select('bl_id')
+        .eq('pl_id', userProfile.pl_id)
+      
+      const { data: ownedItems } = await supabase
+        .from('player_collectible')
+        .select('cl_id')
+        .eq('pl_id', userProfile.pl_id)
+      
+      const ownedBIds = new Set(ownedBlessings?.map(b => b.bl_id) || [])
+      const ownedIIds = new Set(ownedItems?.map(i => i.cl_id) || [])
+      
+      let reward = null
+      let price = 30
+
+      if (!ownedBIds.has(4)) {
+        reward = { type: 'blessing', id: 4, name: 'Ephemeral Point' }
+        price = 30
+      } else if (!ownedIIds.has(1)) {
+        reward = { type: 'item', id: 1, name: 'Dream Pillow' }
+        price = 30
+      } else if (!ownedBIds.has(7)) {
+        reward = { type: 'blessing', id: 7, name: 'Sequential Jump' }
+        price = 20
+      } else {
+        setShopError("You have already acquired all available treasures from the shop!")
+        setIsBuying(false)
+        return
+      }
+
+      // 2. Fetch current coins and check price
       const { data: cData, error: cError } = await supabase
         .from('currency')
         .select('cur_ammount')
@@ -187,66 +219,50 @@ function Centro() {
 
       if (cError) throw cError
 
-      if (!cData || cData.cur_ammount < 10) {
-        setShopError("Insufficient coins! You need 10 pieces.")
-        setIsBuying(false)
-        return
-      }
-
-      // 2. Determine reward based on DB state (not localStorage)
-      // Check which blessings the player already has
-      const { data: ownedBlessings, error: bFetchError } = await supabase
-        .from('player_blessing')
-        .select('bl_id')
-        .eq('pl_id', userProfile.pl_id)
-      
-      if (bFetchError) throw bFetchError
-      
-      const ownedIds = new Set(ownedBlessings.map(b => b.bl_id))
-      
-      let reward = null
-      if (!ownedIds.has(4)) {
-        reward = { type: 'blessing', id: 4, name: 'Ephemeral Point' }
-      } else if (!ownedIds.has(7)) {
-        reward = { type: 'blessing', id: 7, name: 'Sequential Jump' }
-      } else {
-        setShopError("You have already acquired all available blessings from the shop!")
+      if (!cData || cData.cur_ammount < price) {
+        setShopError(`Insufficient coins, you need ${price} pieces.`)
         setIsBuying(false)
         return
       }
 
       // 3. Grant reward
-      const { error: bError } = await supabase
-        .from('player_blessing')
-        .upsert({ pl_id: userProfile.pl_id, bl_id: reward.id }, { onConflict: 'pl_id,bl_id' })
-      
-      if (bError) throw bError
+      if (reward.type === 'blessing') {
+        const { error: bError } = await supabase
+          .from('player_blessing')
+          .upsert({ pl_id: userProfile.pl_id, bl_id: reward.id }, { onConflict: 'pl_id,bl_id' })
+        if (bError) throw bError
+      } else {
+        const { error: iError } = await supabase
+          .from('player_collectible')
+          .upsert({ pl_id: userProfile.pl_id, cl_id: reward.id }, { onConflict: 'pl_id,cl_id' })
+        if (iError) throw iError
+      }
 
-      // SIGNAL GAME: Send broadcast event so the game knows a new blessing was obtained
+      // SIGNAL GAME: Send broadcast event
       await supabase.channel('deck_updates').send({
         type: 'broadcast',
-        event: 'blessing_obtained',
-        payload: { userId: userProfile.pl_id, blessingId: reward.id, timestamp: new Date().toISOString() }
+        event: reward.type === 'blessing' ? 'blessing_obtained' : 'item_obtained',
+        payload: { userId: userProfile.pl_id, rewardId: reward.id, type: reward.type, timestamp: new Date().toISOString() }
       })
 
       // 4. Deduct coins
       const { error: uError } = await supabase
         .from('currency')
-        .update({ cur_ammount: cData.cur_ammount - 10 })
+        .update({ cur_ammount: cData.cur_ammount - price })
         .eq('cur_pl_id', userProfile.pl_id)
 
       if (uError) throw uError
 
       // 5. Update local state
-      setCurrencyData(prev => ({ ...prev, amount: prev.amount - 10 }))
+      setCurrencyData(prev => ({ ...prev, amount: prev.amount - price }))
       
-      // Temporary success feedback (could be improved with a nice modal)
-      setShopError(`Success! You received: ${reward.name}`)
+      // Temporary success feedback
+      setShopError(`Success, you received: ${reward.name}`)
       setTimeout(() => setShopError(null), 5000)
 
     } catch (err) {
       console.error("Shop Error:", err.message)
-      setShopError("Transaction failed. Try again.")
+      setShopError("Transaction failed, please try again.")
     } finally {
       setIsBuying(false)
     }
@@ -424,7 +440,7 @@ function Centro() {
                 onClick={handleBuyClick}
                 disabled={isBuying}
               >
-                 {isBuying ? "Processing..." : "10 Coins: Random Item"}
+                 {isBuying ? "Processing..." : `${shopError && shopError.includes('already') ? 'Sold Out' : (currencyData.collected_lv >= 10 ? '20' : '30')} Coins: Random Item`}
               </button>
               
               {shopError && (
