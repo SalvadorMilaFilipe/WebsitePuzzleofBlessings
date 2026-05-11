@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import BlessingAvatar from '../components/BlessingAvatar'
 import CollectibleAvatar from '../components/CollectibleAvatar'
 import RarityAvatar from '../components/RarityAvatar'
+import CategoryAvatar from '../components/CategoryAvatar'
 import AdminBlessingAvatar from '../components/AdminBlessingAvatar'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
@@ -569,15 +570,21 @@ function Discoveries() {
                   style={{ borderLeft: `5px solid #81D89E` }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
-                    <div className="category-img" style={{ 
-                      minWidth: '70px', height: '100px', marginRight: '1rem',
-                      backgroundImage: `url(${c.cat_image || ''})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center'
-                    }} />
-                    <div className="discoveries-element-info">
+                    <CategoryAvatar 
+                      categoryName={c.cat_name} 
+                      className="discoveries-element-avatar"
+                      style={{ minWidth: '70px', height: '100px', marginRight: '1rem' }}
+                    />
+                    <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
                       <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#81D89E' }}>
                         {c.cat_name}
                       </div>
-                      <p style={{ fontSize: '0.9rem', color: '#bbb', mt: '4px' }}>{c.cat_description || 'No description available.'}</p>
+                      <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: '#81D89E', fontWeight: 700 }}>
+                        Category Discovery
+                      </p>
+                      <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '4px 0' }}>
+                        {c.cat_description || 'No description available for this knowledge branch.'}
+                      </p>
                     </div>
                   </div>
                 </article>
