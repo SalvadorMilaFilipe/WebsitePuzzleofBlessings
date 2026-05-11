@@ -169,6 +169,78 @@ function Centro() {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`
   }
 
+  const [shopError, setShopError] = useState(null)
+  const [isBuying, setIsBuying] = useState(false)
+
+  const handleBuyClick = async () => {
+    if (isBuying || !userProfile?.pl_id) return
+    setShopError(null)
+    setIsBuying(true)
+
+    try {
+      // 1. Fetch current coins
+      const { data: cData, error: cError } = await supabase
+        .from('currency')
+        .select('cur_ammount')
+        .eq('cur_pl_id', userProfile.pl_id)
+        .single()
+
+      if (cError) throw cError
+
+      if (!cData || cData.cur_ammount < 10) {
+        setShopError("Insufficient coins! You need 10 pieces.")
+        setIsBuying(false)
+        return
+      }
+
+      // 2. Determine reward sequence (Order: Ephemeral Point -> Sequential Jump)
+      const buyCountKey = `shop_buy_count_${userProfile.pl_id}`
+      const buyCount = parseInt(localStorage.getItem(buyCountKey) || '0')
+      
+      if (buyCount >= 2) {
+        setShopError("You have already acquired all available blessings from the shop!")
+        setIsBuying(false)
+        return
+      }
+
+      let reward = null
+      if (buyCount === 0) {
+        reward = { type: 'blessing', id: 4, name: 'Ephemeral Point' }
+      } else {
+        reward = { type: 'blessing', id: 7, name: 'Sequential Jump' }
+      }
+
+      // 3. Grant reward (Explicitly ensure it's a blessing)
+      const { error: bError } = await supabase
+        .from('player_blessing')
+        .upsert({ pl_id: userProfile.pl_id, bl_id: reward.id }, { onConflict: 'pl_id,bl_id' })
+      
+      if (bError) throw bError
+
+      // 4. Deduct coins
+      const { error: uError } = await supabase
+        .from('currency')
+        .update({ cur_ammount: cData.cur_ammount - 10 })
+        .eq('cur_pl_id', userProfile.pl_id)
+
+      if (uError) throw uError
+
+      // 5. Update local state
+      setCurrencyData(prev => ({ ...prev, amount: prev.amount - 10 }))
+      localStorage.setItem(buyCountKey, (buyCount + 1).toString())
+      
+      // Temporary success feedback (could be improved with a nice modal)
+      setShopError(`Success! You received: ${reward.name}`)
+      setTimeout(() => setShopError(null), 5000)
+
+    } catch (err) {
+      console.error("Shop Error:", err.message)
+      setShopError("Transaction failed. Try again.")
+    } finally {
+      setIsBuying(false)
+    }
+  }
+
   const isProgressComplete = currencyData.collected_lv === currencyData.max_per_lv
   const progressColorClass = isProgressComplete ? 'progress-gold' : 'progress-standard'
 
@@ -336,9 +408,26 @@ function Centro() {
                  <img src="/img/Player_without_image.png" alt="?" className="sketch-question" />
               </div>
               
-              <button className="btn-primary shop-random-btn">
-                 10 amount to get a random item
+              <button 
+                className="btn-primary shop-random-btn" 
+                onClick={handleBuyClick}
+                disabled={isBuying}
+              >
+                 {isBuying ? "Processing..." : "10 amount to get a random item"}
               </button>
+              
+              {shopError && (
+                <p className={`shop-feedback ${shopError.includes('Success') ? 'success' : 'error'}`} style={{ 
+                  marginTop: '1rem', 
+                  fontSize: '0.9rem', 
+                  color: shopError.includes('Success') ? '#81D89E' : '#ff6b6b',
+                  fontWeight: '600',
+                  textAlign: 'center',
+                  animation: 'fadeIn 0.3s ease'
+                }}>
+                  {shopError}
+                </p>
+              )}
             </div>
           </div>
         </div>
