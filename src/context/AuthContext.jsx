@@ -108,19 +108,18 @@ export const AuthProvider = ({ children }) => {
             if (error) throw error
             currentSiteSessionId.current = data.ss_id
             
-            // UPDATE PLAYER STATUS TO OFFLINE (1) - As per new requirement to only have Online/Offline
-            // and website sessions are now marked as offline.
+            // UPDATE PLAYER STATUS TO ONLINE (3) - Simplified system
             await supabase
                 .from('player')
-                .update({ pl_status_id: 1 })
+                .update({ pl_status_id: 3 })
                 .eq('pl_id', playerId)
 
-            // Update local state so UI reflects it immediately
+            // Update local state so UI reflects it immediately (Green and "Online")
             if (userProfile && userProfile.pl_id === playerId) {
-                setUserProfile(prev => ({ ...prev, pl_status_id: 1, status: { st_status: 'offline', st_color: '#6B7280' } }))
+                setUserProfile(prev => ({ ...prev, pl_status_id: 3, status: { st_status: 'online', st_color: '#10B981' } }))
             }
 
-            console.log('[Auth] Site session started and player marked as offline (ID: 1).')
+            console.log('[Auth] Site session started and player marked as online (ID: 3).')
         } catch (err) {
             console.error('[Auth] Fatal error starting site session:', err.message)
         }
