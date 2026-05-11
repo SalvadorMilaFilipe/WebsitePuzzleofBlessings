@@ -63,9 +63,19 @@ export const AuthProvider = ({ children }) => {
 
         window.addEventListener('beforeunload', handleBeforeUnload)
 
-        const handleVisibilityChange = () => {
+        const handleVisibilityChange = async () => {
             if (document.visibilityState === 'visible' && lastFetchedEmail.current) {
-                fetchUserProfile(lastFetchedEmail.current, true)
+                await fetchUserProfile(lastFetchedEmail.current, true)
+                
+                // RE-ASSERT ONLINE STATUS: If we have an active site session, 
+                // ensure the local state and DB reflect "Online" immediately upon return.
+                if (currentSiteSessionId.current && userProfile?.pl_id) {
+                    setUserProfile(prev => prev ? ({ 
+                        ...prev, 
+                        pl_status_id: 3, 
+                        status: { st_status: 'online', st_color: '#10B981' } 
+                    }) : prev)
+                }
             }
         }
 

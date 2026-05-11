@@ -358,9 +358,17 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
 
 ---
 
-## 11/05/2026 - Devlog #41: Simplificação do Sistema de Status
+## 11/05/2026 - Devlog #41: Economia de Jogo e Refinamento de Descobertas
 *   **Simplificação do Sistema de Presença:**
-    *   **Unificação de Estados:** Remoção da distinção entre "Online no Site" e "Online no Jogo". Agora o sistema utiliza apenas os estados universais **Online** e **Offline**.
-    *   **Atualização de Base de Dados:** As descrições na tabela `status` foram simplificadas para remover sufixos contextuais, garantindo uma interface mais limpa.
-    *   **Lógica de Website:** Conforme definido, as sessões iniciadas via portal web marcam agora o jogador como **Offline** por defeito, reservando o estado **Online** para atividades dentro do cliente de jogo.
-    *   **Sincronização Local:** Ajuste do `AuthContext` para refletir imediatamente estas mudanças no perfil do utilizador e na barra de navegação sem necessidade de recarregar a página.
+    *   **Unificação de Estados:** Eliminação da distinção "Online no Site" vs "Online no Jogo". Agora o sistema utiliza apenas os estados universais **Online** (Verde) e **Offline** (Cinza).
+    *   **Normalização da Base de Dados:** Atualização da tabela `status` para simplificar as descrições e cores, garantindo uma interface mais limpa e direta.
+    *   **Persistência Reativa:** Ajuste do `AuthContext` para que sessões ativas no website marquem o jogador como Online, mantendo a consistência visual em todo o portal.
+*   **Implementação da Economia (The Shop):**
+    *   **Validação de Transações:** Integração com a tabela `currency` para verificar o saldo do jogador antes de permitir compras (Custo: 10 moedas).
+    *   **Lógica de Recompensa Robusta:** Transição de um contador local para verificações diretas na base de dados (`player_blessing`), garantindo que o jogador recebe sempre a próxima bênção em falta na sequência definida (*Ephemeral Point* → *Sequential Jump*).
+    *   **UX de Feedback:** Adição de mensagens de erro e sucesso dinâmicas integradas no modal da loja, eliminando o uso de diálogos intrusivos do browser.
+*   **Expansão do Sistema de Descobertas:**
+    *   **Categorização de Bênçãos:** Implementação do rastreio de categorias no `Discoveries.jsx`. As categorias são agora desbloqueadas e listadas à medida que o jogador obtém bênçãos de diferentes ramos de conhecimento.
+    *   **Componente `CategoryAvatar`:** Criação de uma infraestrutura dedicada para exibir os ícones de categoria armazenados localmente, garantindo consistência visual com o sistema de raridades.
+*   **Documentação e Planeamento:**
+    *   **Relatório Técnico:** Redação da secção 6.1.1 focada no planeamento das bênçãos, taxonomia por utilidade e competências cognitivas, e a natureza iterativa do design do projeto.

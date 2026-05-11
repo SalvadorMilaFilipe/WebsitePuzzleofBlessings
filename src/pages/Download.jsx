@@ -99,7 +99,7 @@ function Download() {
                 rel="noopener noreferrer"
               >
                 <span className="btn-icon">⬇️</span>
-                Download Game
+                Download
               </a>
             </div>
           </div>

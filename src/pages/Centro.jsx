@@ -417,7 +417,7 @@ function Centro() {
                 onClick={handleBuyClick}
                 disabled={isBuying}
               >
-                 {isBuying ? "Processing..." : "10 amount to get a random item"}
+                 {isBuying ? "Processing..." : "10 Coins: Random Item"}
               </button>
               
               {shopError && (
