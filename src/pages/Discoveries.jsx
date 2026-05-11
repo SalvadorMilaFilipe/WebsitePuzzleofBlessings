@@ -717,7 +717,10 @@ function Discoveries() {
             </div>
           ) : (
             <div className="no-results"><p>No levels found.</p></div>
-          )}
+          )
+        ) : (
+          <div className="no-results"><p>Coming soon.</p></div>
+        )}
       </div>
 
       {/* Modal Overlay for Selected Collectible */}
