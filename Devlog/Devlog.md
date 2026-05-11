@@ -355,3 +355,12 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
     *   **Verificação de Posse:** Implementação de lógica de deteção em tempo real para identificar se o jogador já possui a bênção "Pattern Lens" (ID 5).
     *   **Otimização e Estado de Mundo:** Remoção permanente das animações 3D de peças flutuantes para utilizadores que já completaram o desafio, refletindo visualmente a restauração da bênção e otimizando a performance da página.
 *   **Polimento de UX:** Correção da formatação de datas de lançamento e ajuste rigoroso do posicionamento do texto "Blessing Restored" para evitar sobreposições com os modelos 3D.
+
+---
+
+## 11/05/2026 - Devlog #41: Simplificação do Sistema de Status
+*   **Simplificação do Sistema de Presença:**
+    *   **Unificação de Estados:** Remoção da distinção entre "Online no Site" e "Online no Jogo". Agora o sistema utiliza apenas os estados universais **Online** e **Offline**.
+    *   **Atualização de Base de Dados:** As descrições na tabela `status` foram simplificadas para remover sufixos contextuais, garantindo uma interface mais limpa.
+    *   **Lógica de Website:** Conforme definido, as sessões iniciadas via portal web marcam agora o jogador como **Offline** por defeito, reservando o estado **Online** para atividades dentro do cliente de jogo.
+    *   **Sincronização Local:** Ajuste do `AuthContext` para refletir imediatamente estas mudanças no perfil do utilizador e na barra de navegação sem necessidade de recarregar a página.
