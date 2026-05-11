@@ -114,6 +114,13 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                     .eq('bl_id', up.bl_id)
             }
 
+            // SIGNAL GAME: Send broadcast event so the game knows to refresh the deck
+            await supabase.channel('deck_updates').send({
+                type: 'broadcast',
+                event: 'deck_changed',
+                payload: { userId: userId, timestamp: new Date().toISOString() }
+            })
+
             alert("Deck Saved successfully!")
             onClose()
         } catch (err) {

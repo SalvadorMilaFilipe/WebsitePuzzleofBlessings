@@ -222,6 +222,13 @@ function Centro() {
       
       if (bError) throw bError
 
+      // SIGNAL GAME: Send broadcast event so the game knows a new blessing was obtained
+      await supabase.channel('deck_updates').send({
+        type: 'broadcast',
+        event: 'blessing_obtained',
+        payload: { userId: userProfile.pl_id, blessingId: reward.id, timestamp: new Date().toISOString() }
+      })
+
       // 4. Deduct coins
       const { error: uError } = await supabase
         .from('currency')
