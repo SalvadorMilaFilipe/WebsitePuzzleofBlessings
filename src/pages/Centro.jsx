@@ -427,7 +427,7 @@ function Centro() {
             <button className="shop-close-btn" onClick={() => setIsShopOpen(false)}>&times;</button>
             <div className="shop-modal-header centered">
               <h2 className="shop-title">The Shop</h2>
-              <p className="shop-subtitle">For 10 coins you can get a random object or item that can help you in your journey</p>
+              <p className="shop-subtitle">For {shopError && shopError.includes('already') ? '...' : (currencyData.collected_lv >= 10 ? '20' : '30')} coins you can get a random object or item that can help you in your journey</p>
             </div>
             
             <div className="simple-shop-content">

@@ -107,9 +107,18 @@ function Download() {
             <div className="game-preview lowpoly-style" style={{ background: 'transparent', boxShadow: 'none', border: 'none' }}>
               {/* The 3D animation occupies the background of the hero, 
                    but we can keep this div for layout balance if needed or add a specific 3D view here */}
-              <div className="preview-placeholder" style={{ opacity: 0.8, background: 'transparent', boxShadow: 'none' }}>
-                <span className="preview-icon">🧩</span>
-                <p>3D Interactive Experience</p>
+              <div className="preview-placeholder" style={{ opacity: 1, background: 'transparent', boxShadow: 'none' }}>
+                <img 
+                  src="/levelimg/DownloadimgTuturial.png" 
+                  alt="3D Interactive Experience" 
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover', 
+                    borderRadius: '12px',
+                    filter: 'drop-shadow(0 0 20px rgba(129, 216, 158, 0.3))'
+                  }} 
+                />
               </div>
             </div>
           </div>

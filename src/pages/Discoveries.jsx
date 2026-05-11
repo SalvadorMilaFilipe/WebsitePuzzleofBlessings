@@ -40,6 +40,15 @@ function Discoveries() {
 
   const [categories, setCategories] = useState([])
   const [rarities, setRarities] = useState([])
+  const [allLevels, setAllLevels] = useState([])
+
+  useEffect(() => {
+    const fetchLevels = async () => {
+      const { data } = await supabase.from('level').select('*').order('lv_id', { ascending: true })
+      if (data) setAllLevels(data)
+    }
+    fetchLevels()
+  }, [])
 
   useEffect(() => {
     if (!session?.user?.id) return
@@ -669,11 +678,46 @@ function Discoveries() {
           ) : (
             <div className="no-results"><p>No admin tools found.</p></div>
           )
-        ) : (
-          <div className="no-results">
-            <p>Coming soon.</p>
-          </div>
-        )}
+        ) : activeFilter === 'levels' ? (
+          allLevels.length > 0 ? (
+            <div className="discoveries-elements-grid">
+              {allLevels.map(lv => (
+                <article 
+                  key={lv.lv_id}
+                  className="discoveries-element-card lowpoly-card"
+                  style={{ borderLeft: `5px solid #81D89E` }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                    <div className="level-img" style={{ 
+                      minWidth: '100px', height: '100px', marginRight: '1rem',
+                      backgroundImage: `url(${lv.lv_id === 0 ? '/levelimg/DownloadimgTuturial.png' : `/levelimg/level_${lv.lv_id}.png`})`, 
+                      backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
+                      borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)',
+                      backgroundColor: 'rgba(0,0,0,0.3)'
+                    }}>
+                      {/* Fallback text if no image exists (like Level 2) */}
+                      {!lv.lv_id === 0 && ![`level_0.png`, `level_1.png`, `level_3.png`].includes(`level_${lv.lv_id}.png`) && (
+                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '0.7rem', color: '#666' }}>
+                            No Image
+                         </div>
+                      )}
+                    </div>
+                    <div className="discoveries-element-info">
+                      <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#81D89E' }}>
+                        {lv.lv_name}
+                      </div>
+                      <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: '#81D89E', fontWeight: 700 }}>
+                        Level Discovery
+                      </p>
+                      <p style={{ fontSize: '0.9rem', color: '#bbb', mt: '4px' }}>{lv.lv_description || 'Explore the world to uncover more details about this region.'}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="no-results"><p>No levels found.</p></div>
+          )}
       </div>
 
       {/* Modal Overlay for Selected Collectible */}
