@@ -103,24 +103,21 @@ function Download() {
               </a>
             </div>
           </div>
-          <div className="hero-image" style={{ pointerEvents: 'auto' }}>
-            <div className="game-preview lowpoly-style" style={{ background: 'transparent', boxShadow: 'none', border: 'none' }}>
-              {/* The 3D animation occupies the background of the hero, 
-                   but we can keep this div for layout balance if needed or add a specific 3D view here */}
-              <div className="preview-placeholder" style={{ opacity: 1, background: 'transparent', boxShadow: 'none' }}>
-                <img 
-                  src="/levelimg/DownloadimgTuturial.png" 
-                  alt="3D Interactive Experience" 
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover', 
-                    borderRadius: '12px',
-                    filter: 'drop-shadow(0 0 20px rgba(129, 216, 158, 0.3))'
-                  }} 
-                />
-              </div>
-            </div>
+          <div className="hero-image" style={{ pointerEvents: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img 
+              src="/levelimg/DownloadimgTuturial.png" 
+              alt="3D Interactive Experience" 
+              style={{ 
+                width: '130%', 
+                height: 'auto', 
+                maxWidth: '900px',
+                objectFit: 'contain', 
+                borderRadius: '16px',
+                filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 30px rgba(129, 216, 158, 0.15))',
+                transform: 'perspective(1000px) rotateY(-8deg) rotateX(5deg)',
+                zIndex: 2
+              }} 
+            />
           </div>
         </div>
       </section>
