@@ -684,31 +684,33 @@ function Discoveries() {
               {allLevels.filter(lv => lv.lv_id <= playerLevel).map(lv => (
                 <article 
                   key={lv.lv_id}
-                  className="discoveries-element-card lowpoly-card"
-                  style={{ borderLeft: `5px solid #81D89E` }}
+                  className="discoveries-element-card lowpoly-card level-discovery-card"
+                  style={{ borderLeft: `5px solid #81D89E`, padding: '0', overflow: 'hidden' }}
                 >
-                  <div style={{ display: 'flex', flexDirection: 'column', padding: '0' }}>
-                    <div className="level-img-header" style={{ 
-                      width: '100%', height: '150px',
-                      backgroundImage: `url(${lv.lv_id === 0 ? '/levelimg/DownloadimgTuturial.png' : `/levelimg/level_${lv.lv_id}.png`})`, 
-                      backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
-                      borderRadius: '12px 12px 0 0', borderBottom: '1px solid rgba(255,255,255,0.1)',
-                      backgroundColor: 'rgba(0,0,0,0.3)'
-                    }}>
-                      {!lv.lv_id === 0 && ![`level_0.png`, `level_1.png`, `level_3.png`].includes(`level_${lv.lv_id}.png`) && (
-                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '0.8rem', color: '#666' }}>
-                            Preview Unavailable
-                         </div>
-                      )}
+                  <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <div className="level-img-wrapper" style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
+                      <div className="level-img-header" style={{ 
+                        width: '100%', height: '100%',
+                        backgroundImage: `url(${lv.lv_id === 0 ? '/levelimg/DownloadimgTuturial.png' : `/levelimg/level_${lv.lv_id}.png`})`, 
+                        backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
+                        transition: 'transform 0.5s ease',
+                        backgroundColor: 'rgba(0,0,0,0.3)'
+                      }}>
+                        {!lv.lv_id === 0 && ![`level_0.png`, `level_1.png`, `level_3.png`].includes(`level_${lv.lv_id}.png`) && (
+                           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '0.8rem', color: '#666', background: 'rgba(0,0,0,0.6)' }}>
+                              Preview Unavailable
+                           </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="discoveries-element-info" style={{ padding: '1.2rem' }}>
-                      <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#81D89E' }}>
+                    <div className="discoveries-element-info" style={{ padding: '1.5rem', background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }}>
+                      <div className="discoveries-element-title" style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#81D89E' }}>
                         {lv.lv_name}
                       </div>
-                      <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.85rem', color: '#81D89E', fontWeight: 700 }}>
+                      <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.9rem', color: '#81D89E', fontWeight: 700 }}>
                         Level {lv.lv_id} {lv.lv_id === playerLevel ? '(Current)' : '(Completed)'}
                       </p>
-                      <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '8px 0 0' }}>{lv.lv_description || 'Explore the world to uncover more details about this region.'}</p>
+                      <p style={{ fontSize: '0.95rem', color: '#ccc', margin: '12px 0 0', lineHeight: '1.5' }}>{lv.lv_description || 'Explore the world to uncover more details about this region.'}</p>
                     </div>
                   </div>
                 </article>
