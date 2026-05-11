@@ -193,24 +193,29 @@ function Centro() {
         return
       }
 
-      // 2. Determine reward sequence (Order: Ephemeral Point -> Sequential Jump)
-      const buyCountKey = `shop_buy_count_${userProfile.pl_id}`
-      const buyCount = parseInt(localStorage.getItem(buyCountKey) || '0')
+      // 2. Determine reward based on DB state (not localStorage)
+      // Check which blessings the player already has
+      const { data: ownedBlessings, error: bFetchError } = await supabase
+        .from('player_blessing')
+        .select('bl_id')
+        .eq('pl_id', userProfile.pl_id)
       
-      if (buyCount >= 2) {
+      if (bFetchError) throw bFetchError
+      
+      const ownedIds = new Set(ownedBlessings.map(b => b.bl_id))
+      
+      let reward = null
+      if (!ownedIds.has(4)) {
+        reward = { type: 'blessing', id: 4, name: 'Ephemeral Point' }
+      } else if (!ownedIds.has(7)) {
+        reward = { type: 'blessing', id: 7, name: 'Sequential Jump' }
+      } else {
         setShopError("You have already acquired all available blessings from the shop!")
         setIsBuying(false)
         return
       }
 
-      let reward = null
-      if (buyCount === 0) {
-        reward = { type: 'blessing', id: 4, name: 'Ephemeral Point' }
-      } else {
-        reward = { type: 'blessing', id: 7, name: 'Sequential Jump' }
-      }
-
-      // 3. Grant reward (Explicitly ensure it's a blessing)
+      // 3. Grant reward
       const { error: bError } = await supabase
         .from('player_blessing')
         .upsert({ pl_id: userProfile.pl_id, bl_id: reward.id }, { onConflict: 'pl_id,bl_id' })
@@ -227,7 +232,6 @@ function Centro() {
 
       // 5. Update local state
       setCurrencyData(prev => ({ ...prev, amount: prev.amount - 10 }))
-      localStorage.setItem(buyCountKey, (buyCount + 1).toString())
       
       // Temporary success feedback (could be improved with a nice modal)
       setShopError(`Success! You received: ${reward.name}`)
