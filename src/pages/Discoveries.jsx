@@ -539,7 +539,7 @@ function Discoveries() {
                           minWidth: '70px',
                           height: '100px',
                           marginRight: '1rem',
-                          backgroundSize: 'cover'
+                          backgroundSize: 'contain'
                         }}
                       />
 
