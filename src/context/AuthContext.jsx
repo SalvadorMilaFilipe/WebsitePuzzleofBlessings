@@ -65,11 +65,14 @@ export const AuthProvider = ({ children }) => {
 
         const handleVisibilityChange = async () => {
             if (document.visibilityState === 'visible' && lastFetchedEmail.current) {
+                // Fetch fresh profile data from DB
                 await fetchUserProfile(lastFetchedEmail.current, true)
-                
-                // RE-ASSERT ONLINE STATUS: If we have an active site session, 
-                // ensure the local state and DB reflect "Online" immediately upon return.
-                if (currentSiteSessionId.current && userProfile?.pl_id) {
+
+                // RE-ASSERT ONLINE STATUS after fetch completes:
+                // fetchUserProfile may overwrite local state with DB data which could
+                // have a stale/offline status if the DB update was slow.
+                // We force the correct online state here since we know the session is active.
+                if (currentSiteSessionId.current) {
                     setUserProfile(prev => prev ? ({ 
                         ...prev, 
                         pl_status_id: 3, 
@@ -90,11 +93,12 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     // Effect to handle session creation once userProfile is loaded
+    // Guard: do NOT start a session if the user is still in registration (isNewUser)
     useEffect(() => {
-        if (userProfile && session && !currentSiteSessionId.current) {
+        if (userProfile && session && !isNewUser && !currentSiteSessionId.current) {
             startSiteSession(userProfile.pl_username, userProfile.pl_id)
         }
-    }, [userProfile, session])
+    }, [userProfile, session, isNewUser])
 
     const startSiteSession = async (playerName, playerId = null) => {
         if (!playerName || !playerId) return
