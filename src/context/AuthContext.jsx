@@ -75,8 +75,8 @@ export const AuthProvider = ({ children }) => {
                 if (currentSiteSessionId.current) {
                     setUserProfile(prev => prev ? ({ 
                         ...prev, 
-                        pl_status_id: 3, 
-                        status: { st_status: 'online', st_color: '#10B981' } 
+                        pl_status_id: 4, 
+                        status: { st_status: 'online', st_color: '#22C55E' } 
                     }) : prev)
                 }
             }
@@ -122,18 +122,18 @@ export const AuthProvider = ({ children }) => {
             if (error) throw error
             currentSiteSessionId.current = data.ss_id
             
-            // UPDATE PLAYER STATUS TO ONLINE (3) - Simplified system
+            // UPDATE PLAYER STATUS TO ONLINE (4) - Matches DB
             await supabase
                 .from('player')
-                .update({ pl_status_id: 3 })
+                .update({ pl_status_id: 4 })
                 .eq('pl_id', playerId)
 
             // Update local state so UI reflects it immediately (Green and "Online")
             if (userProfile && userProfile.pl_id === playerId) {
-                setUserProfile(prev => ({ ...prev, pl_status_id: 3, status: { st_status: 'online', st_color: '#10B981' } }))
+                setUserProfile(prev => ({ ...prev, pl_status_id: 4, status: { st_status: 'online', st_color: '#22C55E' } }))
             }
 
-            console.log('[Auth] Site session started and player marked as online (ID: 3).')
+            console.log('[Auth] Site session started and player marked as online (ID: 4).')
         } catch (err) {
             console.error('[Auth] Fatal error starting site session:', err.message)
         }
@@ -159,7 +159,7 @@ export const AuthProvider = ({ children }) => {
                 .eq('ss_id', sessionId) // Updated from se_cod
 
             if (userProfile?.pl_id) {
-                // UPDATE PLAYER STATUS TO OFFLINE (1)
+                // UPDATE PLAYER STATUS TO OFFLINE (1) - Matches DB
                 await supabase
                     .from('player')
                     .update({ pl_status_id: 1 })
