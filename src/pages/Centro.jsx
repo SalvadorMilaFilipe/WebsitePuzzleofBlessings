@@ -494,7 +494,7 @@ function Centro() {
                 onClick={handleBuyClick}
                 disabled={isBuying || shopNextReward?.type === 'soldout' || shopLoading}
               >
-                {isBuying ? 'Processing...' : shopNextReward?.type === 'soldout' ? 'Sold Out' : `${shopNextReward?.price ?? 30} Coins: ${shopNextReward?.type === 'collectible' ? 'Buy Collectible' : 'Get Blessing'}`}
+                {isBuying ? 'Processing...' : shopNextReward?.type === 'soldout' ? 'Sold Out' : `${shopNextReward?.price ?? 30} Coins: Random Item`}
               </button>
 
               {shopError && (
