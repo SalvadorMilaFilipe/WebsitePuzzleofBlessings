@@ -148,8 +148,13 @@ function Centro() {
   const handleHintClick = () => {
     if (hintCooldown > 0) return
     
-    // Cycle to next hint before showing
-    setHintIndex(prev => (prev + 1) % hints.length)
+    // Pick a random hint that is different from the current one
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * hints.length);
+    } while (newIndex === hintIndex && hints.length > 1);
+    
+    setHintIndex(newIndex)
     setShowHint(true)
     
     // Auto-hide hint after 10 seconds

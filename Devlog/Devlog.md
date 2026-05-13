@@ -372,3 +372,12 @@ Este documento detalha o progresso técnico e criativo do projeto **Puzzle of Bl
     *   **Componente `CategoryAvatar`:** Criação de uma infraestrutura dedicada para exibir os ícones de categoria armazenados localmente, garantindo consistência visual com o sistema de raridades.
 *   **Documentação e Planeamento:**
     *   **Relatório Técnico:** Redação da secção 6.1.1 focada no planeamento das bênçãos, taxonomia por utilidade e competências cognitivas, e a natureza iterativa do design do projeto.
+
+---
+
+## 13/05/2026 - Devlog #42: Desenvolvimento da Shop e Sistema de Dicas
+*   **Implementação da Lógica de Transações:** Desenvolvimento de um sistema de compra que simula "aleatoriedade" (Random Item) na visão do utilizador, mas que é regido por uma sequência estruturada para auxiliar a progressão.
+*   **Sequência de Recompensas e Preços:** Estabelecido o fluxo **Blessing → Coletável → Blessing**, com uma curva de preços equilibrada de **30-30-20** moedas. Esta cadência garante que o jogador obtenha itens de utilidade e narrativa (como o *Fluffy Bear*) de forma alternada, mantendo o interesse.
+*   **Sistema de Entrega Inteligente:** A lógica foi configurada para entregar itens específicos por ordem, garantindo que o utilizador nunca recebe duplicados e que a sua "sorte" ajuda na progressão do jogo.
+*   **Sistema de Dicas (Hint System):** Criação de dicas enigmáticas e subtis para cada item obtível na loja. O objetivo é fornecer pistas sobre o valor e a natureza dos itens sem revelar diretamente a sua função, preservando o mistério do mundo.
+*   **Polimento de UX de Compra:** Adição de uma animação de revelação inspirada no puzzle original, com suporte a atalhos de teclado (**Space/Enter**) para fechar o overlay e instruções visuais claras.
