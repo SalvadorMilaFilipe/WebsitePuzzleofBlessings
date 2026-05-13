@@ -14,27 +14,27 @@ const GAME_CREDITS = [
       },
       {
         role: '3D Artist',
-        name: 'João Andrade',
+        name: 'João Andrade & SketchFab Authors',
         contribution: 'Low-poly modeling, environment design, visual style'
       },
       {
         role: 'Game UI/UX Designer',
-        name: 'Designer Name',
+        name: 'João Andrade & Google Flow',
         contribution: 'Game interface design, accessibility features, user experience'
       },
       {
         role: 'Sound Design',
-        name: 'Audio Designer',
+        name: 'Pixabay Authors',
         contribution: 'Sound effects, ambient audio, sensory-friendly audio design'
       },
       {
         role: 'Music Composer',
-        name: 'Composer Name',
+        name: 'Pixabay Authors',
         contribution: 'Original soundtrack, calming background music'
       },
       {
         role: 'QA Testing',
-        name: 'Testers',
+        name: 'Sérgio Ravlyuk, João Pereira, Pedro Henrique, Salvador Filipe',
         contribution: 'Beta testing, accessibility testing, feedback collection'
       }
     ]
@@ -52,7 +52,7 @@ const WEBSITE_CREDITS = [
       },
       {
         role: 'Web Designer',
-        name: 'Designer Name',
+        name: 'Salvador Filipe',
         contribution: 'Website design, user interface, visual identity'
       },
       {
@@ -62,48 +62,30 @@ const WEBSITE_CREDITS = [
       },
       {
         role: 'Real-time Integration',
-        name: 'Salvador Filipe',
+        name: 'Salvador Filipe & João Andrade',
         contribution: 'Real-time game-to-site communication, data synchronization'
       }
     ]
   }
 ]
-
-const OTHER_CREDITS = [
-  {
-    category: '📚 Educational Consultants',
-    credits: [
-      {
-        role: 'Special Needs Education',
-        name: 'Consultant Name',
-        contribution: 'Autism spectrum support, adaptive learning strategies'
-      },
-      {
-        role: 'Pedagogical Advisor',
-        name: 'Advisor Name',
-        contribution: 'Cognitive development, assessment frameworks'
-      },
-      {
-        role: 'Therapy Specialist',
-        name: 'Specialist Name',
-        contribution: 'Occupational therapy, sensory integration guidance'
-      }
-    ]
-  }
-]
-
 const TECH_CATEGORIES = [
   {
-    title: 'Game Engine & Development',
-    items: ['Unity Engine', 'C# Programming']
+    title: 'Game Engine & Infrastructure',
+    items: ['Unity Engine', 'C# Programming', 'Supabase (Cloud Backend)', 'Dropbox API (Deliverables)']
   },
   {
-    title: 'Web Development',
-    items: ['React', 'HTML5 / CSS3', 'JavaScript']
+    title: 'Web & Real-time Technologies',
+    items: [
+      'React.js & Vite',
+      'React Three Fiber (3D Animations)',
+      'Three.js (WebGL)',
+      'Supabase Realtime (Cross-platform Broadcast)',
+      'Vanilla CSS3 (Glassmorphism UI)'
+    ]
   },
   {
-    title: 'Design Tools',
-    items: ['Blender (3D Modeling)', 'Adobe Creative Suite', 'Figma (UI Design)']
+    title: 'Design & Development Tools',
+    items: ['Blender (3D Modeling)', 'Pixlr', 'Canva', 'Google Flow', 'Git & GitHub', 'Vercel (Deployment)']
   }
 ]
 
@@ -166,21 +148,6 @@ function Credits() {
             </div>
           </section>
         ))}
-
-        {/* Special Thanks */}
-        <section className="credits-section">
-          <h2 className="credits-category">🙏 Special Thanks</h2>
-          <div className="thanks-content lowpoly-card">
-            <p>We extend our deepest gratitude to:</p>
-            <ul>
-              <li>All the children, families, and educators who participated in playtesting and provided invaluable feedback</li>
-              <li>The schools and institutions that supported our research and development</li>
-              <li>The open-source community for tools and resources that made this project possible</li>
-              <li>Everyone who believed in our vision of making education accessible and engaging through games</li>
-            </ul>
-          </div>
-        </section>
-
         {/* Technologies Used */}
         <section className="credits-section">
           <h2 className="credits-category">🛠️ Technologies & Tools</h2>
@@ -198,17 +165,6 @@ function Credits() {
           </div>
         </section>
 
-        {/* Contact */}
-        <section className="credits-section">
-          <div className="contact-info lowpoly-card">
-            <h3>Want to Contribute?</h3>
-            <p>
-              We're always looking for passionate individuals to join our mission. 
-              If you're interested in contributing to Puzzle of Blessings, please reach out 
-              through our forum or contact the development team.
-            </p>
-          </div>
-        </section>
       </div>
     </main>
   )
