@@ -273,18 +273,6 @@ export const AuthProvider = ({ children }) => {
         return data
     }
 
-    // For users created directly in Supabase Auth (no password / magic-link only)
-    const loginWithMagicLink = async (email) => {
-        const { error } = await supabase.auth.signInWithOtp({
-            email,
-            options: {
-                emailRedirectTo: window.location.origin,
-            },
-        })
-        if (error) throw error
-        return true
-    }
-
     const sendPasswordReset = async (email) => {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
             redirectTo: window.location.origin,
@@ -435,7 +423,6 @@ export const AuthProvider = ({ children }) => {
             setShowInactivityMessage,
             loginWithGoogle,
             loginWithEmail,
-            loginWithMagicLink,
             sendPasswordReset,
             signupWithEmail,
             logout,

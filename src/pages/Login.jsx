@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import './Login.css'
 
 function Login() {
-    const { session, loginWithGoogle, loginWithEmail, loginWithMagicLink, sendPasswordReset, isNewUser, userProfile, loading: authLoading } = useAuth()
+    const { session, loginWithGoogle, loginWithEmail, sendPasswordReset, isNewUser, userProfile, loading: authLoading } = useAuth()
     const navigate = useNavigate()
     
     const [email, setEmail] = useState('')
@@ -34,6 +34,9 @@ function Login() {
             if (msg.includes('Email not confirmed')) {
                 msg = 'Account found, but email is not confirmed. Please check your inbox.'
             }
+            if (msg.toLowerCase().includes('invalid login credentials')) {
+                msg = 'Credenciais inválidas. Se a conta foi criada no painel do Supabase (ou não tens password definida), usa "Reset Password" para criar/alterar a password e depois tenta novamente.'
+            }
             setError(msg)
             setLoading(false)
         }
@@ -45,24 +48,6 @@ function Login() {
             await loginWithGoogle()
         } catch (err) {
             setError('Google Login failed. Please try again.')
-        }
-    }
-
-    const handleMagicLink = async () => {
-        setError('')
-        setLoading(true)
-        try {
-            const trimmedEmail = email.trim()
-            if (!trimmedEmail) {
-                setError('Please enter your email first.')
-                return
-            }
-            await loginWithMagicLink(trimmedEmail)
-            setError('Magic link sent! Check your email inbox.')
-        } catch (err) {
-            setError(err.message || 'Failed to send magic link.')
-        } finally {
-            setLoading(false)
         }
     }
 
@@ -137,18 +122,9 @@ function Login() {
                     <button
                         type="button"
                         className="btn-google"
-                        onClick={handleMagicLink}
-                        disabled={loading}
-                        style={{ background: 'rgba(255,255,255,0.06)', color: '#ddd', flex: 1 }}
-                    >
-                        Send Magic Link
-                    </button>
-                    <button
-                        type="button"
-                        className="btn-google"
                         onClick={handleResetPassword}
                         disabled={loading}
-                        style={{ background: 'rgba(255,255,255,0.06)', color: '#ddd', flex: 1 }}
+                        style={{ background: 'rgba(255,255,255,0.06)', color: '#ddd', width: '100%' }}
                     >
                         Reset Password
                     </button>
