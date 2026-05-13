@@ -75,8 +75,8 @@ export const AuthProvider = ({ children }) => {
                 if (currentSiteSessionId.current) {
                     setUserProfile(prev => prev ? ({ 
                         ...prev, 
-                        pl_status_id: 4, 
-                        status: { st_status: 'online', st_color: '#22C55E' } 
+                        pl_status_id: 2, 
+                        status: { st_status: 'online', st_color: '#81D89E' } 
                     }) : prev)
                 }
             }
@@ -122,18 +122,18 @@ export const AuthProvider = ({ children }) => {
             if (error) throw error
             currentSiteSessionId.current = data.ss_id
             
-            // UPDATE PLAYER STATUS TO ONLINE (4) - Matches DB
+            // UPDATE PLAYER STATUS TO ONLINE (2) - Matches DB
             await supabase
                 .from('player')
-                .update({ pl_status_id: 4 })
+                .update({ pl_status_id: 2 })
                 .eq('pl_id', playerId)
 
             // Update local state so UI reflects it immediately (Green and "Online")
             if (userProfile && userProfile.pl_id === playerId) {
-                setUserProfile(prev => ({ ...prev, pl_status_id: 4, status: { st_status: 'online', st_color: '#22C55E' } }))
+                setUserProfile(prev => ({ ...prev, pl_status_id: 2, status: { st_status: 'online', st_color: '#81D89E' } }))
             }
 
-            console.log('[Auth] Site session started and player marked as online (ID: 4).')
+            console.log('[Auth] Site session started and player marked as online (ID: 2).')
         } catch (err) {
             console.error('[Auth] Fatal error starting site session:', err.message)
         }
@@ -352,7 +352,8 @@ export const AuthProvider = ({ children }) => {
             pl_birth_year: birthYear, // Updated from jo_anonascimento
             pl_country: country, // Updated from jo_pais
             pl_language: 'en', // Updated from jo_lingua, default to English
-            pl_avatar_id: null // Updated from jo_avatar
+            pl_avatar_id: null, // Updated from jo_avatar
+            pl_status_id: 1     // Default to Offline (1) during registration
         }
 
         console.log('[Auth] Attempting to complete registration for:', username)
