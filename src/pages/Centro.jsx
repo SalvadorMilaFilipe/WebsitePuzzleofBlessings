@@ -306,6 +306,22 @@ function Centro() {
     }
   }
 
+  // Keyboard listener to close purchase animation
+  useEffect(() => {
+    if (!showPurchaseAnim) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setShowPurchaseAnim(false);
+        setPurchaseReward(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showPurchaseAnim]);
+
   const isProgressComplete = currencyData.collected_lv === currencyData.max_per_lv
   const progressColorClass = isProgressComplete ? 'progress-gold' : 'progress-standard'
 
@@ -465,24 +481,12 @@ function Centro() {
             <button className="shop-close-btn" onClick={() => setIsShopOpen(false)}>&times;</button>
             <div className="shop-modal-header centered">
               <h2 className="shop-title">The Shop</h2>
-              <p className="shop-subtitle">{shopNextReward?.type === 'soldout' ? 'All treasures have been claimed.' : shopNextReward?.type === 'collectible' ? `${shopNextReward.price} coins — A special collectible awaits` : `${shopNextReward?.price ?? 30} coins — A random blessing awaits`}</p>
+              <p className="shop-subtitle">Spend {shopNextReward?.price ?? 30} coins to receive a random treasure.</p>
             </div>
             
             <div className="simple-shop-content">
               {shopLoading ? (
                 <div className="shop-loading-indicator">Loading...</div>
-              ) : shopNextReward?.type === 'collectible' ? (
-                <div className="collectible-shop-box">
-                  <div className="collectible-shop-img-wrapper">
-                    <img src={shopNextReward.image} alt={shopNextReward.name} className="collectible-shop-img" />
-                    <div className="collectible-shop-glow" />
-                  </div>
-                  <div className="collectible-shop-info">
-                    <span className="collectible-shop-badge">Collectible</span>
-                    <h3 className="collectible-shop-name">{shopNextReward.name}</h3>
-                    <p className="collectible-shop-desc">{shopNextReward.description}</p>
-                  </div>
-                </div>
               ) : (
                 <div className="sketch-question-wrapper">
                   <img src="/img/Player_without_image.png" alt="?" className="sketch-question" />
@@ -545,6 +549,15 @@ function Centro() {
           >
             Continue Exploration
           </button>
+          <div className="purchase-keyboard-hint" style={{ 
+            marginTop: '0.5rem', 
+            fontSize: '0.7rem', 
+            color: 'rgba(255,255,255,0.4)',
+            letterSpacing: '1px',
+            textTransform: 'uppercase'
+          }}>
+            Press SPACE or ENTER to leave the animation
+          </div>
         </div>
       )}
 
