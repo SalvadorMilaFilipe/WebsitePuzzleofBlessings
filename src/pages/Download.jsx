@@ -193,16 +193,19 @@ function Download() {
               <h3>System Requirements</h3>
               <div className="requirements-grid">
                 <div className="requirement-item">
-                  <strong>OS:</strong> Windows 10/11, macOS 10.14+, Linux (Ubuntu 18.04+)
+                  <strong>OS:</strong> Windows 10/11 (64-bit)
                 </div>
                 <div className="requirement-item">
-                  <strong>Processor:</strong> To be determined
+                  <strong>Processor:</strong> Dual-core Intel Core i3 @ 2.4GHz or AMD equivalent
                 </div>
                 <div className="requirement-item">
-                  <strong>Memory:</strong> To be determined
+                  <strong>Memory:</strong> 4 GB RAM
                 </div>
                 <div className="requirement-item">
-                  <strong>Graphics:</strong> Low-poly optimized, details TBD
+                  <strong>Graphics:</strong> Intel HD Graphics 4000 or superior (DirectX 11 support)
+                </div>
+                <div className="requirement-item" style={{ marginTop: '0.5rem', opacity: 0.8 }}>
+                  <strong>Storage:</strong> 500 MB available space
                 </div>
               </div>
             </div>
