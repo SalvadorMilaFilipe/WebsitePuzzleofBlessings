@@ -171,6 +171,39 @@ function Centro() {
 
   const [shopError, setShopError] = useState(null)
   const [isBuying, setIsBuying] = useState(false)
+  const [showPurchaseAnim, setShowPurchaseAnim] = useState(false)
+  const [purchaseReward, setPurchaseReward] = useState(null)
+  const [shopNextReward, setShopNextReward] = useState(null)
+  const [shopLoading, setShopLoading] = useState(false)
+
+  // Compute next available shop reward when shop opens
+  useEffect(() => {
+    if (!isShopOpen || !userProfile?.pl_id) {
+      if (!isShopOpen) setShopNextReward(null)
+      return
+    }
+    const computeNext = async () => {
+      setShopLoading(true)
+      try {
+        const { data: ob } = await supabase.from('player_blessing').select('bl_id').eq('pl_id', userProfile.pl_id)
+        const { data: oi } = await supabase.from('player_collectible').select('cl_id').eq('pl_id', userProfile.pl_id)
+        const bIds = new Set(ob?.map(b => b.bl_id) || [])
+        const cIds = new Set(oi?.map(i => i.cl_id) || [])
+        if (!bIds.has(4)) {
+          setShopNextReward({ type: 'blessing', id: 4, name: 'Ephemeral Point', price: 30 })
+        } else if (!cIds.has(4)) {
+          setShopNextReward({ type: 'collectible', id: 4, name: 'Fluffy Bear', price: 30, description: 'A cute bear, it looks comfy, but it looks like it belonged to a child...', image: '/collectibles/Fluffy_Bear.png' })
+        } else if (!bIds.has(7)) {
+          setShopNextReward({ type: 'blessing', id: 7, name: 'Sequential Jump', price: 20 })
+        } else {
+          setShopNextReward({ type: 'soldout' })
+        }
+      } finally {
+        setShopLoading(false)
+      }
+    }
+    computeNext()
+  }, [isShopOpen, userProfile])
 
   const handleBuyClick = async () => {
     if (isBuying || !userProfile?.pl_id) return
@@ -198,8 +231,8 @@ function Centro() {
       if (!ownedBIds.has(4)) {
         reward = { type: 'blessing', id: 4, name: 'Ephemeral Point' }
         price = 30
-      } else if (!ownedIIds.has(1)) {
-        reward = { type: 'item', id: 1, name: 'Dream Pillow' }
+      } else if (!ownedIIds.has(4)) {
+        reward = { type: 'collectible', id: 4, name: 'Fluffy Bear' }
         price = 30
       } else if (!ownedBIds.has(7)) {
         reward = { type: 'blessing', id: 7, name: 'Sequential Jump' }
@@ -241,7 +274,7 @@ function Centro() {
       // SIGNAL GAME: Send broadcast event
       await supabase.channel('deck_updates').send({
         type: 'broadcast',
-        event: reward.type === 'blessing' ? 'blessing_obtained' : 'item_obtained',
+        event: reward.type === 'blessing' ? 'blessing_obtained' : 'collectible_obtained',
         payload: { userId: userProfile.pl_id, rewardId: reward.id, type: reward.type, timestamp: new Date().toISOString() }
       })
 
@@ -256,9 +289,14 @@ function Centro() {
       // 5. Update local state
       setCurrencyData(prev => ({ ...prev, amount: prev.amount - price }))
       
-      // Temporary success feedback
-      setShopError(`Success, you received: ${reward.name}`)
-      setTimeout(() => setShopError(null), 5000)
+      // Show purchase animation
+      const animReward = reward.type === 'collectible'
+        ? { ...reward, description: 'A cute bear, it looks comfy, but it looks like it belonged to a child...', image: '/collectibles/Fluffy_Bear.png' }
+        : reward
+      setPurchaseReward(animReward)
+      setShowPurchaseAnim(true)
+      setIsShopOpen(false)
+      setShopError(null)
 
     } catch (err) {
       console.error("Shop Error:", err.message)
@@ -427,30 +465,43 @@ function Centro() {
             <button className="shop-close-btn" onClick={() => setIsShopOpen(false)}>&times;</button>
             <div className="shop-modal-header centered">
               <h2 className="shop-title">The Shop</h2>
-              <p className="shop-subtitle">For {shopError && shopError.includes('already') ? '...' : (currencyData.collected_lv >= 10 ? '20' : '30')} coins you can get a random object or item that can help you in your journey</p>
+              <p className="shop-subtitle">{shopNextReward?.type === 'soldout' ? 'All treasures have been claimed.' : shopNextReward?.type === 'collectible' ? `${shopNextReward.price} coins — A special collectible awaits` : `${shopNextReward?.price ?? 30} coins — A random blessing awaits`}</p>
             </div>
             
             <div className="simple-shop-content">
-              <div className="sketch-question-wrapper">
-                 <img src="/img/Player_without_image.png" alt="?" className="sketch-question" />
-              </div>
-              
-              <button 
-                className="btn-primary shop-random-btn" 
+              {shopLoading ? (
+                <div className="shop-loading-indicator">Loading...</div>
+              ) : shopNextReward?.type === 'collectible' ? (
+                <div className="collectible-shop-box">
+                  <div className="collectible-shop-img-wrapper">
+                    <img src={shopNextReward.image} alt={shopNextReward.name} className="collectible-shop-img" />
+                    <div className="collectible-shop-glow" />
+                  </div>
+                  <div className="collectible-shop-info">
+                    <span className="collectible-shop-badge">Collectible</span>
+                    <h3 className="collectible-shop-name">{shopNextReward.name}</h3>
+                    <p className="collectible-shop-desc">{shopNextReward.description}</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="sketch-question-wrapper">
+                  <img src="/img/Player_without_image.png" alt="?" className="sketch-question" />
+                </div>
+              )}
+
+              <button
+                className="btn-primary shop-random-btn"
                 onClick={handleBuyClick}
-                disabled={isBuying}
+                disabled={isBuying || shopNextReward?.type === 'soldout' || shopLoading}
               >
-                 {isBuying ? "Processing..." : `${shopError && shopError.includes('already') ? 'Sold Out' : (currencyData.collected_lv >= 10 ? '20' : '30')} Coins: Random Item`}
+                {isBuying ? 'Processing...' : shopNextReward?.type === 'soldout' ? 'Sold Out' : `${shopNextReward?.price ?? 30} Coins: ${shopNextReward?.type === 'collectible' ? 'Buy Collectible' : 'Get Blessing'}`}
               </button>
-              
+
               {shopError && (
-                <p className={`shop-feedback ${shopError.includes('Success') ? 'success' : 'error'}`} style={{ 
-                  marginTop: '1rem', 
-                  fontSize: '0.9rem', 
+                <p className={`shop-feedback ${shopError.includes('Success') ? 'success' : 'error'}`} style={{
+                  marginTop: '1rem', fontSize: '0.9rem',
                   color: shopError.includes('Success') ? '#81D89E' : '#ff6b6b',
-                  fontWeight: '600',
-                  textAlign: 'center',
-                  animation: 'fadeIn 0.3s ease'
+                  fontWeight: '600', textAlign: 'center', animation: 'fadeIn 0.3s ease'
                 }}>
                   {shopError}
                 </p>
@@ -459,11 +510,49 @@ function Centro() {
           </div>
         </div>
       )}
+      {/* PURCHASE ANIMATION OVERLAY */}
+      {showPurchaseAnim && purchaseReward && (
+        <div className="purchase-anim-overlay">
+          <div className="purchase-orb" />
+          {[...Array(12)].map((_, i) => (
+            <div key={i} className={`purchase-particle pa-${i}`} />
+          ))}
+          <div className="purchase-anim-title" style={{ animationDelay: '0.2s' }}>
+            {purchaseReward.type === 'collectible' ? 'Collectible Found' : 'Blessing Restored'}
+          </div>
+          <div className="purchase-reveal-card">
+            {purchaseReward.type === 'collectible' ? (
+              <div className="purchase-collectible-box">
+                <img src={purchaseReward.image} alt={purchaseReward.name} className="purchase-collectible-img" />
+                <h3 className="purchase-collectible-name">{purchaseReward.name}</h3>
+                <p className="purchase-collectible-desc">{purchaseReward.description}</p>
+              </div>
+            ) : (
+              <div className="purchase-blessing-box">
+                <img
+                  src={`/blessingcardmodels/${purchaseReward.name}.png`}
+                  alt={purchaseReward.name}
+                  className="purchase-blessing-card"
+                  onError={e => { e.target.style.display = 'none' }}
+                />
+                <h3 className="purchase-blessing-name">{purchaseReward.name}</h3>
+              </div>
+            )}
+          </div>
+          <button
+            className="purchase-anim-btn"
+            onClick={() => { setShowPurchaseAnim(false); setPurchaseReward(null) }}
+          >
+            Continue Exploration
+          </button>
+        </div>
+      )}
+
       {/* DECK MODAL */}
-      <DeckModal 
-        isOpen={isDeckOpen} 
-        onClose={() => setIsDeckOpen(false)} 
-        userId={userProfile?.pl_id} 
+      <DeckModal
+        isOpen={isDeckOpen}
+        onClose={() => setIsDeckOpen(false)}
+        userId={userProfile?.pl_id}
       />
     </main>
   )
