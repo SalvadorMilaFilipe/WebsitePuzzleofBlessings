@@ -133,21 +133,7 @@ function Credits() {
           </section>
         ))}
 
-        {/* Other Credits */}
-        {OTHER_CREDITS.map((section, index) => (
-          <section key={index} className="credits-section">
-            <h2 className="credits-category">{section.category}</h2>
-            <div className="credits-grid">
-              {section.credits.map((credit, creditIndex) => (
-                <div key={creditIndex} className="credit-card lowpoly-card">
-                  <div className="credit-role">{credit.role}</div>
-                  <h3 className="credit-name">{credit.name}</h3>
-                  <p className="credit-contribution">{credit.contribution}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
+
         {/* Technologies Used */}
         <section className="credits-section">
           <h2 className="credits-category">🛠️ Technologies & Tools</h2>
