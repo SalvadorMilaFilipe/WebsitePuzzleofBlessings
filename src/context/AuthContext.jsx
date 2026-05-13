@@ -265,12 +265,24 @@ export const AuthProvider = ({ children }) => {
     }
 
     const loginWithEmail = async (email, password) => {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
+        // Always validate against DB player (Edge Function),
+        // independent of how the Supabase Auth user was created.
+        const { data, error } = await supabase.functions.invoke('site-login', {
+            body: { email, password },
         })
         if (error) throw error
-        return data
+
+        const sessionData = data?.session
+        if (!sessionData?.access_token || !sessionData?.refresh_token) {
+            throw new Error('Login failed: invalid session data')
+        }
+
+        const { error: setSessionError } = await supabase.auth.setSession({
+            access_token: sessionData.access_token,
+            refresh_token: sessionData.refresh_token,
+        })
+        if (setSessionError) throw setSessionError
+        return sessionData
     }
 
     const sendPasswordReset = async (email) => {
