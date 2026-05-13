@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import './Login.css'
 
 function Login() {
-    const { session, loginWithGoogle, loginWithEmail, isNewUser, userProfile, loading: authLoading } = useAuth()
+    const { session, loginWithGoogle, loginWithEmail, loginWithMagicLink, sendPasswordReset, isNewUser, userProfile, loading: authLoading } = useAuth()
     const navigate = useNavigate()
     
     const [email, setEmail] = useState('')
@@ -45,6 +45,42 @@ function Login() {
             await loginWithGoogle()
         } catch (err) {
             setError('Google Login failed. Please try again.')
+        }
+    }
+
+    const handleMagicLink = async () => {
+        setError('')
+        setLoading(true)
+        try {
+            const trimmedEmail = email.trim()
+            if (!trimmedEmail) {
+                setError('Please enter your email first.')
+                return
+            }
+            await loginWithMagicLink(trimmedEmail)
+            setError('Magic link sent! Check your email inbox.')
+        } catch (err) {
+            setError(err.message || 'Failed to send magic link.')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleResetPassword = async () => {
+        setError('')
+        setLoading(true)
+        try {
+            const trimmedEmail = email.trim()
+            if (!trimmedEmail) {
+                setError('Please enter your email first.')
+                return
+            }
+            await sendPasswordReset(trimmedEmail)
+            setError('Password reset email sent! Check your inbox.')
+        } catch (err) {
+            setError(err.message || 'Failed to send reset email.')
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -96,6 +132,27 @@ function Login() {
                         {loading ? 'Logging in...' : 'Log In'}
                     </button>
                 </form>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', marginTop: '12px' }}>
+                    <button
+                        type="button"
+                        className="btn-google"
+                        onClick={handleMagicLink}
+                        disabled={loading}
+                        style={{ background: 'rgba(255,255,255,0.06)', color: '#ddd', flex: 1 }}
+                    >
+                        Send Magic Link
+                    </button>
+                    <button
+                        type="button"
+                        className="btn-google"
+                        onClick={handleResetPassword}
+                        disabled={loading}
+                        style={{ background: 'rgba(255,255,255,0.06)', color: '#ddd', flex: 1 }}
+                    >
+                        Reset Password
+                    </button>
+                </div>
 
                 <div className="divider"><span>OR</span></div>
                 
