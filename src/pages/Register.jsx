@@ -34,7 +34,10 @@ function Register() {
     const handleNextStep = (e) => {
         if (e) e.preventDefault()
         setError('')
-        if (!email || !password || !username.trim()) {
+        
+        const effectiveEmail = session ? session.user.email : email;
+
+        if (!effectiveEmail || !password || !username.trim()) {
             setError('Account Email, Password and Public Username are required.')
             return
         }
