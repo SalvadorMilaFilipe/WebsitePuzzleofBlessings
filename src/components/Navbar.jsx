@@ -16,7 +16,7 @@ function Navbar() {
     { label: 'Download', path: '/' },
     { label: 'Discoveries', path: '/discoveries' },
     { label: 'The Center', path: '/centro', isCentro: true },
-    { label: 'Update Log', path: '/updatelog' },
+    { label: 'Game Updates', path: '/updatelog' },
     { label: 'Credits', path: '/credits' }
   ]
 
@@ -156,7 +156,7 @@ function Navbar() {
                   <span className="nav-separator">|</span>
                 </Link>
                 <Link to="/updatelog" className="nav-link" onClick={(e) => handleNavClick(e, '/updatelog')}>
-                  Update Log
+                  Game Updates
                 </Link>
                 <Link to="/credits" className="nav-link" onClick={(e) => handleNavClick(e, '/credits')}>
                   Credits
