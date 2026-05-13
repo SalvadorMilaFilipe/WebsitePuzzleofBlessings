@@ -135,7 +135,13 @@ function Centro() {
   const [hintIndex, setHintIndex] = useState(0)
   const hints = [
     "Where it all started, theres a simple sequence.",
-    "Just five touches for you to see a pattern"
+    "Just five touches for you to see a pattern.",
+    "A fleeting bridge for a leap of faith.",
+    "Maybe you can find something to discover",
+    "A soft echo of childhood waiting for a hug.",
+    "With much richness, small things can be created.",
+    "The sky is not the limit when you find a second footing in the wind.",
+    "One leap is never enough for those who wish to touch the stars."
   ]
 
   // Functional: Hint System
