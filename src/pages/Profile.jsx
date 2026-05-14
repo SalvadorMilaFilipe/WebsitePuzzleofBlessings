@@ -174,13 +174,7 @@ function Profile() {
                             </div>
                         </section>
 
-                        {/* Player Attributes Section */}
-                        <section className="profile-section">
-                            <h3>Player Attributes</h3>
-                            <div className="attributes-info">
-                                Not available in this phase of the game.
-                            </div>
-                        </section>
+
 
                         {/* Blessings Section */}
                         <section className="profile-section">
@@ -198,7 +192,7 @@ function Profile() {
                                                 className={`item-card blessing-card ${isUnlocked ? 'obtained' : 'unobtained'}`}
                                                 title={isUnlocked ? b.bl_name : "Locked"}
                                             >
-                                                <div className="blessing-img-container">
+                                                <div className="blessing-img-container" style={!isUnlocked ? { filter: 'blur(5px) grayscale(100%)', opacity: 0.6 } : {}}>
                                                     <img
                                                         src={`/blessingcardmodels/${formatBlessingImage(b.bl_image || b.bl_name)}`}
                                                         alt={b.bl_name}
@@ -225,12 +219,23 @@ function Profile() {
                             <section className="profile-section">
                                 <h3>Collectibles ({collectibles.length})</h3>
                                 <div className="profile-stats-grid">
-                                    {collectibles.map((c, idx) => (
-                                        <div key={idx} className="item-card obtained">
-                                            <span className="item-card-icon">🏺</span>
-                                            <span className="item-card-name">{c.collectible?.cl_name || `Collectible #${c.cl_id}`}</span>
-                                        </div>
-                                    ))}
+                                    {collectibles.map((c, idx) => {
+                                        const itemName = c.collectible?.cl_name || `Collectible #${c.cl_id}`;
+                                        const fileName = itemName.replace(/\s+/g, '_') + '.png';
+                                        return (
+                                            <div key={idx} className="item-card obtained" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                                                <div className="collectible-img-container" style={{ width: '80px', height: '80px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                    <img 
+                                                        src={`/collectibles/${fileName}`} 
+                                                        alt={itemName} 
+                                                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                                                        onError={(e) => { e.target.src = '/img/default_collectible.png' }}
+                                                    />
+                                                </div>
+                                                <span className="item-card-name" style={{ fontSize: '0.85rem', textAlign: 'center' }}>{itemName}</span>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </section>
                         )}
