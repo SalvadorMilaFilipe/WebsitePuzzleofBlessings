@@ -130,6 +130,36 @@ export default function DeckModal({ isOpen, onClose, userId }) {
         }
     }
 
+    const onDragStart = (e, pbItem) => {
+        e.dataTransfer.setData("pb_id", pbItem.bl_id);
+        e.dataTransfer.effectAllowed = "move";
+    };
+
+    const onDragOver = (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+    };
+
+    const onDrop = (e, targetIdx) => {
+        e.preventDefault();
+        const blId = e.dataTransfer.getData("pb_id");
+        if (!blId) return;
+
+        // Find the item in allBlessings
+        const pbItem = allBlessings.find(b => b.bl_id === parseInt(blId) || b.bl_id === blId);
+        if (!pbItem) return;
+
+        const newSlots = [...deckSlots];
+        
+        // If it was already in another slot, remove it from there
+        const prevIdx = newSlots.findIndex(s => s?.bl_id === pbItem.bl_id);
+        if (prevIdx !== -1) newSlots[prevIdx] = null;
+
+        // Place in target slot
+        newSlots[targetIdx] = pbItem;
+        setDeckSlots(newSlots);
+    };
+
     if (!isOpen) return null
 
     const inventory = allBlessings.filter(b => !deckSlots.find(s => s?.bl_id === b.bl_id))
@@ -150,10 +180,16 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                                 key={i} 
                                 className={`deck-slot ${!slot ? 'empty' : ''}`} 
                                 onClick={() => slot && toggleBlessing(slot)}
+                                onDragOver={onDragOver}
+                                onDrop={(e) => onDrop(e, i)}
                                 data-slot={4 - i}
                             >
                                 {slot ? (
-                                    <div className="slot-filled">
+                                    <div 
+                                        className="slot-filled"
+                                        draggable="true"
+                                        onDragStart={(e) => onDragStart(e, slot)}
+                                    >
                                         {slot.blessing?.isAdminOnly ? (
                                             <AdminBlessingAvatar blessing={slot.blessing} className="slot-avatar" />
                                         ) : (
@@ -174,7 +210,13 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                     <div className="deck-inventory-grid">
                         {loading ? <div className="deck-loading">Loading...</div> : 
                           inventory.length > 0 ? inventory.map(item => (
-                            <div key={item.id} className="inventory-item" onClick={() => toggleBlessing(item)}>
+                            <div 
+                                key={item.id} 
+                                className="inventory-item" 
+                                onClick={() => toggleBlessing(item)}
+                                draggable="true"
+                                onDragStart={(e) => onDragStart(e, item)}
+                            >
                                 {item.blessing?.isAdminOnly ? (
                                     <AdminBlessingAvatar blessing={item.blessing} className="inventory-avatar" />
                                 ) : (
