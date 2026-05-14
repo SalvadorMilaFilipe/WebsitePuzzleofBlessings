@@ -13,12 +13,15 @@ function CollectibleAvatar({ collectibleName, className, style = {} }) {
     
     let fileName = `${collectibleName}.png`;
 
-    if (collectibleName.toLowerCase() === 'vhs tape') {
+    const nameLower = collectibleName.toLowerCase();
+    if (nameLower === 'vhs tape') {
       fileName = 'VHS Tape.png';
-    } else if (collectibleName.toLowerCase() === 'dream pillows' || collectibleName.toLowerCase() === 'dreams pillow') {
+    } else if (nameLower === 'dream pillows' || nameLower === 'dreams pillow') {
       fileName = 'Dreams Pillow.png';
-    } else if (collectibleName.toLowerCase() === 'climbing trophy') {
+    } else if (nameLower === 'climbing trophy') {
       fileName = 'Climbing Trophy.png';
+    } else if (nameLower === 'fluffy bear') {
+      fileName = 'Fluffy_Bear.png';
     }
 
     // Try multiple path patterns to ensure we find the local image

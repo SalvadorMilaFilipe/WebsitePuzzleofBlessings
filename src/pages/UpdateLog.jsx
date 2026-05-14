@@ -44,9 +44,9 @@ function UpdateLog() {
     <main className="updatelog-main" style={{ paddingTop: '100px' }}>
       <div className="container">
         <h1 className="section-title">Game Updates</h1>
-        
+
         <p className="update-intro">
-          Track all changes, additions, and improvements made to the Puzzle of Blessings game. 
+          Track all changes, additions, and improvements made to the Puzzle of Blessings game.
           Stay informed about new Blessings, map updates, balance changes, and more.
         </p>
 
