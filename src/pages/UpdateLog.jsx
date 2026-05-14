@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 function UpdateLog() {
   const [updates, setUpdates] = useState([])
   const [loading, setLoading] = useState(true)
-  const [selectedVersion, setSelectedVersion] = useState('current')
+  const [selectedVersion, setSelectedVersion] = useState('all')
 
   useEffect(() => {
     const fetchUpdates = async () => {
@@ -26,8 +26,8 @@ function UpdateLog() {
     fetchUpdates()
   }, [])
 
-  const filteredUpdates = selectedVersion === 'current'
-    ? (updates.length > 0 ? [updates[0]] : [])
+  const filteredUpdates = selectedVersion === 'all'
+    ? updates
     : updates.filter(update => update.version === selectedVersion)
 
   const formatDate = (dateString) => {
@@ -53,7 +53,7 @@ function UpdateLog() {
         <div className="version-filter lowpoly-card">
           <label>Filter by Version:</label>
           <select value={selectedVersion} onChange={(e) => setSelectedVersion(e.target.value)}>
-            <option value="current">Current Version (Latest)</option>
+            <option value="all">All Versions</option>
             {updates.map(update => (
               <option key={update.id} value={update.version}>
                 Version {update.version}
