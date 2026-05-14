@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { formatBlessingImage } from '../utils/formatUtils'
+import CollectibleAvatar from '../components/CollectibleAvatar'
 import '../../css/profile.css'
 
 function Profile() {
@@ -221,15 +222,12 @@ function Profile() {
                                 <div className="profile-stats-grid">
                                     {collectibles.map((c, idx) => {
                                         const itemName = c.collectible?.cl_name || `Collectible #${c.cl_id}`;
-                                        const fileName = itemName.replace(/\s+/g, '_') + '.png';
                                         return (
                                             <div key={idx} className="item-card obtained" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                                                 <div className="collectible-img-container" style={{ width: '80px', height: '80px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                    <img 
-                                                        src={`/collectibles/${fileName}`} 
-                                                        alt={itemName} 
+                                                    <CollectibleAvatar 
+                                                        collectibleName={itemName} 
                                                         style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                                                        onError={(e) => { e.target.src = '/img/default_collectible.png' }}
                                                     />
                                                 </div>
                                                 <span className="item-card-name" style={{ fontSize: '0.85rem', textAlign: 'center' }}>{itemName}</span>
