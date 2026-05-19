@@ -43,6 +43,8 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
     const meshRef = useRef();
     const currentPos = useRef(new THREE.Vector3(...initialPos));
     const velocity = useRef(new THREE.Vector3(0, 0, 0));
+    const force = useRef(new THREE.Vector3(0, 0, 0));
+    const target = useRef(new THREE.Vector3(0, 0, 0));
     
     const shape = useMemo(() => createPuzzleShape(tabs || [0,0,0,0]), [tabs]);
 
@@ -54,27 +56,26 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
 
         const effectiveClickCount = isLoggedIn ? clickCount : Math.min(clickCount, 4);
         
-        let target;
         if (isLoggedIn && clickCount >= 5) {
-            target = new THREE.Vector3(...targetGridPos);
+            target.current.set(...targetGridPos);
         } else {
             const focus = 5 / (effectiveClickCount + 1);
-            target = new THREE.Vector3(
+            target.current.set(
                 Math.sin(t * 0.4 + offset) * focus,
                 Math.cos(t * 0.35 + offset) * focus,
                 Math.sin(t * 0.3 + offset) * 1.5
             );
 
             if (!isLoggedIn && clickCount >= 5) {
-                target.x += (Math.random() - 0.5) * 1.5;
-                target.y += (Math.random() - 0.5) * 1.5;
+                target.current.x += (Math.random() - 0.5) * 1.5;
+                target.current.y += (Math.random() - 0.5) * 1.5;
             }
         }
 
-        const force = new THREE.Vector3().subVectors(target, currentPos.current);
+        force.current.subVectors(target.current, currentPos.current);
         const strength = (isLoggedIn && clickCount >= 5) ? 0.12 : 0.015 * speed * (clickCount + 1);
-        force.multiplyScalar(strength);
-        velocity.current.add(force);
+        force.current.multiplyScalar(strength);
+        velocity.current.add(force.current);
 
         velocity.current.multiplyScalar((isLoggedIn && clickCount >= 5) ? 0.8 : 0.94);
 
@@ -84,8 +85,9 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
         if (isLoggedIn && clickCount >= 5) {
             meshRef.current.rotation.set(0, 0, 0);
         } else {
-            meshRef.current.rotation.x += 0.005 + (velocity.current.length() * 0.06);
-            meshRef.current.rotation.y += 0.005 + (velocity.current.length() * 0.06);
+            const len = velocity.current.length();
+            meshRef.current.rotation.x += 0.005 + (len * 0.06);
+            meshRef.current.rotation.y += 0.005 + (len * 0.06);
         }
     });
 
@@ -94,11 +96,11 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
 
     return (
         <mesh ref={meshRef} rotation={rotation} castShadow visible={!completed || targetGridPos[2] === 0}>
-            <extrudeGeometry args={[shape, { depth: 0.15, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04 }]} />
+            <extrudeGeometry args={[shape, { depth: 0.15, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 1, curveSegments: 6 }]} />
             <meshStandardMaterial 
                 color={displayColor} 
-                roughness={0.15} 
-                metalness={0.8} 
+                roughness={0.25} 
+                metalness={0.7} 
                 emissive={displayColor}
                 emissiveIntensity={isLoggedIn ? ((isLoggedIn && clickCount >= 5) ? 2 : clickCount * 0.35) : 0} 
             />
@@ -119,7 +121,7 @@ const SuccessOrb = ({ visible, isStatic }) => {
     return (
         <group>
             <mesh ref={meshRef}>
-                <sphereGeometry args={[1.9, 48, 32]} />
+                <sphereGeometry args={[1.9, 32, 16]} />
                 <meshStandardMaterial 
                     color="#ffffff" 
                     emissive="#ffffff" 
@@ -176,8 +178,8 @@ const PuzzleScene = ({ clickCount, isLoggedIn, completed, isStatic }) => {
             ))}
 
             <SuccessOrb visible={completed} isStatic={isStatic} />
-            <Environment preset="city" />
-            <ContactShadows position={[0, -5, 0]} opacity={0.4} scale={20} blur={2} far={6} />
+            <Environment preset="city" resolution={256} />
+            <ContactShadows position={[0, -5, 0]} opacity={0.4} scale={20} blur={2} far={6} resolution={256} />
         </>
     );
 };
@@ -353,7 +355,7 @@ const PuzzleAnimation = () => {
             }}
         >
             {!hasBlessing && (
-                <Canvas shadows gl={{ antialias: true }} dpr={[1, 2]}>
+                <Canvas shadows gl={{ antialias: false, powerPreference: "high-performance" }} dpr={[1, 1.5]}>
                     <Suspense fallback={null}>
                         <PuzzleScene 
                             clickCount={clickCount} 
