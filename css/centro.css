@@ -721,9 +721,9 @@
    PURCHASE ANIMATION OVERLAY
    ============================================= */
 .purchase-anim-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at center, rgba(16,28,45,0.98) 0%, #040810 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; overflow: hidden; }
-.purchase-orb { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(170,154,216,0.2) 0%, transparent 70%); animation: orb-breathe 3s ease-in-out infinite alternate; pointer-events: none; }
+.purchase-orb { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(170,154,216,0.2) 0%, transparent 70%); animation: orb-breathe 3s ease-in-out infinite alternate; pointer-events: none; will-change: transform, opacity; }
 @keyframes orb-breathe { from { transform: scale(0.8); opacity: 0.5; } to { transform: scale(1.3); opacity: 1; } }
-.purchase-particle { position: absolute; border-radius: 50%; pointer-events: none; animation: particle-float 3s ease-in-out infinite alternate; }
+.purchase-particle { position: absolute; border-radius: 50%; pointer-events: none; animation: particle-float 3s ease-in-out infinite alternate; will-change: transform, opacity; }
 .pa-0  { width:10px; height:10px; background:#81D89E; top:10%; left:15%;  animation-delay:0s;    animation-duration:2.8s; }
 .pa-1  { width: 8px; height: 8px; background:#5BC0EB; top:20%; left:80%;  animation-delay:0.3s;  animation-duration:3.2s; }
 .pa-2  { width:14px; height:14px; background:#AA9AD8; top:75%; left:12%;  animation-delay:0.6s;  animation-duration:2.5s; }
@@ -737,15 +737,16 @@
 .pa-10 { width:13px; height:13px; background:#AA9AD8; top:65%; left:60%;  animation-delay:1.0s;  animation-duration:2.4s; }
 .pa-11 { width: 6px; height: 6px; background:#FFD700; top:40%; left:90%;  animation-delay:0.15s; animation-duration:3.6s; }
 @keyframes particle-float { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 50% { transform: translateY(-25px) scale(1.2); opacity: 1; } 100% { transform: translateY(10px) scale(0.8); opacity: 0.5; } }
-.purchase-anim-title { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 10px; color: #fff; text-align: center; animation: fade-in-glow-white 1s ease-out forwards; opacity: 0; z-index: 10; }
-.purchase-reveal-card { z-index: 10; animation: card-appear 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.4s forwards; opacity: 0; }
+.purchase-anim-title { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 10px; color: #fff; text-align: center; animation: fade-in-glow-white 1s ease-out forwards; opacity: 0; z-index: 10; will-change: transform, opacity; }
+@keyframes fade-in-glow-white { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); } }
+.purchase-reveal-card { z-index: 10; animation: card-appear 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.4s forwards; opacity: 0; will-change: transform, opacity; backface-visibility: hidden; }
 @keyframes card-appear { 0% { opacity: 0; transform: scale(0.5) rotateY(90deg); } 100% { opacity: 1; transform: scale(1) rotateY(0deg); } }
-.purchase-collectible-box { background: rgba(20,20,40,0.85); border: 1px solid rgba(170,154,216,0.4); border-radius: 20px; padding: 2rem 2.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; box-shadow: 0 0 40px rgba(170,154,216,0.3), inset 0 0 20px rgba(170,154,216,0.05); backdrop-filter: blur(10px); max-width: 320px; }
-.purchase-collectible-img { width: 180px; height: 180px; object-fit: contain; filter: drop-shadow(0 0 30px rgba(170,154,216,0.7)); animation: floating 4s ease-in-out infinite; }
+.purchase-collectible-box { background: rgba(20,20,40,0.85); border: 1px solid rgba(170,154,216,0.4); border-radius: 20px; padding: 2rem 2.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; box-shadow: 0 0 20px rgba(170,154,216,0.2); backdrop-filter: blur(4px); max-width: 320px; }
+.purchase-collectible-img { width: 180px; height: 180px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(170,154,216,0.5)); animation: floating 4s ease-in-out infinite; will-change: transform; }
 .purchase-collectible-name { font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0; text-shadow: 0 0 15px rgba(170,154,216,0.6); }
 .purchase-collectible-desc { font-size: 0.85rem; color: #bbb; margin: 0; text-align: center; line-height: 1.5; font-style: italic; }
 .purchase-blessing-box { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-.purchase-blessing-card { width: 220px; height: 320px; object-fit: contain; filter: drop-shadow(0 0 30px rgba(129,216,158,0.5)); }
+.purchase-blessing-card { width: 220px; height: 320px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(129,216,158,0.4)); will-change: transform; }
 .purchase-blessing-name { font-size: 1.2rem; font-weight: 700; color: #81D89E; margin: 0; text-shadow: 0 0 12px rgba(129,216,158,0.5); }
-.purchase-anim-btn { position: relative; z-index: 10; padding: 14px 40px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 30px; cursor: pointer; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; backdrop-filter: blur(10px); animation: fade-in-glow-white 1s ease-out 1.2s forwards; opacity: 0; }
+.purchase-anim-btn { position: relative; z-index: 10; padding: 14px 40px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 30px; cursor: pointer; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; backdrop-filter: blur(4px); animation: fade-in-glow-white 1s ease-out 1.2s forwards; opacity: 0; will-change: opacity, transform; }
 .purchase-anim-btn:hover { background: rgba(255,255,255,0.15); border-color: white; box-shadow: 0 0 20px rgba(255,255,255,0.2); transform: translateY(-2px); }
