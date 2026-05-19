@@ -45,11 +45,15 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
     const velocity = useRef(new THREE.Vector3(0, 0, 0));
     const force = useRef(new THREE.Vector3(0, 0, 0));
     const target = useRef(new THREE.Vector3(0, 0, 0));
+    const settled = useRef(false);
     
     const shape = useMemo(() => createPuzzleShape(tabs || [0,0,0,0]), [tabs]);
 
     useFrame((state) => {
         if (isStatic) return; // Freeze animation
+        
+        // Optimization: stop computing if piece is locked in place
+        if (settled.current) return;
 
         const t = state.clock.getElapsedTime();
         if (!meshRef.current) return;
@@ -58,7 +62,17 @@ const InteractivePiece = ({ initialPos, targetGridPos, rotation, color, speed, o
         
         if (isLoggedIn && clickCount >= 5) {
             target.current.set(...targetGridPos);
+            // Check distance to target to settle and stop calculations
+            if (currentPos.current.distanceToSquared(target.current) < 0.0001) {
+                currentPos.current.copy(target.current);
+                meshRef.current.position.copy(currentPos.current);
+                meshRef.current.rotation.set(0, 0, 0);
+                settled.current = true;
+                return;
+            }
         } else {
+            // Reset settled if click count drops
+            settled.current = false;
             const focus = 5 / (effectiveClickCount + 1);
             target.current.set(
                 Math.sin(t * 0.4 + offset) * focus,
@@ -382,12 +396,13 @@ const PuzzleAnimation = () => {
                     textAlign: 'center',
                     transition: 'all 0.8s ease',
                     animation: 'fade-in-glow-white 1.5s ease-out forwards',
+                    willChange: 'transform, opacity',
                     zIndex: 10
                 }}>
                     <style>{`
                         @keyframes fade-in-glow-white {
-                            0% { opacity: 0; transform: translate(-50%, 20px); filter: blur(10px); }
-                            100% { opacity: 1; transform: translate(-50%, 0); filter: blur(0); text-shadow: 0 0 30px rgba(255, 255, 255, 0.9); }
+                            0% { opacity: 0; transform: translate(-50%, 20px); }
+                            100% { opacity: 1; transform: translate(-50%, 0); text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
                         }
                     `}</style>
                     Blessing Restored
@@ -409,7 +424,9 @@ const PuzzleAnimation = () => {
                     backgroundPosition: 'center',
                     zIndex: 15,
                     animation: 'card-appear 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
-                    filter: 'drop-shadow(0 0 30px rgba(170, 154, 216, 0.6))'
+                    filter: 'drop-shadow(0 0 20px rgba(170, 154, 216, 0.4))',
+                    willChange: 'transform, opacity',
+                    backfaceVisibility: 'hidden'
                 }}>
                     <style>{`
                         @keyframes card-appear {
