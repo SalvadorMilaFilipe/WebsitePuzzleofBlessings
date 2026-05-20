@@ -253,10 +253,10 @@ function Register() {
 
                         <div className="register-actions">
                             <button type="button" className="btn-secondary" onClick={handleLogoutExit}>
-                                Logout & Exit
+                                Exit
                             </button>
                             <button type="submit" className="btn-primary" disabled={loading}>
-                                {loading ? 'Processing...' : 'Profile Done →'}
+                                {loading ? 'Processing...' : 'Next →'}
                             </button>
                         </div>
 

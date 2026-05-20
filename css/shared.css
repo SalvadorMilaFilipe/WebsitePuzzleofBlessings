@@ -1029,3 +1029,138 @@ section {
         gap: 1rem;
     }
 }
+
+/* ===========================================
+   PAGE TRANSITIONS & LOADERS
+   =========================================== */
+.page-transition-wrapper {
+    width: 100%;
+    animation: pageSlideFadeIn 0.55s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes pageSlideFadeIn {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 15px, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Premium Page Loader */
+.premium-page-loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    width: 100%;
+    gap: 2.5rem;
+    perspective: 1000px;
+    z-index: 999;
+}
+
+.loader-puzzle-container {
+    width: 90px;
+    height: 90px;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    transform-style: preserve-3d;
+    animation: puzzleFloat 3s ease-in-out infinite, puzzleRotate 8s linear infinite;
+    will-change: transform;
+}
+
+.loader-puzzle-piece {
+    width: 42px;
+    height: 42px;
+    background: rgba(107, 203, 119, 0.15);
+    border: 2px solid rgba(129, 216, 158, 0.3);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: piecePulse 2s ease-in-out infinite alternate;
+}
+
+.loader-puzzle-piece.p1 {
+    background: rgba(77, 166, 201, 0.2);
+    border-color: rgba(126, 200, 227, 0.4);
+    animation-delay: 0s;
+}
+
+.loader-puzzle-piece.p2 {
+    background: rgba(107, 203, 119, 0.2);
+    border-color: rgba(129, 216, 158, 0.4);
+    animation-delay: 0.3s;
+}
+
+.loader-puzzle-piece.p3 {
+    background: rgba(123, 104, 238, 0.2);
+    border-color: rgba(155, 143, 255, 0.4);
+    animation-delay: 0.6s;
+}
+
+.loader-puzzle-piece.p4 {
+    background: rgba(255, 140, 66, 0.2);
+    border-color: rgba(255, 170, 110, 0.4);
+    animation-delay: 0.9s;
+}
+
+.loader-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--green-accent), var(--blue-accent), var(--lavender-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: pulseText 1.5s ease-in-out infinite alternate;
+    text-shadow: 0 0 20px rgba(129, 216, 158, 0.2);
+}
+
+@keyframes puzzleFloat {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        transform: translate3d(0, -18px, 0);
+    }
+}
+
+@keyframes puzzleRotate {
+    0% {
+        transform: rotateY(0deg) rotateX(0deg);
+    }
+    50% {
+        transform: rotateY(180deg) rotateX(90deg);
+    }
+    100% {
+        transform: rotateY(360deg) rotateX(180deg);
+    }
+}
+
+@keyframes piecePulse {
+    0% {
+        transform: scale3d(1, 1, 1);
+        filter: brightness(1);
+    }
+    100% {
+        transform: scale3d(0.92, 0.92, 0.92);
+        filter: brightness(1.25);
+        box-shadow: 0 0 18px rgba(255, 255, 255, 0.15);
+    }
+}
+
+@keyframes pulseText {
+    0% {
+        opacity: 0.65;
+    }
+    100% {
+        opacity: 1;
+    }
+}
