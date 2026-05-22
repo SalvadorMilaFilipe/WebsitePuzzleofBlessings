@@ -41,11 +41,14 @@ function Discoveries() {
   useEffect(() => {
     if (selectedCollectible || selectedBlessing) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [selectedCollectible, selectedBlessing]);
 
@@ -274,6 +277,26 @@ function Discoveries() {
     [normalizedBlessings, searchTerm]
   )
 
+  const groupedBlessingsByCategory = useMemo(() => {
+    const groups = {}
+    visibleBlessingsByCategory.forEach((b) => {
+      const catName = b.category?.cat_name || 'General'
+      if (!groups[catName]) groups[catName] = []
+      groups[catName].push(b)
+    })
+    return groups
+  }, [visibleBlessingsByCategory])
+
+  const groupedBlessingsByRarity = useMemo(() => {
+    const groups = {}
+    visibleBlessingsByRarity.forEach((b) => {
+      const rarName = b.rarity?.rar_name || 'Unknown Rarity'
+      if (!groups[rarName]) groups[rarName] = []
+      groups[rarName].push(b)
+    })
+    return groups
+  }, [visibleBlessingsByRarity])
+
   const visibleGeneral = useMemo(() => {
     const items = [
       ...tutorialItems,
@@ -432,7 +455,8 @@ function Discoveries() {
   }
 
   return (
-    <main className="discoveries-main">
+    <>
+      <main className="discoveries-main">
       <div className="container">
         <h1 className="section-title">Discoveries</h1>
 
@@ -538,16 +562,37 @@ function Discoveries() {
         ) : activeFilter === 'categories' ? (
           blessingsLoading ? (
             <div className="no-results"><p>Loading discoveries...</p></div>
-          ) : visibleBlessingsByCategory.length > 0 ? (
-            visibleBlessingsByCategory.map((b) => renderBlessingCard(b))
+          ) : Object.keys(groupedBlessingsByCategory).length > 0 ? (
+            Object.keys(groupedBlessingsByCategory).map((catName) => (
+              <div key={catName} style={{ display: 'contents' }}>
+                <div style={{ gridColumn: '1 / -1', marginTop: '1.5rem' }}>
+                  <h3 className="discoveries-subsection-title">{catName}</h3>
+                  <div className="discoveries-section-divider" style={{ margin: '0.5rem 0 1.5rem' }} />
+                </div>
+                {groupedBlessingsByCategory[catName].map((b) => renderBlessingCard(b))}
+              </div>
+            ))
           ) : (
             <div className="no-results"><p>No blessings in unlocked categories yet.</p></div>
           )
         ) : activeFilter === 'rarities' ? (
           blessingsLoading ? (
             <div className="no-results"><p>Loading discoveries...</p></div>
-          ) : visibleBlessingsByRarity.length > 0 ? (
-            visibleBlessingsByRarity.map((b) => renderBlessingCard(b))
+          ) : Object.keys(groupedBlessingsByRarity).length > 0 ? (
+            Object.keys(groupedBlessingsByRarity).map((rarName) => {
+              const rarityColor = getRarityColor(groupedBlessingsByRarity[rarName][0].rarity?.rar_name);
+              return (
+                <div key={rarName} style={{ display: 'contents' }}>
+                  <div style={{ gridColumn: '1 / -1', marginTop: '1.5rem' }}>
+                    <h3 className="discoveries-subsection-title" style={{ color: rarityColor }}>
+                      {rarName}
+                    </h3>
+                    <div className="discoveries-section-divider" style={{ margin: '0.5rem 0 1.5rem', background: `linear-gradient(90deg, transparent, ${rarityColor}44, transparent)` }} />
+                  </div>
+                  {groupedBlessingsByRarity[rarName].map((b) => renderBlessingCard(b))}
+                </div>
+              );
+            })
           ) : (
             <div className="no-results"><p>No blessings with rarity discovered yet.</p></div>
           )
@@ -623,7 +668,7 @@ function Discoveries() {
                         {lv.lv_name}
                       </div>
                       <p className="discoveries-blessing-category" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.9rem', color: '#81D89E', fontWeight: 700 }}>
-                        Level {lv.lv_id} {lv.lv_id === playerLevel ? '(Current Exploration)' : '(Region Restored)'}
+                        {lv.lv_id === 0 ? 'Tutorial' : `Level ${lv.lv_id}`} {lv.lv_id === playerLevel ? '(Current Exploration)' : '(Region Restored)'}
                       </p>
                       <p style={{ fontSize: '0.95rem', color: '#ccc', margin: '12px 0 0', lineHeight: '1.5' }}>{lv.lv_description || 'Explore the world to uncover more details about this region.'}</p>
                     </div>
@@ -637,6 +682,7 @@ function Discoveries() {
           <div className="no-results"><p>Coming soon.</p></div>
         )}
         </div>
+      </main>
 
       {/* Modal Overlay for Selected Collectible */}
       {selectedCollectible && (
@@ -745,7 +791,7 @@ function Discoveries() {
           </div>
         </div>
       )}
-    </main>
+    </>
   )
 }
 
