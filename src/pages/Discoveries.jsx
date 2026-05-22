@@ -682,7 +682,8 @@ function Discoveries() {
           <div className="no-results"><p>Coming soon.</p></div>
         )}
         </div>
-      </main>
+      </div>
+    </main>
 
       {/* Modal Overlay for Selected Collectible */}
       {selectedCollectible && (
