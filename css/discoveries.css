@@ -596,6 +596,7 @@
 }
 
 .no-results {
+    grid-column: 1 / -1;
     text-align: center;
     padding: 4rem 2rem;
     color: var(--text-muted);

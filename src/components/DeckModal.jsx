@@ -14,6 +14,17 @@ export default function DeckModal({ isOpen, onClose, userId }) {
         if (isOpen && userId) fetchData()
     }, [isOpen, userId])
 
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isOpen])
+
     const fetchData = async () => {
         setLoading(true)
         try {

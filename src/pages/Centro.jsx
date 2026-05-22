@@ -187,6 +187,17 @@ function Centro() {
   const [shopNextReward, setShopNextReward] = useState(null)
   const [shopLoading, setShopLoading] = useState(false)
 
+  useEffect(() => {
+    if (isShopOpen || showPurchaseAnim) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isShopOpen, showPurchaseAnim])
+
   // Compute next available shop reward when shop opens
   useEffect(() => {
     if (!isShopOpen || !userProfile?.pl_id) {
