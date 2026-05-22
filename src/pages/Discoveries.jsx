@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { supabase } from '../lib/supabase'
 import BlessingAvatar from '../components/BlessingAvatar'
 import CollectibleAvatar from '../components/CollectibleAvatar'
@@ -686,7 +687,7 @@ function Discoveries() {
     </main>
 
       {/* Modal Overlay for Selected Collectible */}
-      {selectedCollectible && (
+      {selectedCollectible && createPortal(
         <div className="discoveries-modal-overlay" onClick={() => setSelectedCollectible(null)}>
           <div className="discoveries-modal" onClick={(e) => e.stopPropagation()}>
             <button className="discoveries-close-btn" onClick={() => setSelectedCollectible(null)}>
@@ -723,11 +724,12 @@ function Discoveries() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Modal Overlay for Selected Blessing */}
-      {selectedBlessing && (
+      {selectedBlessing && createPortal(
         <div className="discoveries-modal-overlay" onClick={() => setSelectedBlessing(null)}>
           <div className="discoveries-modal" onClick={(e) => e.stopPropagation()}>
             <button className="discoveries-close-btn" onClick={() => setSelectedBlessing(null)}>
@@ -790,7 +792,8 @@ function Discoveries() {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )
