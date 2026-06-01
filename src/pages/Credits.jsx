@@ -94,10 +94,10 @@ function Credits() {
     <main className="credits-main" style={{ paddingTop: '100px' }}>
       <div className="container">
         <h1 className="section-title">Credits</h1>
-        
+
         <p className="credits-intro">
-          Puzzle of Blessings was made possible through the dedication, creativity, and expertise 
-          of many talented individuals. We thank everyone who contributed to making this educational 
+          Puzzle of Blessings was made possible through the dedication, creativity, and expertise
+          of many talented individuals. We thank everyone who contributed to making this educational
           game a reality.
         </p>
 
@@ -164,7 +164,7 @@ function Credits() {
           flexWrap: 'wrap'
         }}>
           <span><strong>Game Dev:</strong> <a href="mailto:0andradejoao@gmail.com" style={{ color: 'var(--blue-accent)', textDecoration: 'none', marginLeft: '0.5rem' }}>0andradejoao@gmail.com</a></span>
-          <span><strong>Website Dev:</strong> <a href="mailto:smilaf@gmaol.com" style={{ color: 'var(--blue-accent)', textDecoration: 'none', marginLeft: '0.5rem' }}>smilaf@gmaol.com</a></span>
+          <span><strong>Website Dev:</strong> <a href="mailto:smilaf@gmail.com" style={{ color: 'var(--blue-accent)', textDecoration: 'none', marginLeft: '0.5rem' }}>smilaf@gmail.com</a></span>
         </div>
       </div>
     </main>
