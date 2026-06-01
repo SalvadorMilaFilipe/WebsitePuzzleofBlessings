@@ -151,18 +151,21 @@ function Credits() {
           </div>
         </section>
 
-        {/* Contacts */}
-        <section className="credits-section">
-          <h2 className="credits-category">📬 Contacts</h2>
-          <div className="contact-info lowpoly-card" style={{ textAlign: 'center' }}>
-            <p style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>
-              <strong>Game Dev:</strong> <a href="mailto:0andradejoao@gmail.com" style={{ color: 'var(--blue-accent)', textDecoration: 'underline' }}>0andradejoao@gmail.com</a>
-            </p>
-            <p style={{ fontSize: '1.1rem' }}>
-              <strong>Website Dev:</strong> <a href="mailto:smilaf@gmaol.com" style={{ color: 'var(--blue-accent)', textDecoration: 'underline' }}>smilaf@gmaol.com</a>
-            </p>
-          </div>
-        </section>
+        {/* Contacts Footer Bar */}
+        <div style={{
+          marginTop: '5rem',
+          paddingTop: '1.5rem',
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '2.5rem',
+          fontSize: '0.95rem',
+          color: 'var(--text-secondary)',
+          flexWrap: 'wrap'
+        }}>
+          <span><strong>Game Dev:</strong> <a href="mailto:0andradejoao@gmail.com" style={{ color: 'var(--blue-accent)', textDecoration: 'none', marginLeft: '0.5rem' }}>0andradejoao@gmail.com</a></span>
+          <span><strong>Website Dev:</strong> <a href="mailto:smilaf@gmaol.com" style={{ color: 'var(--blue-accent)', textDecoration: 'none', marginLeft: '0.5rem' }}>smilaf@gmaol.com</a></span>
+        </div>
       </div>
     </main>
   )
