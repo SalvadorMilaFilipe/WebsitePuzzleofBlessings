@@ -109,13 +109,16 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                 .eq('pl_id', userId)
 
             // 2. Update the 4 chosen ones (Sequential updates using composite keys)
-            const updates = deckSlots
-                .filter(slot => slot !== null)
-                .map((slot, index) => ({
-                    bl_id: slot.bl_id,
-                    is_in_deck: true,
-                    deck_slot: 4 - index
-                }))
+            const updates = []
+            deckSlots.forEach((slot, index) => {
+                if (slot !== null) {
+                    updates.push({
+                        bl_id: slot.bl_id,
+                        is_in_deck: true,
+                        deck_slot: 4 - index
+                    })
+                }
+            })
 
             for (const up of updates) {
                 await supabase
