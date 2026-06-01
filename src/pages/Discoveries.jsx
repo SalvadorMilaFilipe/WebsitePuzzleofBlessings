@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase'
 import BlessingAvatar from '../components/BlessingAvatar'
 import CollectibleAvatar from '../components/CollectibleAvatar'
 import AdminBlessingAvatar from '../components/AdminBlessingAvatar'
+import CategoryAvatar from '../components/CategoryAvatar'
+import RarityAvatar from '../components/RarityAvatar'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -579,24 +581,24 @@ function Discoveries() {
             allCategories.map(cat => (
                 <article 
                   key={cat.cat_id}
-                  className="discoveries-element-card lowpoly-card level-discovery-card"
-                  style={{ borderLeft: `5px solid #5BC0EB`, padding: '0', overflow: 'hidden' }}
+                  className="discoveries-element-card lowpoly-card"
+                  style={{ borderLeft: `5px solid #5BC0EB` }}
                 >
-                  <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                    <div className="level-img-wrapper" style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
-                      <div className="level-img-header" style={{ 
-                        width: '100%', height: '100%',
-                        backgroundImage: `url(/categories/${cat.cat_image || `${cat.cat_name}.png`})`, 
-                        backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
-                        backgroundColor: 'rgba(0,0,0,0.3)'
-                      }}>
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                    <CategoryAvatar
+                      categoryName={cat.cat_name}
+                      className="discoveries-element-avatar"
+                      style={{ minWidth: '70px', height: '100px', marginRight: '1rem' }}
+                    />
+                    <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#5BC0EB' }}>
+                          {cat.cat_name}
+                        </div>
                       </div>
-                    </div>
-                    <div className="discoveries-element-info" style={{ padding: '1.5rem', background: 'rgba(15, 26, 18, 0.95)' }}>
-                      <div className="discoveries-element-title" style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#5BC0EB' }}>
-                        {cat.cat_name}
-                      </div>
-                      <p style={{ fontSize: '0.95rem', color: '#ccc', margin: '12px 0 0', lineHeight: '1.5' }}>{cat.cat_description || 'Category description not available.'}</p>
+                      <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '4px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {cat.cat_description || 'Category description not available.'}
+                      </p>
                     </div>
                   </div>
                 </article>
@@ -611,24 +613,24 @@ function Discoveries() {
               return (
                 <article 
                   key={rar.rar_id}
-                  className="discoveries-element-card lowpoly-card level-discovery-card"
-                  style={{ borderLeft: `5px solid ${rarityColor}`, padding: '0', overflow: 'hidden' }}
+                  className="discoveries-element-card lowpoly-card"
+                  style={{ borderLeft: `5px solid ${rarityColor}` }}
                 >
-                  <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                    <div className="level-img-wrapper" style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
-                      <div className="level-img-header" style={{ 
-                        width: '100%', height: '100%',
-                        backgroundImage: `url(/rarityimages/${rar.rar_card_image || `${rar.rar_name.toLowerCase()}_rar.png`})`, 
-                        backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
-                        backgroundColor: 'rgba(0,0,0,0.3)'
-                      }}>
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                    <RarityAvatar
+                      rarityName={rar.rar_name}
+                      className="discoveries-element-avatar"
+                      style={{ minWidth: '70px', height: '100px', marginRight: '1rem' }}
+                    />
+                    <div className="discoveries-element-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="discoveries-element-title" style={{ fontSize: '1.6rem', fontWeight: 'bold', color: rarityColor }}>
+                          {rar.rar_name}
+                        </div>
                       </div>
-                    </div>
-                    <div className="discoveries-element-info" style={{ padding: '1.5rem', background: 'rgba(15, 26, 18, 0.95)' }}>
-                      <div className="discoveries-element-title" style={{ fontSize: '1.8rem', fontWeight: 'bold', color: rarityColor }}>
-                        {rar.rar_name}
-                      </div>
-                      <p style={{ fontSize: '0.95rem', color: '#ccc', margin: '12px 0 0', lineHeight: '1.5' }}>{rar.rar_description || 'Rarity description not available.'}</p>
+                      <p style={{ fontSize: '0.9rem', color: '#bbb', margin: '4px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {rar.rar_description || 'Rarity description not available.'}
+                      </p>
                     </div>
                   </div>
                 </article>

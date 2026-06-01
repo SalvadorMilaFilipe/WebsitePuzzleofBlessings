@@ -29,9 +29,9 @@ function RarityAvatar({ rarityName, className, style = {} }) {
 
     // Try multiple path patterns to ensure we find the local image
     const paths = [
-      `/rarityimg/${fileName}`,
-      `./rarityimg/${fileName}`,
-      `/public/rarityimg/${fileName}`
+      `/rarityimages/${fileName}`,
+      `./rarityimages/${fileName}`,
+      `/public/rarityimages/${fileName}`
     ];
 
     setImgUrl(paths[Math.min(retry, paths.length - 1)]);
