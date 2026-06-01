@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [userProfile, setUserProfile] = useState(null) // Data from 'jogador' table
     const [loading, setLoading] = useState(true)
     const [isNewUser, setIsNewUser] = useState(false)
+    const [isAnimationPlaying, setIsAnimationPlaying] = useState(false) // Added for global animation state
     const fetchingProfile = useRef(false)
     const lastFetchedEmail = useRef(null)
     const currentSiteSessionId = useRef(null)
@@ -432,6 +433,8 @@ export const AuthProvider = ({ children }) => {
             userProfile,
             isNewUser,
             loading,
+            isAnimationPlaying,
+            setIsAnimationPlaying,
             showInactivityMessage,
             setShowInactivityMessage,
             loginWithGoogle,

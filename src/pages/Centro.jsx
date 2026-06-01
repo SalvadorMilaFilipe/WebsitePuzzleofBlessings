@@ -7,7 +7,7 @@ import DeckModal from '../components/DeckModal'
 import '../../css/centro.css'
 
 function Centro() {
-  const { userProfile, loading: authLoading } = useAuth()
+  const { userProfile, loading: authLoading, setIsAnimationPlaying } = useAuth()
 
   // Data States
   const [currencyData, setCurrencyData] = useState({ amount: 0, collected_lv: 0, max_per_lv: 10 })
@@ -317,6 +317,7 @@ function Centro() {
         : reward
       setPurchaseReward(animReward)
       setShowPurchaseAnim(true)
+      if (setIsAnimationPlaying) setIsAnimationPlaying(true)
       setIsShopOpen(false)
       setShopError(null)
 
@@ -336,6 +337,7 @@ function Centro() {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         setShowPurchaseAnim(false);
+        if (setIsAnimationPlaying) setIsAnimationPlaying(false);
         setPurchaseReward(null);
       }
     };
@@ -567,7 +569,7 @@ function Centro() {
           </div>
           <button
             className="purchase-anim-btn"
-            onClick={() => { setShowPurchaseAnim(false); setPurchaseReward(null) }}
+            onClick={() => { setShowPurchaseAnim(false); if (setIsAnimationPlaying) setIsAnimationPlaying(false); setPurchaseReward(null) }}
           >
             Continue Exploration
           </button>

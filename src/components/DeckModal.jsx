@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { supabase } from '../lib/supabase'
 import BlessingAvatar from './BlessingAvatar'
 import AdminBlessingAvatar from './AdminBlessingAvatar'
@@ -62,12 +63,12 @@ export default function DeckModal({ isOpen, onClose, userId }) {
             
             setAllBlessings(processedData)
 
-            // Fill slots based on deck_slot: 
-            // Slot 1 -> index 0, Slot 2 -> index 1, Slot 3 -> index 2, Slot 4 -> index 3
+            // Fill slots based on deck_slot mapping (game reads backwards): 
+            // deck_slot 4 -> index 0 (Leftmost), 3 -> 1, 2 -> 2, 1 -> 3 (Rightmost)
             const initialSlots = [null, null, null, null]
             processedData.forEach(item => {
                 if (item.is_in_deck && item.deck_slot >= 1 && item.deck_slot <= 4) {
-                    initialSlots[item.deck_slot - 1] = item
+                    initialSlots[4 - item.deck_slot] = item
                 }
             })
             setDeckSlots(initialSlots)
@@ -109,13 +110,14 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                 .eq('pl_id', userId)
 
             // 2. Update the 4 chosen ones (Sequential updates using composite keys)
+            // Game reads backwards, so index 0 = deck_slot 4, index 3 = deck_slot 1
             const updates = []
             deckSlots.forEach((slot, index) => {
                 if (slot !== null) {
                     updates.push({
                         bl_id: slot.bl_id,
                         is_in_deck: true,
-                        deck_slot: index + 1
+                        deck_slot: 4 - index
                     })
                 }
             })
@@ -178,7 +180,7 @@ export default function DeckModal({ isOpen, onClose, userId }) {
 
     const inventory = allBlessings.filter(b => !deckSlots.find(s => s?.bl_id === b.bl_id))
 
-    return (
+    return createPortal(
         <div className="deck-overlay" onClick={onClose}>
             <div className="deck-modal" onClick={e => e.stopPropagation()}>
                 <header className="deck-header">
@@ -249,6 +251,7 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                     </button>
                 </footer>
             </div>
-        </div>
+        </div>,
+        document.body
     )
 }

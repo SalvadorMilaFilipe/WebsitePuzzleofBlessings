@@ -199,7 +199,7 @@ const PuzzleScene = ({ clickCount, isLoggedIn, completed, isStatic }) => {
 };
 
 const PuzzleAnimation = () => {
-    const { session, userProfile } = useAuth();
+    const { session, userProfile, setIsAnimationPlaying } = useAuth();
     const isLoggedIn = !!session;
     
     const [clickCount, setClickCount] = useState(0);
@@ -296,8 +296,9 @@ const PuzzleAnimation = () => {
             setCompleted(false);
             setIsExpanded(false);
             setShowBlessing(false);
+            if (setIsAnimationPlaying) setIsAnimationPlaying(false);
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn, setIsAnimationPlaying]);
 
     // Scroll lock logic
     useEffect(() => {
@@ -322,6 +323,7 @@ const PuzzleAnimation = () => {
             if (isLoggedIn && next === 5) {
                 setCompleted(true);
                 setIsExpanded(true); // Trigger immersion
+                if (setIsAnimationPlaying) setIsAnimationPlaying(true);
                 
                 // Show the blessing card with a slight delay for dramatic effect
                 setTimeout(() => setShowBlessing(true), 1200);
@@ -445,6 +447,7 @@ const PuzzleAnimation = () => {
                         
                         await grantBlessing();
                         setIsExpanded(false);
+                        if (setIsAnimationPlaying) setIsAnimationPlaying(false);
                         setCompleted(false); // Optional: Reset for next time or keep completed
                         setClickCount(0);
                         setShowBlessing(false); // Reset card visibility

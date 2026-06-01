@@ -38,6 +38,20 @@ function Discoveries() {
   const [selectedCollectible, setSelectedCollectible] = useState(null)
 
   const [allLevels, setAllLevels] = useState([])
+  const [allCategories, setAllCategories] = useState([])
+  const [allRarities, setAllRarities] = useState([])
+
+  useEffect(() => {
+    const fetchCatsAndRarities = async () => {
+      const [{ data: cats }, { data: rars }] = await Promise.all([
+        supabase.from('category').select('*').order('cat_id', { ascending: true }),
+        supabase.from('rarity').select('*').order('rar_id', { ascending: true })
+      ])
+      if (cats) setAllCategories(cats)
+      if (rars) setAllRarities(rars)
+    }
+    fetchCatsAndRarities()
+  }, [])
 
   useEffect(() => {
     if (selectedCollectible || selectedBlessing) {
@@ -561,41 +575,67 @@ function Discoveries() {
             <div className="no-results"><p>No collectibles found.</p></div>
           )
         ) : activeFilter === 'categories' ? (
-          blessingsLoading ? (
-            <div className="no-results"><p>Loading discoveries...</p></div>
-          ) : Object.keys(groupedBlessingsByCategory).length > 0 ? (
-            Object.keys(groupedBlessingsByCategory).map((catName) => (
-              <div key={catName} style={{ display: 'contents' }}>
-                <div style={{ gridColumn: '1 / -1', marginTop: '1.5rem' }}>
-                  <h3 className="discoveries-subsection-title">{catName}</h3>
-                  <div className="discoveries-section-divider" style={{ margin: '0.5rem 0 1.5rem' }} />
-                </div>
-                {groupedBlessingsByCategory[catName].map((b) => renderBlessingCard(b))}
-              </div>
+          allCategories.length > 0 ? (
+            allCategories.map(cat => (
+                <article 
+                  key={cat.cat_id}
+                  className="discoveries-element-card lowpoly-card level-discovery-card"
+                  style={{ borderLeft: `5px solid #5BC0EB`, padding: '0', overflow: 'hidden' }}
+                >
+                  <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <div className="level-img-wrapper" style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
+                      <div className="level-img-header" style={{ 
+                        width: '100%', height: '100%',
+                        backgroundImage: `url(/categories/${cat.cat_image || `${cat.cat_name}.png`})`, 
+                        backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
+                        backgroundColor: 'rgba(0,0,0,0.3)'
+                      }}>
+                      </div>
+                    </div>
+                    <div className="discoveries-element-info" style={{ padding: '1.5rem', background: 'rgba(15, 26, 18, 0.95)' }}>
+                      <div className="discoveries-element-title" style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#5BC0EB' }}>
+                        {cat.cat_name}
+                      </div>
+                      <p style={{ fontSize: '0.95rem', color: '#ccc', margin: '12px 0 0', lineHeight: '1.5' }}>{cat.cat_description || 'Category description not available.'}</p>
+                    </div>
+                  </div>
+                </article>
             ))
           ) : (
-            <div className="no-results"><p>No blessings in unlocked categories yet.</p></div>
+            <div className="no-results"><p>No categories found.</p></div>
           )
         ) : activeFilter === 'rarities' ? (
-          blessingsLoading ? (
-            <div className="no-results"><p>Loading discoveries...</p></div>
-          ) : Object.keys(groupedBlessingsByRarity).length > 0 ? (
-            Object.keys(groupedBlessingsByRarity).map((rarName) => {
-              const rarityColor = getRarityColor(groupedBlessingsByRarity[rarName][0].rarity?.rar_name);
+          allRarities.length > 0 ? (
+            allRarities.map(rar => {
+              const rarityColor = getRarityColor(rar.rar_name);
               return (
-                <div key={rarName} style={{ display: 'contents' }}>
-                  <div style={{ gridColumn: '1 / -1', marginTop: '1.5rem' }}>
-                    <h3 className="discoveries-subsection-title" style={{ color: rarityColor }}>
-                      {rarName}
-                    </h3>
-                    <div className="discoveries-section-divider" style={{ margin: '0.5rem 0 1.5rem', background: `linear-gradient(90deg, transparent, ${rarityColor}44, transparent)` }} />
+                <article 
+                  key={rar.rar_id}
+                  className="discoveries-element-card lowpoly-card level-discovery-card"
+                  style={{ borderLeft: `5px solid ${rarityColor}`, padding: '0', overflow: 'hidden' }}
+                >
+                  <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <div className="level-img-wrapper" style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
+                      <div className="level-img-header" style={{ 
+                        width: '100%', height: '100%',
+                        backgroundImage: `url(/rarityimages/${rar.rar_card_image || `${rar.rar_name.toLowerCase()}_rar.png`})`, 
+                        backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
+                        backgroundColor: 'rgba(0,0,0,0.3)'
+                      }}>
+                      </div>
+                    </div>
+                    <div className="discoveries-element-info" style={{ padding: '1.5rem', background: 'rgba(15, 26, 18, 0.95)' }}>
+                      <div className="discoveries-element-title" style={{ fontSize: '1.8rem', fontWeight: 'bold', color: rarityColor }}>
+                        {rar.rar_name}
+                      </div>
+                      <p style={{ fontSize: '0.95rem', color: '#ccc', margin: '12px 0 0', lineHeight: '1.5' }}>{rar.rar_description || 'Rarity description not available.'}</p>
+                    </div>
                   </div>
-                  {groupedBlessingsByRarity[rarName].map((b) => renderBlessingCard(b))}
-                </div>
+                </article>
               );
             })
           ) : (
-            <div className="no-results"><p>No blessings with rarity discovered yet.</p></div>
+            <div className="no-results"><p>No rarities found.</p></div>
           )
         ) : activeFilter === 'admin' && isAdmin ? (
           visibleAdminBlessings.length > 0 ? (

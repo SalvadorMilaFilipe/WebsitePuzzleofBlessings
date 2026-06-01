@@ -6,7 +6,7 @@ function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeMobileIndex, setActiveMobileIndex] = useState(-1)
-  const { session, userProfile, logout } = useAuth()
+  const { session, userProfile, logout, isAnimationPlaying } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const sidebarRef = useRef(null)
@@ -119,7 +119,7 @@ function Navbar() {
     </svg>`
   )}`
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register'
-  if (isAuthPage) return null
+  if (isAuthPage || isAnimationPlaying) return null
 
   return (
     <>
