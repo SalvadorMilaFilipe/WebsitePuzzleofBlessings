@@ -151,6 +151,18 @@ function Credits() {
           </div>
         </section>
 
+        {/* Contacts */}
+        <section className="credits-section">
+          <h2 className="credits-category">📬 Contacts</h2>
+          <div className="contact-info lowpoly-card" style={{ textAlign: 'center' }}>
+            <p style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>
+              <strong>Game Dev:</strong> <a href="mailto:0andradejoao@gmail.com" style={{ color: 'var(--blue-accent)', textDecoration: 'underline' }}>0andradejoao@gmail.com</a>
+            </p>
+            <p style={{ fontSize: '1.1rem' }}>
+              <strong>Website Dev:</strong> <a href="mailto:smilaf@gmaol.com" style={{ color: 'var(--blue-accent)', textDecoration: 'underline' }}>smilaf@gmaol.com</a>
+            </p>
+          </div>
+        </section>
       </div>
     </main>
   )
