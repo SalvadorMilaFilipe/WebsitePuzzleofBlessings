@@ -62,12 +62,12 @@ export default function DeckModal({ isOpen, onClose, userId }) {
             
             setAllBlessings(processedData)
 
-            // Fill slots based on reversed deck_slot: 
-            // Slot 4 -> index 0, Slot 3 -> index 1, Slot 2 -> index 2, Slot 1 -> index 3
+            // Fill slots based on deck_slot: 
+            // Slot 1 -> index 0, Slot 2 -> index 1, Slot 3 -> index 2, Slot 4 -> index 3
             const initialSlots = [null, null, null, null]
             processedData.forEach(item => {
                 if (item.is_in_deck && item.deck_slot >= 1 && item.deck_slot <= 4) {
-                    initialSlots[4 - item.deck_slot] = item
+                    initialSlots[item.deck_slot - 1] = item
                 }
             })
             setDeckSlots(initialSlots)
@@ -115,7 +115,7 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                     updates.push({
                         bl_id: slot.bl_id,
                         is_in_deck: true,
-                        deck_slot: 4 - index
+                        deck_slot: index + 1
                     })
                 }
             })
@@ -196,7 +196,7 @@ export default function DeckModal({ isOpen, onClose, userId }) {
                                 onClick={() => slot && toggleBlessing(slot)}
                                 onDragOver={onDragOver}
                                 onDrop={(e) => onDrop(e, i)}
-                                data-slot={4 - i}
+                                data-slot={i + 1}
                             >
                                 {slot ? (
                                     <div 
