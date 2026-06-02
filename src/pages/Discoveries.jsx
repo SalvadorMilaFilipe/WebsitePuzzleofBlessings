@@ -457,8 +457,8 @@ function Discoveries() {
               </div>
 
               <div className="guest-actions">
-                <button className="btn-primary" onClick={() => navigate('/register')}>Start Your Journey</button>
-                <button className="btn-secondary" onClick={() => navigate('/login')}>Recover Memories</button>
+                <button className="discoveries-btn-primary" onClick={() => navigate('/register')}>Start Your Journey</button>
+                <button className="discoveries-btn-secondary" onClick={() => navigate('/login')}>Recover Memories</button>
               </div>
               
               <p className="guest-footer-note">
