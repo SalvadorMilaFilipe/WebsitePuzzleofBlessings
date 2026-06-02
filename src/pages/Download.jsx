@@ -19,14 +19,20 @@ function Download() {
     async function fetchLatestInfo() {
       try {
         const { data, error } = await supabase
-          .from('launcher_versions')
+          .from('launchergamedownload')
           .select('*')
           .order('id', { ascending: false })
           .limit(1)
           .maybeSingle()
 
         if (data && !error) {
-          setLatestInfo(data)
+          setLatestInfo({
+            version: data.version,
+            size_mb: data.size_mb,
+            platform: data.platform,
+            add_date: data.add_date,
+            site_exe: data.url_download
+          })
         }
       } catch (err) {
         console.error('Error fetching game info:', err)
@@ -41,7 +47,7 @@ function Download() {
       .on('postgres_changes', { 
         event: '*', 
         schema: 'public', 
-        table: 'launcher_versions' 
+        table: 'launchergamedownload' 
       }, () => {
         fetchLatestInfo()
       })
@@ -140,9 +146,6 @@ function Download() {
                 <p className="download-date">Released: <span>{latestInfo.add_date?.split('T')[0]}</span></p>
               </div>
               <div className="download-actions">
-                <p className="download-notice">
-                  Official Windows installer. Use the main download button at the top of the page.
-                </p>
               </div>
             </div>
 
