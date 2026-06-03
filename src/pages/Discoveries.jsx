@@ -333,6 +333,24 @@ function Discoveries() {
     )
   }, [adminBlessings, searchTerm])
 
+  const unlockedCategories = useMemo(() => {
+    const unlockedIds = new Set(
+      blessings
+        .map((b) => b?.category?.cat_id)
+        .filter((id) => id != null)
+    )
+    return allCategories.filter((cat) => unlockedIds.has(cat.cat_id))
+  }, [blessings, allCategories])
+
+  const unlockedRarities = useMemo(() => {
+    const unlockedIds = new Set(
+      blessings
+        .map((b) => b?.rarity?.rar_id)
+        .filter((id) => id != null)
+    )
+    return allRarities.filter((rar) => unlockedIds.has(rar.rar_id))
+  }, [blessings, allRarities])
+
   const isAdmin = useMemo(() => {
     // Current admin identification logic
     return session?.user?.email === 'sfilipe05@gmail.com' || userProfile?.pl_username === 'Salvador Filipe' || userProfile?.pl_is_admin === true;
@@ -577,8 +595,8 @@ function Discoveries() {
             <div className="no-results"><p>No collectibles found.</p></div>
           )
         ) : activeFilter === 'categories' ? (
-          allCategories.length > 0 ? (
-            allCategories.map(cat => (
+          unlockedCategories.length > 0 ? (
+            unlockedCategories.map(cat => (
                 <article 
                   key={cat.cat_id}
                   className="discoveries-element-card lowpoly-card"
@@ -607,8 +625,8 @@ function Discoveries() {
             <div className="no-results"><p>No categories found.</p></div>
           )
         ) : activeFilter === 'rarities' ? (
-          allRarities.length > 0 ? (
-            allRarities.map(rar => {
+          unlockedRarities.length > 0 ? (
+            unlockedRarities.map(rar => {
               const rarityColor = getRarityColor(rar.rar_name);
               return (
                 <article 
