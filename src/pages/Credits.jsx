@@ -151,21 +151,7 @@ function Credits() {
           </div>
         </section>
 
-        {/* Contacts Footer Bar */}
-        <div style={{
-          marginTop: '5rem',
-          paddingTop: '1.5rem',
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '2.5rem',
-          fontSize: '0.95rem',
-          color: 'var(--text-secondary)',
-          flexWrap: 'wrap'
-        }}>
-          <span><strong>Game Dev:</strong> <a href="mailto:0andradejoao@gmail.com" style={{ color: 'var(--blue-accent)', textDecoration: 'none', marginLeft: '0.5rem' }}>0andradejoao@gmail.com</a></span>
-          <span><strong>Website Dev:</strong> <a href="mailto:smilaf@gmail.com" style={{ color: 'var(--blue-accent)', textDecoration: 'none', marginLeft: '0.5rem' }}>smilaf@gmail.com</a></span>
-        </div>
+
       </div>
     </main>
   )
