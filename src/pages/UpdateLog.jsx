@@ -10,7 +10,7 @@ function UpdateLog() {
     const fetchUpdates = async () => {
       try {
         const { data, error } = await supabase
-          .from('launchergamedownload')
+          .from('launcher_versions')
           .select('*')
           .order('add_date', { ascending: false })
 
@@ -89,7 +89,7 @@ function UpdateLog() {
                     )}
                   </div>
                   <div className="update-meta" style={{ marginTop: '1.5rem', opacity: 0.7, fontSize: '0.8rem' }}>
-                    <span>Platform: {update.platform}</span> • <span>Size: {update.size_mb} MB</span>
+                    <span>Platform: {update.platform || 'Windows (Tested)'}</span> • <span>Size: {update.size_mb} MB</span>
                   </div>
                 </div>
               </div>

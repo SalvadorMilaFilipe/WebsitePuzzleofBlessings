@@ -19,7 +19,7 @@ function Download() {
     async function fetchLatestInfo() {
       try {
         const { data, error } = await supabase
-          .from('launchergamedownload')
+          .from('launcher_versions')
           .select('*')
           .order('id', { ascending: false })
           .limit(1)
@@ -29,9 +29,9 @@ function Download() {
           setLatestInfo({
             version: data.version,
             size_mb: data.size_mb,
-            platform: data.platform,
+            platform: data.platform || 'Windows (Tested)',
             add_date: data.add_date,
-            site_exe: data.url_download
+            site_exe: data.site_exe
           })
         }
       } catch (err) {
@@ -47,7 +47,7 @@ function Download() {
       .on('postgres_changes', { 
         event: '*', 
         schema: 'public', 
-        table: 'launchergamedownload' 
+        table: 'launcher_versions' 
       }, () => {
         fetchLatestInfo()
       })
