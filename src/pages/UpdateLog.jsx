@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 function UpdateLog() {
   const [updates, setUpdates] = useState([])
   const [loading, setLoading] = useState(true)
+  const [errorMsg, setErrorMsg] = useState(null)
   const [selectedVersion, setSelectedVersion] = useState('all')
 
   useEffect(() => {
@@ -18,6 +19,8 @@ function UpdateLog() {
         setUpdates(data || [])
       } catch (err) {
         console.error('Error fetching updates:', err)
+        const errorDetails = err.message ? `${err.message} (Code: ${err.code || 'N/A'}) - Details: ${err.details || 'None'} - Hint: ${err.hint || 'None'}` : JSON.stringify(err);
+        setErrorMsg(errorDetails)
       } finally {
         setLoading(false)
       }
@@ -67,6 +70,11 @@ function UpdateLog() {
           {loading ? (
             <div className="loading-updates" style={{ textAlign: 'center', color: '#81D89E', padding: '2rem' }}>
               Fetching latest updates...
+            </div>
+          ) : errorMsg ? (
+            <div style={{ textAlign: 'center', color: '#ff6b6b', padding: '2rem', backgroundColor: 'rgba(255,0,0,0.1)', borderRadius: '8px' }}>
+              <h3>Error loading updates:</h3>
+              <p>{errorMsg}</p>
             </div>
           ) : (
             filteredUpdates.map(update => (
