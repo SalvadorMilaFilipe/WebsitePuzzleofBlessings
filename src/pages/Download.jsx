@@ -21,7 +21,7 @@ function Download() {
         const { data, error } = await supabase
           .from('launchergamedownload')
           .select('*')
-          .order('created_at', { ascending: false })
+          .order('add_date', { ascending: false })
           .limit(1)
           .maybeSingle()
 
@@ -30,7 +30,7 @@ function Download() {
             version: data.version,
             size_mb: data.size,
             platform: data.platform || 'Windows (Tested)',
-            add_date: data.created_at,
+            add_date: data.add_date,
             site_exe: data.url
           })
         }

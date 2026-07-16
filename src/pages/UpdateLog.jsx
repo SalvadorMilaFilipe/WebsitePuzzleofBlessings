@@ -5,15 +5,14 @@ function UpdateLog() {
   const [updates, setUpdates] = useState([])
   const [loading, setLoading] = useState(true)
   const [errorMsg, setErrorMsg] = useState(null)
-  const [selectedVersion, setSelectedVersion] = useState('all')
 
   useEffect(() => {
     const fetchUpdates = async () => {
       try {
         const { data, error } = await supabase
           .from('launchergamedownload')
-          .select('*')
-          .order('created_at', { ascending: false })
+          .select('add_date, description')
+          .order('add_date', { ascending: false })
 
         if (error) throw error
         setUpdates(data || [])
@@ -28,10 +27,6 @@ function UpdateLog() {
 
     fetchUpdates()
   }, [])
-
-  const filteredUpdates = selectedVersion === 'all'
-    ? updates
-    : updates.filter(update => update.version === selectedVersion)
 
   const formatDate = (dateString) => {
     if (!dateString) return ''
@@ -53,18 +48,6 @@ function UpdateLog() {
           Stay informed about new Blessings, map updates, balance changes, and more.
         </p>
 
-        <div className="version-filter lowpoly-card">
-          <label>Filter by Version:</label>
-          <select value={selectedVersion} onChange={(e) => setSelectedVersion(e.target.value)}>
-            <option value="all">All Versions</option>
-            {updates.map(update => (
-              <option key={update.id} value={update.version}>
-                Version {update.version}
-              </option>
-            ))}
-          </select>
-        </div>
-
         {/* Update Entries */}
         <div className="updates-timeline">
           {loading ? (
@@ -77,33 +60,29 @@ function UpdateLog() {
               <p>{errorMsg}</p>
             </div>
           ) : (
-            filteredUpdates.map(update => (
-              <div key={update.id} className="update-entry lowpoly-card" data-version={update.version}>
+            updates.map((update, index) => (
+              <div key={update.add_date || index} className="update-entry lowpoly-card">
                 <div className="update-header">
-                  <h2 className="version-number">Version {update.version}</h2>
-                  <span className="update-date">{formatDate(update.created_at)}</span>
+                  <h2 className="version-number">{formatDate(update.add_date)}</h2>
                 </div>
                 <div className="update-content">
                   <div className="update-section">
                     <h3>💎 Change Log</h3>
-                    {update.release_notes ? (
+                    {update.description ? (
                       <ul>
-                        {update.release_notes.split(/\r?\n/).map((line, idx) => (
+                        {update.description.split(/\r?\n/).map((line, idx) => (
                           line.trim() && <li key={idx}>{line.trim()}</li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="no-description">No details provided for this version.</p>
+                      <p className="no-description">No details provided for this update.</p>
                     )}
-                  </div>
-                  <div className="update-meta" style={{ marginTop: '1.5rem', opacity: 0.7, fontSize: '0.8rem' }}>
-                    <span>Platform: {update.platform || 'Windows (Tested)'}</span> • <span>Size: {update.size} MB</span>
                   </div>
                 </div>
               </div>
             ))
           )}
-          {!loading && filteredUpdates.length === 0 && (
+          {!loading && updates.length === 0 && (
             <p style={{ textAlign: 'center', opacity: 0.6 }}>No updates found.</p>
           )}
         </div>
