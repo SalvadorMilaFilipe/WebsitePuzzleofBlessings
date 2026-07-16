@@ -10,9 +10,9 @@ function UpdateLog() {
     const fetchUpdates = async () => {
       try {
         const { data, error } = await supabase
-          .from('launcher_versions')
+          .from('launchergamedownload')
           .select('*')
-          .order('add_date', { ascending: false })
+          .order('created_at', { ascending: false })
 
         if (error) throw error
         setUpdates(data || [])
@@ -73,14 +73,14 @@ function UpdateLog() {
               <div key={update.id} className="update-entry lowpoly-card" data-version={update.version}>
                 <div className="update-header">
                   <h2 className="version-number">Version {update.version}</h2>
-                  <span className="update-date">{formatDate(update.add_date)}</span>
+                  <span className="update-date">{formatDate(update.created_at)}</span>
                 </div>
                 <div className="update-content">
                   <div className="update-section">
                     <h3>💎 Change Log</h3>
-                    {update.description ? (
+                    {update.release_notes ? (
                       <ul>
-                        {update.description.split(/\r?\n/).map((line, idx) => (
+                        {update.release_notes.split(/\r?\n/).map((line, idx) => (
                           line.trim() && <li key={idx}>{line.trim()}</li>
                         ))}
                       </ul>
@@ -89,7 +89,7 @@ function UpdateLog() {
                     )}
                   </div>
                   <div className="update-meta" style={{ marginTop: '1.5rem', opacity: 0.7, fontSize: '0.8rem' }}>
-                    <span>Platform: {update.platform || 'Windows (Tested)'}</span> • <span>Size: {update.size_mb} MB</span>
+                    <span>Platform: {update.platform || 'Windows (Tested)'}</span> • <span>Size: {update.size} MB</span>
                   </div>
                 </div>
               </div>
